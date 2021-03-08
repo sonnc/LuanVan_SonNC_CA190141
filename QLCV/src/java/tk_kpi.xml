@@ -1,0 +1,32 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <!-- Configuration for the default package. -->
+    <package name="tk_kpi" extends="struts-default">
+        <action name="viewKpiOfDepartementAction" class="app.kpi.KpiAction" method="viewKpiOfDepartement">
+            <result name="success">/tk_kpi/home.jsp</result>
+            <result name="error" type="redirect">404.jsp</result>
+        </action>
+        <action name="viewKpiDetailAction" class="app.kpi.KpiAction" method="viewKpiDetail">
+            <result name="success">/tk_kpi/view-kpi-setup-detail.jsp</result>
+            <result name="error" type="redirect">404.jsp</result>
+        </action>
+        <action name="getAllStaffKpiAction" class="app.kpi.KpiAction" method="getAllStaffKpi">
+            <result name="success">/tk_kpi/kpi_create_kpi_staff.jsp</result>
+            <result name="error" type="redirect">404.jsp</result>
+        </action>
+        <action name="kpiUserAction" class="app.kpi.KpiAction" method="kpiUser">
+            <result name="success">/tk_kpi/create_kpi_for_staff.jsp</result>
+            <result name="CREATE_KPI_STAFF_SUCCESS">/tk_kpi/kpi_create_kpi_staff.jsp</result>
+            <result name="VIEW_KPI_STAFF_SUCCESS">/tk_kpi/view-kpi-staff.jsp</result>
+            <result name="VIEW_MY_KPI_SUCCESS">/tk_kpi/view-my-kpi.jsp</result>
+            <result name="GET_RATING_KPI_SUCCESS">/tk_kpi/rating-my-kpi.jsp</result>
+            <result name="SEND_RATING_KPI_SUCCESS">/tk_kpi/rating-my-kpi.jsp</result>
+            <result name="GET_RATING_KPI_STAFF_SUCCESS">/tk_kpi/rating-kpi-for-staff.jsp</result>
+            <result name="UPDATE_KPI_STAFF_SUCCESS">/tk_kpi/rating-kpi-for-staff.jsp</result>
+            <result name="error" type="redirect">404.jsp</result>
+        </action>
+    </package>
+</struts>
