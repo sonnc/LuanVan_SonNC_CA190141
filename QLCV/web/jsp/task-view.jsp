@@ -69,211 +69,199 @@
                                                     <input hidden="true" name="workspaceId" value="<s:property value="workspace.id"/>" />
                                                     <input hidden="true" name="tasklistid" value="<s:property value="tasklist.id"/>" />
                                                 </div>
-                                                <div class="form-group col-12 mb-2 ">
+
+                                                <div class="form-body">
+                                                    <h4 class="form-section"><i class="ft-user"></i> THÔNG TIN CHUNG</h4>
                                                     <div class="row">
-
-                                                        <div class="col-9"> 
-                                                            <h4 class="info">THÔNG TIN CHUNG</h4>
-                                                            <div class="row">
-                                                                <div class="col-12">
-                                                                    <fieldset class="form-group">
-                                                                        <label>Tên công việc <span class="danger">*</span></label>
-                                                                        <s:textfield requiredLabel="true" type="text" name="task.taskName" cssClass="form-control" id="textbox2"/>
-                                                                    </fieldset>
+                                                        <div class="col-6">
+                                                            <div class="form-group row">
+                                                                <label class="col-md-3 label-control" for="projectinput1">Tên công việc/ nhiệm vụ</label>
+                                                                <div class="col-md-9">
+                                                                    <s:textfield disabled="true" cssClass="form-control" name="task.taskName"/>
                                                                 </div>
                                                             </div>
-                                                            <div class="row">
-                                                                <div class="col-3">
-                                                                    <fieldset class="form-group">
-                                                                        <label>Tiền khoán</label>
-                                                                        <s:textfield value="0" type="number" name="task.nganSach" cssClass="form-control" id="textbox2"/>
-                                                                    </fieldset>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <label>Người thực hiện <span class="danger">*</span></label>
-                                                                    <select class="form-control" name="task.assigneeUserId"> 
-                                                                        <s:iterator value="listUserRaciR">
-                                                                            <option value="<s:property value="id"/>"><s:property value="fullName"/></option>
-                                                                        </s:iterator>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <label>Người kiểm tra <span class="danger">*</span></label>
-                                                                    <select class="form-control" name="task.reviewBy"> 
-                                                                        <s:iterator value="listUserInWorkspace">
-                                                                            <option value="<s:property value="id"/>"><s:property value="fullName"/></option>
-                                                                        </s:iterator>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <label>Task list <span class="danger">*</span></label>
-                                                                    <select disabled="true" class="form-control" name="task.tasklistid"> 
-                                                                        <s:iterator value="tasklist">
-                                                                            <option value="<s:property value="id"/>"><s:property value="taskListTitle"/></option>
-                                                                        </s:iterator>
-                                                                    </select>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-3 label-control" for="projectinput1">Tiền khoán</label>
+                                                                <div class="col-md-9">
+                                                                    <s:textfield disabled="true" cssClass="form-control" name="task.nganSach"/>
                                                                 </div>
                                                             </div>
-                                                            <div class="row">
-                                                                <div class="col-3">
-                                                                    <fieldset class="form-group">
-                                                                        <label>Ngày bắt đầu <span class="danger">*</span></label>
-                                                                        <input type="date" name="startDate" class="form-control" id="textbox2"/>
-                                                                    </fieldset>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <fieldset class="form-group">
-                                                                        <label>Hạn cuối cùng <span class="danger">*</span></label>
-                                                                        <input type="date" name="dueDate" class="form-control" id="textbox2"/>
-                                                                    </fieldset>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <fieldset class="form-group">
-                                                                        <label>Mức độ ưu tiên <span class="danger">*</span></label>
-                                                                        <s:select  cssClass="form-control"
-                                                                                   headerKey="-1" headerValue="Lựa chọn giá trị"
-                                                                                   list="#{1:'CAO', 2:'TRUNG BÌNH', 3:'THẤP'}" 
-                                                                                   name="task.priority" 
-                                                                                   value="" />
-                                                                    </fieldset>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <fieldset class="form-group">
-                                                                        <label>Estimate <span class="danger">*</span></label>
-                                                                        <s:textfield min="1" type="number" name="task.timeEstimate" cssClass="form-control" id="textbox2"/>
-                                                                    </fieldset>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-3 label-control" for="projectinput1">Người thực hiện</label>
+                                                                <div class="col-md-9">
+                                                                    <s:textfield disabled="true" cssClass="form-control" name="task.assigneeUserId"/>
                                                                 </div>
                                                             </div>
-
-                                                            <div class="row">
-                                                                <div class="col-12">
-                                                                    <fieldset class="form-group">
-                                                                        <label>Mô tả công việc</label>
-                                                                        <s:textarea type="text" name="task.taskDesc" cssClass="form-control" id="textbox2"></s:textarea>
-                                                                        </fieldset> 
-                                                                    </div>
-                                                                </div>
-
-                                                                <h4 class="info">UDF</h4>
-                                                                <div class="row">
-                                                                    <div class="col-12">
-                                                                        <div class="form-group col-12 mb-2 contact-repeater">
-                                                                            <div data-repeater-list="listUdfTask">
-                                                                                <div class="input-group mb-1" data-repeater-item id="countItemRepeat">
-                                                                                    <div class=" col-11">
-                                                                                        <div class="row">
-                                                                                            <div class="col-6">
-                                                                                                <input placeholder="Mô tả UDF" type="text" name="UdfName" class="form-control" id="textbox2"/>
-                                                                                            </div>
-                                                                                            <div class="col-3">
-                                                                                                <select class="form-control" name="UdfType"> 
-                                                                                                    <option value="">Lựa chọn loại giá trị</option>
-                                                                                                    <option value="DATE">DATE</option>
-                                                                                                    <option value="TEXT">TEXT</option>
-                                                                                                    <option value="NUMBER">NUMBER</option>
-                                                                                                    <option value="EMAIL">EMAIL</option>
-                                                                                                </select>
-                                                                                            </div>
-                                                                                            <div class="col-3">
-                                                                                                <input placeholder="Giá trị dữ liệu" type="text" name="UdfValue" class="form-control" id="textbox2"/>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-1" >
-                                                                                        <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
-                                                                                    </div>
-
-                                                                                </div>
-                                                                            </div>
-                                                                            <button onclick="return countId()" type="button" data-repeater-create class="btn btn-primary">
-                                                                                <i class="ft-plus"></i> <%=properties.getProperty("app.add")%>
-                                                                        </button>
-
-                                                                        <script>
-                                                                            function countIdUdf() {
-                                                                                var s = document.querySelectorAll('[id^=countItemRepeatUDF]').length;
-                                                                                document.getElementById('countItemInputUDF').value = s;
-                                                                            }
-                                                                        </script> 
-                                                                    </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-3 label-control" for="projectinput1">Người kiểm tra</label>
+                                                                <div class="col-md-9">
+                                                                    <s:textfield disabled="true" cssClass="form-control" name="task.reviewBy"/>
                                                                 </div>
                                                             </div>
-
-                                                            <h4 class="info">BỘ DANH SÁCH KIỂM TRA</h4>
-                                                            <div class="row">
-                                                                <div class="col-12">
-                                                                    <div class="form-group col-12 mb-2 contact-repeater">
-                                                                        <div data-repeater-list="lstCheckList">
-                                                                            <div class="input-group mb-1" data-repeater-item id="countItemRepeatCheckList">
-                                                                                <div class="form-group col-11">
-                                                                                    <div >
-                                                                                        <s:textfield type="text" name="checkListTitle" cssClass="form-control" id="textbox2"/>
-                                                                                        <ul>
-                                                                                            <li><s:textfield label="Đầu mục kiểm tra 1" type="text" name="checkListItem1" cssClass="form-control" id="textbox2"/></li>
-                                                                                            <li><s:textfield label="Đầu mục kiểm tra 2"  type="text" name="checkListItem2" cssClass="form-control" id="textbox2"/></li>
-                                                                                        </ul>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-group col-1" >
-                                                                                    <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
-                                                                                </div>
-
-                                                                            </div>
-                                                                        </div>
-                                                                        <button onclick="return countId()" type="button" data-repeater-create class="btn btn-primary">
-                                                                            <i class="ft-plus"></i> <%=properties.getProperty("app.add")%>
-                                                                        </button>
-
-                                                                        <script>
-                                                                            function countIdCheckList() {
-                                                                                var s = document.querySelectorAll('[id^=countItemRepeatCheckList]').length;
-                                                                                document.getElementById('countItemInputCheckList').value = s;
-                                                                            }
-                                                                        </script> 
-                                                                    </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-3 label-control" for="projectinput1">Mô tả</label>
+                                                                <div class="col-md-9">
+                                                                    <s:textarea disabled="true" cssClass="form-control" name="task.taskDesc"/>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-3">
-                                                            <div class="row">
-                                                                <fieldset class="form-group form-group-style">
-                                                                    <label>ĐÍNH KÈM TÀI LIỆU</label>
-                                                                    <p>Tối đa 5MB/file</p>
-                                                                    <input type="file" class="form-control" name="myFile" id="file" multiple="" onchange="updateList()">
-                                                                    <div id="fileList"></div>
-                                                                </fieldset>
-                                                                <script>
-                                                                    function updateList() {
-                                                                        var input = document.getElementById('file');
-                                                                        var output = document.getElementById('fileList');
-                                                                        var children = "";
-                                                                        for (var i = 0; i < input.files.length; ++i) {
-                                                                            children += '<li>' + input.files.item(i).name + '</li>';
-                                                                        }
-                                                                        output.innerHTML = '<ul>' + children + '</ul>';
-                                                                    }
-
-                                                                </script>
+                                                        <div class="col-6">
+                                                            <div class="form-group row">
+                                                                <label class="col-md-3 label-control" for="projectinput1">Ngày bắt đầu</label>
+                                                                <div class="col-md-9">
+                                                                    <s:textfield disabled="true" cssClass="form-control" name="task.startDate"/>
+                                                                </div>
                                                             </div>
-                                                            <div class="row">
-                                                                <span style="color: orange">*</span> BÌNH LUẬN
-                                                                <s:textarea name="taskComment.comment"  cssClass="form-control" style="min-height: 200px;"></s:textarea>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-3 label-control" for="projectinput1">Hạn cuối cùng</label>
+                                                                <div class="col-md-9">
+                                                                    <s:textfield disabled="true" cssClass="form-control" name="task.dueDate"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-3 label-control" for="projectinput1">Mức độ ưu tiên</label>
+                                                                <div class="col-md-9">
+                                                                    <s:textfield disabled="true" cssClass="form-control" name="task.priority"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-3 label-control" for="projectinput1">Estimate</label>
+                                                                <div class="col-md-9">
+                                                                    <s:textfield disabled="true" cssClass="form-control" name="task.timeEstimate"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-3 label-control" for="projectinput1">Task list</label>
+                                                                <div class="col-md-9">
+                                                                    <s:textfield disabled="true" cssClass="form-control" name="task.tasklistid"/>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <h4 class="form-section"><i class="ft-folder"></i> SUB - TASK</h4>
+                                                <div class="row">
+                                                    <table class="table table-striped table-bordered zero-configuration hiden">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>ID</th>
+                                                                <th>Tên công việc</th>
+                                                                <th>Người thực hiện</th>
+                                                                <th>Ngày bắt đầu</th>
+                                                                <th>Hạn kết thúc</th>
+                                                                <th>Mức độ</th>
+                                                                <th>Trạng thái</th>
+                                                                <th>Estimate</th>
+                                                                <th>Kiểm tra</th>
+                                                                <th>Chức năng</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <s:iterator value="lstTasks" var="test">
+                                                                <tr>
+                                                                    <td><s:property value="id"/></td>
+                                                                    <td><s:property value="taskName"/></td>
+                                                                    <td><s:property value="assigneeUserId"/></td>
+                                                                    <td><s:property value="startDate"/></td>
+                                                                    <td><s:property value="dueDate"/></td>
+                                                                    <td><s:property value="priority"/></td>
+                                                                    <td><s:property value="status"/></td>
+                                                                    <td><s:property value="timeEstimate"/></td>
+                                                                    <td><s:property value="reviewBy"/></td>
+                                                                    <td>
+                                                                        <a type="button" class="btn btn-facebook" href="taskCRUD?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>&&event=view">
+                                                                                Xem
+                                                                            </a>
+                                                                            <a type="button" class="btn btn-warning" href="taskCRUD?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>&&event=view">
+                                                                                Sửa
+                                                                            </a>
+                                                                            <a type="button" class="btn btn-danger" href="taskCRUD?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>&&event=view">
+                                                                                Xóa
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                            </s:iterator>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <h4 class="form-section"><i class="ft-server"></i> UDF</h4>
+                                                <div class="row">
+                                                    <table class="table table-striped table-bordered zero-configuration hiden">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>ID</th>
+                                                                <th>Mô tả UDF</th>
+                                                                <th>Loại giá trị</th>
+                                                                <th>Giá trị UDF</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <s:iterator value="lstUdf" var="test">
+                                                                <tr>
+                                                                    <td><s:property value="id"/></td>
+                                                                    <td><s:property value="refKey"/></td>
+                                                                    <td><s:property value="extValue1"/></td>
+                                                                    <td><s:property value="fieldValue"/></td>
+                                                                </tr>
+                                                            </s:iterator>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <h4 class="form-section"><i class="ft-check-square"></i> ĐẦU MỤC KIỂM TRA</h4>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="form-group row"  > 
+                                                            <s:iterator value="lstChecklists" var="checklist">
+                                                                <div class="row" style="padding-left: 20px">
+                                                                    <div class="col-12"><s:property value="checkListName"/></div>
+                                                                    <div class="col-12">
+                                                                        <s:iterator value="lstChecklistItems" var="checklistitem">
+                                                                            <s:if test="#checklist.id == #checklistitem.tkWsTaskChecklist.id">
+                                                                                <li><s:property value="itemName"/></li>
+                                                                                </s:if>
+                                                                            </s:iterator>
+                                                                    </div>
+                                                                </div>
+                                                            </s:iterator>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h4 class="form-section"><i class="ft-file"></i> TỆP ĐÍNH KÈM</h4>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="form-group row">
+                                                            <s:iterator value="lstAttachmentses">
+                                                                <s:property value="fileName"/>
+                                                            </s:iterator>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h4 class="form-section"><i class="ft-smartphone"></i> THẢO LUẬN</h4>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="form-group row">
+                                                            <div class="col-md-12">
+                                                                <s:iterator value="lstComments">
+                                                                    <s:property value="comment"/>
+                                                                </s:iterator>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
-                            </section>
-                        </div>
+                            </div>
                     </div>
-                </form>                                                
-            </div>
+                    </section>
+                </div>
+        </div>
+    </form>                                                
+</div>
 
-        <%@include file="/jsp/footer.jsp" %>
-        <%@include file="/jsp/js.jsp" %>
-    </body>
+<%@include file="/jsp/footer.jsp" %>
+<%@include file="/jsp/js.jsp" %>
+</body>
 </html>

@@ -60,7 +60,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <s:iterator value="tkWsTasklists" var="test">
+                                        <s:iterator value="tkWsTasklists" var="testTaskList">
                                             <div class="card-content collapse hiden">
                                                 <div class="card-body card-dashboard">
                                                     <div class="row">
@@ -102,7 +102,7 @@
                                                                     <td><s:property value="timeEstimate"/></td>
                                                                     <td><s:property value="reviewBy"/></td>
                                                                     <td>
-                                                                        <a type="button" class="btn btn-facebook" href="taskCRUD?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>&&event=view">
+                                                                        <a type="button" class="btn btn-facebook" href="viewTask?workspaceId=<s:property value="workspace.id"/>&&tasklistid=<s:property value="#testTaskList.id"/>&&taskid=<s:property value="id"/>">
                                                                             Xem
                                                                         </a>
                                                                         <a type="button" class="btn btn-warning" href="taskCRUD?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>&&event=view">

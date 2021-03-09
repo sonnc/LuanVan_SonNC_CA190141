@@ -72,8 +72,8 @@
                                                 <div class="form-group col-12 mb-2 ">
                                                     <div class="row">
 
-                                                        <div class="col-9"> 
-                                                            <h4 class="info">THÔNG TIN CHUNG</h4>
+                                                        <div class="col-12"> 
+                                                            <h4 class="form-section"><i class="ft-home"></i> THÔNG TIN CHUNG</h4>
                                                             <div class="row">
                                                                 <div class="col-12">
                                                                     <fieldset class="form-group">
@@ -154,12 +154,12 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <h4 class="info">UDF</h4>
+                                                                <h4 class="form-section"><i class="ft-user"></i> UDF</h4>
                                                                 <div class="row">
                                                                     <div class="col-12">
                                                                         <div class="form-group col-12 mb-2 contact-repeater">
                                                                             <div data-repeater-list="listUdfTask">
-                                                                                <div class="input-group mb-1" data-repeater-item id="countItemRepeat">
+                                                                                <div class="input-group mb-1" data-repeater-item id="countItemRepeatUDF">
                                                                                     <div class=" col-11">
                                                                                         <div class="row">
                                                                                             <div class="col-6">
@@ -199,7 +199,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <h4 class="info">BỘ DANH SÁCH KIỂM TRA</h4>
+                                                            <h4 class="form-section"><i class="ft-check-square"></i> ĐẦU MỤC KIỂM TRA</h4>
                                                             <div class="row">
                                                                 <div class="col-12">
                                                                     <div class="form-group col-12 mb-2 contact-repeater">
@@ -233,31 +233,34 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-3">
+                                                            <h4 class="form-section"><i class="ft-check-square"></i> THẢO LUẬN</h4>
                                                             <div class="row">
-                                                                <fieldset class="form-group form-group-style">
-                                                                    <label>ĐÍNH KÈM TÀI LIỆU</label>
-                                                                    <p>Tối đa 5MB/file</p>
-                                                                    <input type="file" class="form-control" name="myFile" id="file" multiple="" onchange="updateList()">
-                                                                    <div id="fileList"></div>
-                                                                </fieldset>
-                                                                <script>
-                                                                    function updateList() {
-                                                                        var input = document.getElementById('file');
-                                                                        var output = document.getElementById('fileList');
-                                                                        var children = "";
-                                                                        for (var i = 0; i < input.files.length; ++i) {
-                                                                            children += '<li>' + input.files.item(i).name + '</li>';
-                                                                        }
-                                                                        output.innerHTML = '<ul>' + children + '</ul>';
-                                                                    }
+                                                                <div class="col-12">
+                                                                    <s:textarea name="taskComment.comment"  cssClass="form-control" style="min-height: 200px;"></s:textarea>
 
-                                                                </script>
-                                                            </div>
-                                                            <div class="row">
-                                                                <span style="color: orange">*</span> BÌNH LUẬN
-                                                                <s:textarea name="taskComment.comment"  cssClass="form-control" style="min-height: 200px;"></s:textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <h4 class="form-section"><i class="ft-check-square"></i> ĐÍNH KÈM TÀI LIỆU</h4>
+                                                                <div class="row">
+                                                                    <div class="col-12">
+                                                                        <fieldset class="form-group form-group-style">
+                                                                            <p>Tối đa 5MB/file</p>
+                                                                            <input type="file" class="form-control" name="myFile" id="file" multiple="" onchange="updateList()">
+                                                                            <div id="fileList"></div>
+                                                                        </fieldset>
+                                                                        <script>
+                                                                            function updateList() {
+                                                                                var input = document.getElementById('file');
+                                                                                var output = document.getElementById('fileList');
+                                                                                var children = "";
+                                                                                for (var i = 0; i < input.files.length; ++i) {
+                                                                                    children += '<li>' + input.files.item(i).name + '</li>';
+                                                                                }
+                                                                                output.innerHTML = '<ul>' + children + '</ul>';
+                                                                            }
+
+                                                                        </script>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>

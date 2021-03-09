@@ -75,6 +75,12 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
     private File[] myFile;
     private String[] myFileFileName;
     private List<RaciView> lstRaciViews = new ArrayList<>();
+    private List<TkWsTask> lstTasks = new ArrayList<>();
+    private List<SysUdfFieldValue> lstUdf = new ArrayList<>();
+    private List<TkWsAttachments> lstAttachmentses = new ArrayList<>();
+    private List<TkWsTaskChecklist> lstChecklists = new ArrayList<>();
+    private List<TkWsTaskChecklistItem> lstChecklistItems = new ArrayList<>();
+    private List<TkWsComment> lstComments = new ArrayList<>();
 
     public TaskListAction() {
         taskListController = new TaskListController();
@@ -448,7 +454,7 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
         List<TkWsTaskRaci> lstRacis = new ArrayList<>();
         lstRacis = taskListController.getAllRaciAndView(tasklistid);
-        System.out.println("==============="+lstRacis.size());
+        System.out.println("===============" + lstRacis.size());
         for (int i = 0; i < lstRacis.size(); i++) {
             TkWsTaskRaci get = lstRacis.get(i);
             TkUser user = taskListController.getUserById(get.getUserId());
@@ -462,6 +468,38 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
             rv.setRaciI(get.getRaciI());
             lstRaciViews.add(rv);
         }
+        workspace = workspaceController.GetWorkspaceById(workspaceId);
+        tasklist = taskListController.GetTaskListById(tasklistid);
+        return SUCCESS;
+    }
+
+    public String viewTask() {
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+        task = taskListController.GetTaskById(taskid);
+
+        // thong tin subtask
+        lstTasks = taskListController.GetAllSubTaskByTaskId(taskid);
+
+        // thông tin udf
+        lstUdf = taskListController.GetAllUDFByTaskId(taskid);
+
+        // thông tin checklist
+        lstChecklists = taskListController.GetAllCheckListByTaskId(taskid);
+        List<Integer> lstchecklist = new ArrayList<>();
+        for (int i = 0; i < lstChecklists.size(); i++) {
+            lstchecklist.add(lstChecklists.get(i).getId());
+        }
+
+        lstChecklistItems = taskListController.GetAllCheckListItemByCheckListId(lstchecklist);
+
+        // thông tin file
+        lstAttachmentses = taskListController.GetAllAttachmentByTaskId(taskid);
+
+        // thong tin comment
+        lstComments = taskListController.GetAllCommentByTaskId(taskid);
+
         workspace = workspaceController.GetWorkspaceById(workspaceId);
         tasklist = taskListController.GetTaskListById(tasklistid);
         return SUCCESS;
@@ -638,7 +676,53 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
     public void setLstRaciViews(List<RaciView> lstRaciViews) {
         this.lstRaciViews = lstRaciViews;
     }
-    
-    
+
+    public List<TkWsTask> getLstTasks() {
+        return lstTasks;
+    }
+
+    public void setLstTasks(List<TkWsTask> lstTasks) {
+        this.lstTasks = lstTasks;
+    }
+
+    public List<SysUdfFieldValue> getLstUdf() {
+        return lstUdf;
+    }
+
+    public void setLstUdf(List<SysUdfFieldValue> lstUdf) {
+        this.lstUdf = lstUdf;
+    }
+
+    public List<TkWsAttachments> getLstAttachmentses() {
+        return lstAttachmentses;
+    }
+
+    public void setLstAttachmentses(List<TkWsAttachments> lstAttachmentses) {
+        this.lstAttachmentses = lstAttachmentses;
+    }
+
+    public List<TkWsTaskChecklist> getLstChecklists() {
+        return lstChecklists;
+    }
+
+    public void setLstChecklists(List<TkWsTaskChecklist> lstChecklists) {
+        this.lstChecklists = lstChecklists;
+    }
+
+    public List<TkWsTaskChecklistItem> getLstChecklistItems() {
+        return lstChecklistItems;
+    }
+
+    public void setLstChecklistItems(List<TkWsTaskChecklistItem> lstChecklistItems) {
+        this.lstChecklistItems = lstChecklistItems;
+    }
+
+    public List<TkWsComment> getLstComments() {
+        return lstComments;
+    }
+
+    public void setLstComments(List<TkWsComment> lstComments) {
+        this.lstComments = lstComments;
+    }
 
 }

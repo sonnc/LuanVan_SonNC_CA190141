@@ -301,6 +301,23 @@ public class TaskListController {
         return user;
     }
     
+    public TkWsTask GetTaskById(int taskId){
+        TkWsTask task = new TkWsTask();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            task = (TkWsTask) session.get(TkWsTask.class, taskId);
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return task;
+    }
+    
     public String createTask(TkWsTask task, List<SysUdfFieldValue> lstUdf,
             List<TkWsTaskChecklist> lstChecklists, List<TkWsTaskChecklistItem> lstChecklistItems,
             TkWsComment comment, List<TkWsAttachments> lstAttachments) {
@@ -360,5 +377,116 @@ public class TaskListController {
         
     }
     
+    
+    public List<TkWsTask> GetAllSubTaskByTaskId(int taskId) {
+        List<TkWsTask> lstTasks = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM TkWsTask WHERE parentTaskId =:taskId and isSubTask='Y'");
+            query.setParameter("taskId", taskId);
+            lstTasks = query.list();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstTasks;
+    }
+    
+    public List<SysUdfFieldValue> GetAllUDFByTaskId(int taskId) {
+        List<SysUdfFieldValue> lstTasks = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM SysUdfFieldValue WHERE refId =:taskId and status='ACTIVE'");
+            query.setParameter("taskId", taskId);
+            lstTasks = query.list();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstTasks;
+    }
+    public List<TkWsTaskChecklist> GetAllCheckListByTaskId(int taskId) {
+        List<TkWsTaskChecklist> lstChecklists = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM TkWsTaskChecklist WHERE tkWsTask.id =:taskId and checkListStatus='ACTIVE'");
+            query.setParameter("taskId", taskId);
+            lstChecklists = query.list();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstChecklists;
+    }
+    public List<TkWsTaskChecklistItem> GetAllCheckListItemByCheckListId(List<Integer> checklistID) {
+        List<TkWsTaskChecklistItem> lstChecklists = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM TkWsTaskChecklistItem WHERE tkWsTaskChecklist.id in (:checklistID) and itemStatus='ACTIVE'");
+            query.setParameterList("checklistID", checklistID);
+            lstChecklists = query.list();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstChecklists;
+    }
+    
+    public List<TkWsAttachments> GetAllAttachmentByTaskId(int taskId) {
+        List<TkWsAttachments> lstAttachmentses = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM TkWsAttachments WHERE taskId=:taskId and fileStatus='ACTIVE'");
+            query.setParameter("taskId", taskId);
+            lstAttachmentses = query.list();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstAttachmentses;
+    }
+    public List<TkWsComment> GetAllCommentByTaskId(int taskId) {
+        List<TkWsComment> lstComments = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM TkWsComment WHERE taskId=:taskId and status='ACTIVE'");
+            query.setParameter("taskId", taskId);
+            lstComments = query.list();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstComments;
+    }
     
 }
