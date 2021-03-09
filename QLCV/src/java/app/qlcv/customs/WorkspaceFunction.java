@@ -103,40 +103,47 @@ public class WorkspaceFunction extends ActionSupport implements SessionAware, Se
 
         for (int i = 0; i < lstTasks.size(); i++) {
             TkWsTask get = lstTasks.get(i);
+            System.out.println(get.getStatus());
             if (get.getStatus().equals("OPEN")) {
-                countOpen = countOpen++;
+                countOpen = countOpen+1;
             }
             if (get.getStatus().equals("INPROCESS")) {
-                countInprocess = countInprocess++;
+                countInprocess = countInprocess+1;
             }
             if (get.getStatus().equals("CLOSE")) {
-                countClose = countClose++;
+                countClose = countClose+1;
             }
             if (get.getStatus().equals("CANCEL")) {
-                countCancel = countCancel++;
+                countCancel = countCancel+1;
             }
         }
         if (lstTasks.size() > 0) {
             int totalTask = lstTasks.size();
-            String countOpenString;
-            String countInprocessString;
-            String countCloseString;
-            String countCancelString;
+            String countOpenString ="0";
+            String countInprocessString ="0";
+            String countCloseString ="0";
+            String countCancelString ="0";
             DecimalFormat df = new DecimalFormat("#.#");
             countOpenString = df.format(countOpen / totalTask);
             countInprocessString = df.format(countInprocess / totalTask);
             countCloseString = df.format(countClose / totalTask);
             countCancelString = df.format(countCancel / totalTask);
+            System.out.println(totalTask);
+            System.out.println(countOpen);
+            System.out.println(countInprocess);
+            System.out.println(countClose);
+            System.out.println(countCancel);
             bieudoTask = "{value: #value1#, name: 'Open'},{value: #value2#, name: 'Closed'},"
                     + "{value: #value3#, name: 'In-Process'},{value: #value4#, name: 'Cancel'}";
-            bieudoTask.replaceAll("#value1#", countOpenString);
-            bieudoTask.replaceAll("#value2#", countInprocessString);
-            bieudoTask.replaceAll("#value3#", countCloseString);
-            bieudoTask.replaceAll("#value4#", countCancelString);
+            bieudoTask = bieudoTask.replace("#value1#", countOpenString);
+            bieudoTask = bieudoTask.replace("#value2#", countInprocessString);
+            bieudoTask = bieudoTask.replace("#value3#", countCloseString);
+            bieudoTask = bieudoTask.replace("#value4#", countCancelString);
         } else {
             bieudoTask = "{value: 0, name: 'Open'},{value: 0, name: 'Closed'},"
                     + "{value: 0, name: 'In-Process'},{value: 0, name: 'Cancel'}";
         }
+        System.out.println(bieudoTask);
         return bieudoTask;
     }
 

@@ -30,5 +30,9 @@
             <result name="success">/jsp/workspace-viewtask.jsp</result>
             <result name="error">/jsp/errorcode.jsp</result>
         </action>
+        <action name="viewRaci" class="app.qlcv.workspace.TaskListAction" method="viewRaci">
+            <result name="success">/jsp/tasklist-view-raci.jsp</result>
+            <result name="error">/jsp/errorcode.jsp</result>
+        </action>
     </package>
 </struts>

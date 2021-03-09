@@ -68,7 +68,7 @@
                                                             <h4 class="card-title" style="color: #007bff;"><s:property value="taskListTitle"/></h4> 
                                                         </div>
                                                         <div class="col-1">
-                                                            RACI
+                                                            <a style="color: red; float: right" href="viewRaci?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>"><i class="la la-eye"></i>VIEW RACI</a>
                                                         </div>
                                                         <div class="col-1">
                                                             <a style="color: green; float: right" href="prepareCreateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>"><i class="la la-edit"></i>NEW</a>
@@ -86,6 +86,7 @@
                                                                     <th>Trạng thái</th>
                                                                     <th>Estimate</th>
                                                                     <th>Kiểm tra</th>
+                                                                    <th>Chức năng</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -100,6 +101,17 @@
                                                                     <td><s:property value="status"/></td>
                                                                     <td><s:property value="timeEstimate"/></td>
                                                                     <td><s:property value="reviewBy"/></td>
+                                                                    <td>
+                                                                        <a type="button" class="btn btn-facebook" href="taskCRUD?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>&&event=view">
+                                                                            Xem
+                                                                        </a>
+                                                                        <a type="button" class="btn btn-warning" href="taskCRUD?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>&&event=view">
+                                                                           Sửa
+                                                                        </a>
+                                                                        <a type="button" class="btn btn-danger" href="taskCRUD?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>&&event=view">
+                                                                            Xóa
+                                                                        </a>
+                                                                    </td>
                                                                 </tr>
                                                             </s:iterator>
                                                         </tbody>
@@ -117,7 +129,7 @@
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="card-title">Danh sách công việc: <s:property value="taskListTitle"/></h4>
+                                            <h4 class="card-title btn btn-facebook">Danh sách công việc </h4> <h4 class="card-title  btn btn-vimeo"><s:property value="taskListTitle"/></h4>
                                             <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                             <div class="heading-elements">
                                                 <ul class="list-inline mb-0">
@@ -135,7 +147,7 @@
                                                             <h4 class="card-title" style="color: #007bff;"><s:property value="taskListTitle"/></h4> 
                                                         </div>
                                                         <div class="col-1">
-                                                            RACI
+                                                            <a style="color: red; float: right" href="viewRaci?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>"><i class="la la-eye"></i>VIEW RACI</a>
                                                         </div>
                                                         <div class="col-1">
                                                             <a style="color: green; float: right" href="prepareCreateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>"><i class="la la-edit"></i>NEW</a>
@@ -153,6 +165,7 @@
                                                                     <th>Trạng thái</th>
                                                                     <th>Estimate</th>
                                                                     <th>Kiểm tra</th>
+                                                                    <th>Chức năng</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -167,6 +180,7 @@
                                                                     <td><s:property value="status"/></td>
                                                                     <td><s:property value="timeEstimate"/></td>
                                                                     <td><s:property value="reviewBy"/></td>
+                                                                    <td>dd</td>
                                                                 </tr>
                                                             </s:iterator>
                                                         </tbody>

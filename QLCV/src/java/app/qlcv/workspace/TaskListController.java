@@ -198,7 +198,7 @@ public class TaskListController {
             for (int i = 0; i < lstTasklists.size(); i++) {
                 List<TkWsTaskRaci> lstRacis = new ArrayList<>();
                 List<TkWsTask> task = new ArrayList<>();
-                Query q = session.createQuery("FROM TkWsTask WHERE tkWsTasklist.id =:tasklistID and status = 'ACTIVE' ");
+                Query q = session.createQuery("FROM TkWsTask WHERE tkWsTasklist.id =:tasklistID ");
                 q.setParameter("tasklistID", lstTasklists.get(i).getId());
                 task = q.list();
                 
@@ -265,6 +265,42 @@ public class TaskListController {
         return lstuser;
     }
     
+    public List<TkWsTaskRaci> getAllRaciAndView(int taskListId) {
+        List<TkWsTaskRaci> lstTasksRacis = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM TkWsTaskRaci WHERE tkWsTasklist.id =:taskListId and status='ACTIVE'");
+            query.setParameter("taskListId", taskListId);
+            lstTasksRacis = query.list();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstTasksRacis;
+    }
+    
+    public TkUser getUserById(int userid){
+        TkUser user = new TkUser();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            user = (TkUser) session.get(TkUser.class, userid);
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return user;
+    }
+    
     public String createTask(TkWsTask task, List<SysUdfFieldValue> lstUdf,
             List<TkWsTaskChecklist> lstChecklists, List<TkWsTaskChecklistItem> lstChecklistItems,
             TkWsComment comment, List<TkWsAttachments> lstAttachments) {
@@ -323,4 +359,6 @@ public class TaskListController {
         return error;
         
     }
+    
+    
 }

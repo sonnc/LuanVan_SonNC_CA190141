@@ -8,6 +8,7 @@ package app.qlcv.workspace;
 import app.qlcv.customs.MemberInfoWorkspaceSummary;
 import app.qlcv.customs.MilestonesAndFolder;
 import app.qlcv.customs.RaciMappingCustome;
+import app.qlcv.customs.RaciView;
 import app.qlcv.customs.TkWsTaskListCustom;
 import app.qlcv.customs.WorkspaceFunction;
 import app.qlcv.customs.WorkspaceSummary;
@@ -73,6 +74,7 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
     private List<TkUser> listUserRaciR = new ArrayList<>();
     private File[] myFile;
     private String[] myFileFileName;
+    private List<RaciView> lstRaciViews = new ArrayList<>();
 
     public TaskListAction() {
         taskListController = new TaskListController();
@@ -323,7 +325,6 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         for (Map.Entry<Integer, MilestonesAndFolder> entry : hashMap.entrySet()) {
             MilestonesAndFolder value = entry.getValue();
             lstMilestonesAndFolders.add(value);
-            
 
         }
 
@@ -357,7 +358,7 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         task.setIsSubTask("N");
         task.setStartDate(systemMethod.formatStringDateToSqlDate(request.getParameter("startDate")));
         task.setDueDate(systemMethod.formatStringDateToSqlDate(request.getParameter("dueDate")));
-        task.setStatus("ACTIVE");
+        task.setStatus("OPEN");
 
         int countItemInputUDF = Integer.parseInt(request.getParameter("countItemInputUDF"));
         int countItemInputCheckList = Integer.parseInt(request.getParameter("countItemInputCheckList"));
@@ -442,13 +443,39 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         }
     }
 
+    public String viewRaci() {
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        List<TkWsTaskRaci> lstRacis = new ArrayList<>();
+        lstRacis = taskListController.getAllRaciAndView(tasklistid);
+        System.out.println("==============="+lstRacis.size());
+        for (int i = 0; i < lstRacis.size(); i++) {
+            TkWsTaskRaci get = lstRacis.get(i);
+            TkUser user = taskListController.getUserById(get.getUserId());
+            RaciView rv = new RaciView();
+            rv.setUserId(user.getId());
+            rv.setUserLogin(user.getLoginId());
+            rv.setFullName(user.getFullName());
+            rv.setRaciA(get.getRaciA());
+            rv.setRaciR(get.getRaciR());
+            rv.setRaciC(get.getRaciC());
+            rv.setRaciI(get.getRaciI());
+            lstRaciViews.add(rv);
+        }
+        workspace = workspaceController.GetWorkspaceById(workspaceId);
+        tasklist = taskListController.GetTaskListById(tasklistid);
+        return SUCCESS;
+    }
+
     @Override
-    public void setSession(Map<String, Object> map) {
+    public void setSession(Map<String, Object> map
+    ) {
         this.session = map;
     }
 
     @Override
-    public void setServletRequest(HttpServletRequest hsr) {
+    public void setServletRequest(HttpServletRequest hsr
+    ) {
         this.request = hsr;
     }
 
@@ -603,6 +630,15 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
     public void setMyFileFileName(String[] myFileFileName) {
         this.myFileFileName = myFileFileName;
     }
+
+    public List<RaciView> getLstRaciViews() {
+        return lstRaciViews;
+    }
+
+    public void setLstRaciViews(List<RaciView> lstRaciViews) {
+        this.lstRaciViews = lstRaciViews;
+    }
+    
     
 
 }
