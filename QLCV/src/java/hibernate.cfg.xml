@@ -70,5 +70,6 @@ Contributor(s):
     <mapping resource="app/qlcv/entities/TkKpiItemDetailRating.hbm.xml"/>
     <mapping resource="app/qlcv/entities/TkRatingDateSetup.hbm.xml"/>
     <mapping resource="app/qlcv/entities/TkDepartment.hbm.xml"/>
+    <mapping resource="app/qlcv/entities/LuongKhoan.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

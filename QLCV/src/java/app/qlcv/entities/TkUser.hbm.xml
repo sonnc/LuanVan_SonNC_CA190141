@@ -62,6 +62,9 @@
         <property name="profilePicture" type="binary">
             <column name="PROFILE_PICTURE" />
         </property>
+        <property name="luongCoSo" type="big_decimal">
+            <column name="LUONG_CO_SO" />
+        </property>
         <many-to-one name="tkDepartment" class="app.qlcv.entities.TkDepartment"  lazy="false" cascade="none" fetch="select">
             <column name="DEPARTMENT" not-null="true" />
         </many-to-one>

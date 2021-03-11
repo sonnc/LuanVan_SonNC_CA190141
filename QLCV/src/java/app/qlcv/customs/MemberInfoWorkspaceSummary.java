@@ -5,6 +5,8 @@
  */
 package app.qlcv.customs;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author sonng
@@ -20,9 +22,9 @@ public class MemberInfoWorkspaceSummary {
     private int taskClose;
     private int taskCancel;
     private int taskDelay;
-    private String amount;
+    private BigDecimal amount;
 
-    public MemberInfoWorkspaceSummary(String maNhanVien, String tenNhanVien, String email, String dienThoai, int tongSoTask, int taskOpen, int taskInprocess, int taskClose, int taskCancel, int taskDelay, String amount) {
+    public MemberInfoWorkspaceSummary(String maNhanVien, String tenNhanVien, String email, String dienThoai, int tongSoTask, int taskOpen, int taskInprocess, int taskClose, int taskCancel, int taskDelay, BigDecimal amount) {
         this.maNhanVien = maNhanVien;
         this.tenNhanVien = tenNhanVien;
         this.email = email;
@@ -110,11 +112,11 @@ public class MemberInfoWorkspaceSummary {
         this.taskCancel = taskCancel;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

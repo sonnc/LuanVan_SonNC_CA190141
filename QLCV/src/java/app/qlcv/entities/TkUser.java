@@ -2,6 +2,7 @@ package app.qlcv.entities;
 // Generated Feb 20, 2021 4:59:14 PM by Hibernate Tools 4.3.1
 
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -31,6 +32,7 @@ public class TkUser  implements java.io.Serializable {
      private Integer teamNumber;
      private TkDepartment tkDepartment;
      private byte[] profilePicture;
+     private BigDecimal luongCoSo;
 
     public TkUser() {
     }
@@ -212,6 +214,14 @@ public class TkUser  implements java.io.Serializable {
 
     public void setTkDepartment(TkDepartment tkDepartment) {
         this.tkDepartment = tkDepartment;
+    }
+
+    public BigDecimal getLuongCoSo() {
+        return luongCoSo;
+    }
+
+    public void setLuongCoSo(BigDecimal luongCoSo) {
+        this.luongCoSo = luongCoSo;
     }
 
 

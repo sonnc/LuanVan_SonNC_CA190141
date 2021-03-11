@@ -176,6 +176,8 @@ public class WorkspaceAction extends ActionSupport implements SessionAware, Serv
 
         workspaceSummary = workspaceFunction.getWorkspaceSummary(id, request);
         session.put("bieudoTask", workspaceFunction.GetCharTask(id));
+        session.put("bieudoTask2",workspaceFunction.GetCharMemberTask(id));
+        session.put("bieudoTask3",workspaceFunction.GetCharTask3(id));
         lstMemberInfoWorkspaceSummarys = workspaceController.MemberInfoWorkspaceSummary(id);
 
         return SUCCESS;

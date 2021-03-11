@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.SessionAware;
 import app.qlcv.entities.*;
+import app.qlcv.sys.CodeValueController;
 import java.util.Properties;
 
 /**
@@ -27,6 +28,7 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
     private Map<String, Object> session;
     private File myFile;
     private UserController userController;
+    private CodeValueController codeValueController;
 
     public HttpServletRequest getRequest() {
         return request;
@@ -38,6 +40,7 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
     
     public UserAction() {
         userController = new UserController();
+        codeValueController = new CodeValueController();
     }
     
     @Override
@@ -58,10 +61,12 @@ public class UserAction extends ActionSupport implements SessionAware, ServletRe
         lstUser = userController.userLogin(userName, userPassword);
         if (lstUser!=null && lstUser.size()==1) {
             TkUser user = lstUser.get(0);
+            SysCodeValue syscode = codeValueController.getCodeValueById(user.getRoleId());
             Properties properties = prop.ReadFile(user.getLangPreference());
             if ("ACTIVE".equals(user.getStatus())) {
                 session.put("properties", properties);
                 session.put("user", user);
+                session.put("role", syscode);
                 return SUCCESS;
             } else {
                 addActionMessage(properties.getProperty("cdsac"));

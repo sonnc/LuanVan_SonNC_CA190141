@@ -13,6 +13,8 @@
             session.removeAttribute("CssAndJs");
             session.setAttribute("CssAndJs", "workspace-summary");
             String data = (String) session.getAttribute("bieudoTask");
+            String data2 = (String) session.getAttribute("bieudoTask2");
+            String data3 = (String) session.getAttribute("bieudoTask3");
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <%@include file="/jsp/header.jsp" %>
@@ -38,15 +40,18 @@
                                     <%=properties.getProperty("app.function.qlcv")%>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop11">
-                                    <a class="dropdown-item" href="workspaceAction?event=edit&&id=<s:property value="workspace.id"/>">Tất cả</a>
-                                    <a class="dropdown-item" href="workspaceAction?event=edit&&id=<s:property value="workspace.id"/>">Đang mở</a>
-                                    <a class="dropdown-item" href="taskAction?event=prepareCreateTaskList&&workspaceId=<s:property value="workspace.id"/>">Đang xử lý</a>
-                                    <a class="dropdown-item" href="taskAction?event=prepareCreateTaskList&&workspaceId=<s:property value="workspace.id"/>">Đã đóng</a>
-                                    <a class="dropdown-item" href="taskAction?event=prepareCreateTaskList&&workspaceId=<s:property value="workspace.id"/>">Đã hủy</a>
-                                    <a class="dropdown-item" href="taskAction?event=prepareCreateTaskList&&workspaceId=<s:property value="workspace.id"/>">Trễ hạn</a>
+                                    <a class="dropdown-item" href="GetTaskByUser?workspaceId=<s:property value="workspace.id"/>&&status=all">Tất cả</a>
+                                    <a class="dropdown-item" href="GetTaskByUser?workspaceId=<s:property value="workspace.id"/>&&status=OPEN">Đang mở</a>
+                                    <a class="dropdown-item" href="GetTaskByUser?workspaceId=<s:property value="workspace.id"/>&&status=INPROCESS">Đang xử lý</a>
+                                    <a class="dropdown-item" href="GetTaskByUser?workspaceId=<s:property value="workspace.id"/>&&status=COMPLETE">Hoàn thành, chờ đánh giá</a>
+                                    <a class="dropdown-item" href="GetTaskByUser?workspaceId=<s:property value="workspace.id"/>&&status=CLOSE">Đã đóng</a>
+                                    <a class="dropdown-item" href="GetTaskByUser?workspaceId=<s:property value="workspace.id"/>&&status=CANCEL">Đã hủy</a>
+                                    <a class="dropdown-item" href="GetTaskByUser?workspaceId=<s:property value="workspace.id"/>&&status=DELAY">Trễ hạn</a>
                                 </div>
                             </div>
 
+                            <%if ("PM".equals(role.getCode()) || "SPM".equals(role.getCode()) || "GD".equals(role.getCode())) {
+                            %>
                             <div>
                                 <button class="btn btn-info round dropdown-toggle dropdown-menu-right box-shadow-2 px-2"
                                         id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -71,6 +76,7 @@
 
                                 </div>
                             </div>
+                            <%}%>
                         </div>
                     </div>
                 </div>
@@ -198,7 +204,7 @@
                                 <div class="card">
                                     <div class="card-head">
                                         <div class="card-header">
-                                            <h4 class="card-title">Task Progress</h4>
+                                            <h4 class="card-title">Tỷ lệ hoàn thành workspace</h4>
                                             <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                             <div class="heading-elements">
                                                 <ul class="list-inline mb-0">
@@ -274,8 +280,20 @@
                                                             <td><s:property value="taskClose"/></td>
                                                             <td><s:property value="taskCancel"/></td>
                                                             <td><s:property value="taskDelay"/></td>
+                                                            <% if ("PM".equals(role.getCode()) || "SPM".equals(role.getCode()) || "GD".equals(role.getCode())) {
+                                                            %>
                                                             <td><s:property value="amount"/></td>
-
+                                                            <%}else{
+                                                            %>
+                                                            <s:set var="useremployee"><%=userLoginSys.getEmployeeNo()%></s:set>
+                                                            <s:if test="#test.maNhanVien == #useremployee">
+                                                                <td><s:property value="amount"/></td>
+                                                            </s:if>
+                                                            <s:else>
+                                                                <td>********</td>
+                                                            </s:else>
+                                                            <%
+                                                                     }%>
                                                         </tr>
                                                     </s:iterator>
                                                 </tbody>
@@ -292,8 +310,8 @@
         <script>
             window.onload = function () {
                 func1();
-//                func2();
-//                func3();
+                func2();
+                func3();
             };
 
             function func1() {
@@ -328,8 +346,8 @@
 
                                         // Add title
                                         title: {
-                                            text: 'Task progress',
-                                            subtext: 'Open vs Closed Task',
+                                            text: 'Thông tin Công việc',
+                                            subtext: 'Dữ liệu xử lý',
                                             x: 'center'
                                         },
 
@@ -343,11 +361,11 @@
                                         legend: {
                                             orient: 'vertical',
                                             x: 'left',
-                                            data: ['Open', 'Closed', 'Cancel', 'In-Process']
+                                            data: ['Open', 'Closed', 'Cancel', 'In-Process', 'Complete']
                                         },
 
                                         // Add custom colors
-                                        color: ['#FECEA8', '#FF847C', '#759773', '#afc8ae'],
+                                        color: ['#FCB900', '#ABB8C3', '#EB144C', '#008B02', '#BA68C8'],
 
                                         // Display toolbox
                                         toolbox: {
@@ -459,8 +477,8 @@
 
                                         // Add title
                                         title: {
-                                            text: 'Task progress',
-                                            subtext: 'Open vs Closed Task',
+                                            text: 'Tỷ lệ hoàn thành',
+                                            subtext: '(trong workspace)',
                                             x: 'center'
                                         },
 
@@ -474,11 +492,11 @@
                                         legend: {
                                             orient: 'vertical',
                                             x: 'left',
-                                            data: ['Open', 'Closed', 'Cancel', 'In-Process']
+                                            data: ['Finished', 'Unfinished']
                                         },
 
                                         // Add custom colors
-                                        color: ['#FECEA8', '#FF847C', '#759773', '#afc8ae'],
+                                        color: ['#7BDCB5', '#EB144C'],
 
                                         // Display toolbox
                                         toolbox: {
@@ -526,7 +544,7 @@
                                                 radius: '70%',
                                                 center: ['50%', '57.5%'],
                                                 data: [
-            <%=data%>
+            <%=data2%>
                                                 ]
                                             }]
                                     };
@@ -590,8 +608,8 @@
 
                                         // Add title
                                         title: {
-                                            text: 'Task progress',
-                                            subtext: 'Open vs Closed Task',
+                                            text: 'Phân bổ công việc',
+                                            subtext: 'Theo Miletones, folder, khác',
                                             x: 'center'
                                         },
 
@@ -605,11 +623,11 @@
                                         legend: {
                                             orient: 'vertical',
                                             x: 'left',
-                                            data: ['Open', 'Closed', 'Cancel', 'In-Process']
+                                            data: ['Miles-tone', 'Folder', 'Others']
                                         },
 
                                         // Add custom colors
-                                        color: ['#FECEA8', '#FF847C', '#759773', '#afc8ae'],
+                                        color: ['#FECEA8', '#FF847C', '#759773'],
 
                                         // Display toolbox
                                         toolbox: {
@@ -657,7 +675,7 @@
                                                 radius: '70%',
                                                 center: ['50%', '57.5%'],
                                                 data: [
-            <%=data%>
+            <%=data3%>
                                                 ]
                                             }]
                                     };

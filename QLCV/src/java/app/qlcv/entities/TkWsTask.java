@@ -34,7 +34,7 @@ public class TkWsTask  implements java.io.Serializable {
      private Integer nganSachCcy;
      private Long amountSpent;
      private Long amountRemain;
-     private String reviewBy;
+     private Integer reviewBy;
      private Set tkWsTaskChecklists = new HashSet(0);
 
     public TkWsTask() {
@@ -46,7 +46,7 @@ public class TkWsTask  implements java.io.Serializable {
         this.tkWsTasklist = tkWsTasklist;
         this.isSubTask = isSubTask;
     }
-    public TkWsTask(int id, TkWsTasklist tkWsTasklist, String createBy, String lastUpdateBy, Date createDate, Date lastUpdateDate, String taskName, String taskDesc, String isSubTask, Integer parentTaskId, Integer assigneeUserId, Date startDate, Date dateClose, Date dueDate, Integer priority, String status, Integer timeEstimate, Integer timeEstimateDdl, Long nganSach, Integer nganSachCcy, Long amountSpent, Long amountRemain, String reviewBy, Set tkWsTaskChecklists) {
+    public TkWsTask(int id, TkWsTasklist tkWsTasklist, String createBy, String lastUpdateBy, Date createDate, Date lastUpdateDate, String taskName, String taskDesc, String isSubTask, Integer parentTaskId, Integer assigneeUserId, Date startDate, Date dateClose, Date dueDate, Integer priority, String status, Integer timeEstimate, Integer timeEstimateDdl, Long nganSach, Integer nganSachCcy, Long amountSpent, Long amountRemain, Integer reviewBy, Set tkWsTaskChecklists) {
        this.id = id;
        this.tkWsTasklist = tkWsTasklist;
        this.createBy = createBy;
@@ -230,11 +230,11 @@ public class TkWsTask  implements java.io.Serializable {
     public void setAmountRemain(Long amountRemain) {
         this.amountRemain = amountRemain;
     }
-    public String getReviewBy() {
+    public Integer getReviewBy() {
         return this.reviewBy;
     }
     
-    public void setReviewBy(String reviewBy) {
+    public void setReviewBy(Integer reviewBy) {
         this.reviewBy = reviewBy;
     }
     public Set getTkWsTaskChecklists() {

@@ -260,6 +260,8 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
             workspace = workspaceController.GetWorkspaceById(workspaceId);
             workspaceSummary = workspaceFunction.getWorkspaceSummary(workspaceId, request);
             session.put("bieudoTask", workspaceFunction.GetCharTask(workspaceId));
+            session.put("bieudoTask2", workspaceFunction.GetCharMemberTask(workspaceId));
+            session.put("bieudoTask3", workspaceFunction.GetCharTask3(workspaceId));
             lstMemberInfoWorkspaceSummarys = workspaceController.MemberInfoWorkspaceSummary(workspaceId);
 
             return "CREATE_RACI_SUCCESS";
@@ -454,7 +456,6 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
         List<TkWsTaskRaci> lstRacis = new ArrayList<>();
         lstRacis = taskListController.getAllRaciAndView(tasklistid);
-        System.out.println("===============" + lstRacis.size());
         for (int i = 0; i < lstRacis.size(); i++) {
             TkWsTaskRaci get = lstRacis.get(i);
             TkUser user = taskListController.getUserById(get.getUserId());

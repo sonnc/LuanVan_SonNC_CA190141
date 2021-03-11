@@ -8,6 +8,8 @@
     <include file="codeset.xml"/>
     <include file="workspace.xml"/>
     <include file="tasklist.xml"/>
+    <include file="task.xml"/>
+    <include file="luongkhoan.xml"/>
     <include file="tk_kpi.xml"/>
     
     <package name="default" extends="struts-default">

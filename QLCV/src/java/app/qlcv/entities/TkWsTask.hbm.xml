@@ -71,8 +71,8 @@
         <property name="amountRemain" type="java.lang.Long">
             <column name="amount_remain" precision="10" scale="0" />
         </property>
-        <property name="reviewBy" type="string">
-            <column name="review_by" length="45" />
+        <property name="reviewBy" type="java.lang.Integer">
+            <column name="review_by"/>
         </property>
         <set name="tkWsTaskChecklists" table="tk_ws_task_checklist" inverse="true" lazy="true" fetch="select">
             <key>

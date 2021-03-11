@@ -20,6 +20,7 @@ import app.qlcv.entities.TkWsTeams;
 import app.qlcv.utils.HibernateUtil;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +56,19 @@ public class WorkspaceController {
             + "(select count(*) from tk_ws_task t join tk_ws_tasklist l on t.tk_ws_tasklist_id = l.id where l.tk_workspace_id=w.id ) count_task\n"
             + " from tk_workspace w join tk_ws_people p on w.id= p.tk_workspace_id\n"
             + "where p.status='ACTIVE' and p.user_id=:userId";
+
+    private String CHAR_TASK_3 = "SELECT \n"
+            + "COUNT(*) count_task\n"
+            + " FROM tk_ws_tasklist a join tk_ws_folder b on a.tk_ws_folder_id = b.id join tk_ws_task c on a.id= c.tk_ws_tasklist_id\n"
+            + " where A.STATUS='ACTIVE'  AND B.isMilestones = 'Y' and a.tk_workspace_ID=:workspaceId\n"
+            + " union all\n"
+            + " SELECT \n"
+            + "COUNT(*) count_task\n"
+            + " FROM tk_ws_tasklist a join tk_ws_folder b on a.tk_ws_folder_id = b.id join tk_ws_task c on a.id= c.tk_ws_tasklist_id\n"
+            + " where a.status='ACTIVE' AND ( B.isMilestones <> 'Y' or B.isMilestones is null) and a.tk_workspace_ID=:workspaceId\n"
+            + " union all\n"
+            + " select count(*) count_task from tk_ws_tasklist a join tk_ws_task c on a.id= c.tk_ws_tasklist_id\n"
+            + " where a.tk_ws_folder_id is null and a.tk_workspace_ID=:workspaceId";
 
     public WorkspaceController() {
         session = HibernateUtil.getSessionFactory().openSession();
@@ -430,7 +444,7 @@ public class WorkspaceController {
                         (int) ((BigInteger) row[7]).intValue(),
                         (int) ((BigInteger) row[8]).intValue(),
                         (int) ((BigInteger) row[9]).intValue(),
-                        (String) row[10]
+                        (BigDecimal) row[10]
                 );
                 lst.add(member);
             }
@@ -466,6 +480,32 @@ public class WorkspaceController {
                         (String) String.valueOf(row[6])
                 );
                 lst.add(member);
+            }
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lst;
+    }
+
+    public List<Integer> GetChar3(int workspaceId) {
+        List<Integer> lst = new ArrayList<>();
+        List<BigInteger> listResult = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createSQLQuery(CHAR_TASK_3);
+            query.setParameter("workspaceId", workspaceId);
+            listResult = query.list();
+            for (int i = 0; i < listResult.size(); i++) {
+                BigInteger get = listResult.get(i);
+                System.out.println(get.intValue());
+                lst.add(get.intValue());
             }
 
         } catch (Exception e) {

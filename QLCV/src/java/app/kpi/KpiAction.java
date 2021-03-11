@@ -342,6 +342,7 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
             if ("BO_PHAN".equals(lstTkKpiItems.get(i).getKpiItem())) {
                 HashSet<TkKpiItemDetail> hset = new HashSet<TkKpiItemDetail>(lstTkKpiItems.get(i).getTkKpiItemDetails());
                 List<TkKpiItemDetail> lstTkKpiItemSettings = new ArrayList<TkKpiItemDetail>(hset);
+                System.out.println("vdavasdvadssssssssssssssssssssssssssssssssssssss = "+lstTkKpiItemSettings.size());
                 double total = 0;
                 for (int j = 0; j < lstTkKpiItemSettings.size(); j++) {
                     double tyLe = 0;
@@ -393,6 +394,7 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
         tkKpiItemDetail.setKpiName("KET_QUA_THUC_HIEN_KPI");
         tkKpiItemDetail.setTrongSo(100.0);
 
+        System.out.println("lstTkKpiItemDetailPhongBan = "+lstTkKpiItemDetailPhongBan.size());
         totalSum = totalBP+totalTX+totalDX;
         tkKpiItemDetail.setTyLeThucHien(totalSum);
         lstTkKpiItemDetailTOTAL.add(tkKpiItemDetail);

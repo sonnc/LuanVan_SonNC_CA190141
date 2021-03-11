@@ -41,9 +41,14 @@
                                     <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
+                                            <%if ("PM".equals(role.getCode()) || "SPM".equals(role.getCode()) || "GD".equals(role.getCode())) {
+                                            %>
                                             <li><a class="btn btn-sm btn-danger box-shadow-2 round btn-min-width pull-right"
                                                    href="workspaceAction?event=prepareCreate"><%=properties.getProperty("app.workspace.add")%></a>
                                             </li>
+                                            <%
+                                                }
+                                            %>
                                         </ul>
                                     </div>
                                 </div>

@@ -3,12 +3,17 @@
     Created on : Feb 14, 2021, 5:37:45 PM
     Author     : sonng
 --%>
+<%@page import="app.qlcv.entities.SysCodeValue"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="app.qlcv.entities.TkUser"%>
 <%@page import="app.qlcv.workspace.WorkspaceController"%>
 <%@page import="app.qlcv.entities.TkWorkspace"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+TkUser userLoginSys = (TkUser) session.getAttribute("user");
+SysCodeValue role = (SysCodeValue) session.getAttribute("role");
+%>
 <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-semi-light bg-info navbar-shadow">
     <div class="navbar-wrapper">
         <div class="navbar-header">
@@ -35,14 +40,13 @@
                     <li class="dropdown dropdown-user nav-item">
                         <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                             <span class="mr-1">Xin Chào,
-                                <span class="user-name text-bold-700">John Doe</span>
+                                <span class="user-name text-bold-700"><%=userLoginSys.getFullName()%> (<%=role.getLocalCodeValue() %>)</span>
                             </span>
                             <!--                            <span class="avatar avatar-online">
                                                             <img src="<%=session.getAttribute("httpURL")%>app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"><i></i></span>-->
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#"><i class="ft-user"></i> Edit Profile</a>
-                            <a class="dropdown-item" href="#"><i class="ft-check-square"></i> Task</a>
-                            <div class="dropdown-divider"></div><a class="dropdown-item" href="UserLogout"><i class="ft-power"></i> Logout</a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <div class="dropdown-divider"></div><a class="dropdown-item" href="UserLogout"><i class="ft-power"></i> Đăng xuất</a>
                         </div>
                     </li>
                     <li class="dropdown dropdown-language nav-item"><a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown"
@@ -66,50 +70,68 @@
 
             <li class="nav-item"><a href="#"><i class="la la-home"></i><span class="menu-title"><%=properties.getProperty("app.dashboards")%></span></a>
             </li>
-            <li class=" nav-item"><a href="#"><i class="la la-inbox"></i><span class="menu-title"><%=properties.getProperty("app.notification")%></span></a>
+            <li class=" nav-item"><a href="#"><i class="la la-bell"></i><span class="menu-title"><%=properties.getProperty("app.notification")%></span></a>
             </li>
-            <li class=" nav-item"><a href="#"><i class="la la-windows"></i><span class="menu-title"><%=properties.getProperty("app.department")%></span></a>
+<!--            <li class=" nav-item"><a href="#"><i class="la la-windows"></i><span class="menu-title"><%=properties.getProperty("app.department")%></span></a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="#">Quản lý phòng ban</a></li>
                     <li><a class="menu-item" href="#">Thêm thành viên</a></li>
                     <li><a class="menu-item" href="#">Xóa thành viên</a></li>
                     <li><a class="menu-item" href="#">Sửa thành viên</a></li>
                 </ul>
-            </li>
+            </li>-->
             <li class=" nav-item"><a href="viewWorkspaceAction"><i class="la la-briefcase"></i><span class="menu-title"><%=properties.getProperty("app.workspace")%></span></a>
              
             </li>
             <li class=" nav-item"><a href="#"><i class="la la-inbox"></i><span class="menu-title">Khoán và tiền thưởng</span></a>
                 <ul class="menu-content">
-                    <li><a class="menu-item" href="#">Cài đặt tính khoán - PM</a></li>
-                    <li><a class="menu-item" href="#">Thống kê - PM</a></li>
-                    <li><a class="menu-item" href="#">Khoán và hiệu quả CV</a></li>
+                    <%if ("PM".equals(role.getCode()) ||"SPM".equals(role.getCode())||"GD".equals(role.getCode())
+                            ) {
+                            %>
+                    <li><a class="menu-item" href="themisPrepareCaculateAction">Tính khoán - PM</a></li>
+                    <%
+                        }
+                    %>
+                    
+                    <li><a class="menu-item" href="themisAction">Khoán và hiệu quả CV</a></li>
                 </ul>
             </li>
-            <li class=" nav-item"><a href="viewKpiOfDepartementAction"><i class="la la-inbox"></i><span class="menu-title"><%=properties.getProperty("app.kpi")%></span></a>
+            <li class=" nav-item"><a href="viewKpiOfDepartementAction"><i class="la la-star"></i><span class="menu-title"><%=properties.getProperty("app.kpi")%></span></a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="viewKpiOfDepartementAction">KPI</a></li>
-                        <% int year = Calendar.getInstance().get(Calendar.YEAR);%>
-                       
-
-                     <li>
+                         <% int year = Calendar.getInstance().get(Calendar.YEAR);%>
+                         <%if ("PM".equals(role.getCode()) ||"SPM".equals(role.getCode())||"GD".equals(role.getCode())
+                            ) {
+                            %>
+                    <li>
                         <a href="getAllStaffKpiAction?kpiYear=<%= year%>">QUẢN LÝ KPI NHÂN VIÊN</a>
                      </li>
+                    <%
+                        }
+                    %>
+                        
+                     
                    
                     <li>
                         <a type="button" href="kpiUserAction?userId=0&&kpiYear=<%= year%>&&method=viewMyKpi">KPI CỦA TÔI</a>
                     </li>
                 </ul>
             </li>
-            <li class=" nav-item"><a href="#"><i class="la la-inbox"></i><span class="menu-title"><%=properties.getProperty("app.report")%></span></a>
-            </li>
-            <li class=" nav-item"><a href="#"><i class="la la-inbox"></i><span class="menu-title"><%=properties.getProperty("app.setup")%></span></a>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="getAllCodeSet">Giá trị hệ thống</a></li>
-                    <li><a class="menu-item" href="#">UDF</a></li>
-                    <li><a class="menu-item" href="<%=session.getAttribute("httpURL")%>tk_admin/home.jsp">Cài đặt Hệ thống</a></li>
-                </ul>
-            </li>
+<!--            <li class=" nav-item"><a href="#"><i class="la la-inbox"></i><span class="menu-title"><%=properties.getProperty("app.report")%></span></a>
+            </li>-->
+            <%if ("PM".equals(role.getCode()) ||"SPM".equals(role.getCode())||"GD".equals(role.getCode())
+                            ) {
+                            %>
+                            <li class=" nav-item"><a href="#"><i class="la la-chrome"></i><span class="menu-title"><%=properties.getProperty("app.setup")%></span></a>
+                                <ul class="menu-content">
+                                    <li><a class="menu-item" href="getAllCodeSet">Giá trị hệ thống</a></li>
+                                    <li><a class="menu-item" href="<%=session.getAttribute("httpURL")%>tk_admin/home.jsp">Cài đặt Hệ thống</a></li>
+                                </ul>
+                            </li>
+                    <%
+                        }
+                    %>
+           
 
         </ul>
     </div>
