@@ -5,6 +5,7 @@
  */
 package app.qlcv.customs;
 
+import app.qlcv.entities.TkUser;
 import app.qlcv.entities.TkWorkspace;
 import app.qlcv.entities.TkWsFolder;
 import app.qlcv.entities.TkWsTask;
@@ -34,14 +35,15 @@ public class TkWsTaskListCustom {
     private Date createDate;
     private Date lastUpdateDate;
     private List<TkWsTask> lstTask;
+    private List<TkWsTaskCustom> lstTaskCustoms;
 
     public TkWsTaskListCustom() {
     }
 
-    public TkWsTaskListCustom(int id, TkWsFolder tkWsFolder,List <TkWsTaskRaci>  tkWsTaskRacis, String taskListTitle, String taskListDesc, Integer timeEstimate, Integer timeEstimateDdl, Date dueDate, String priority, String status, String createBy, String lastUpdateBy, Date createDate, Date lastUpdateDate, List<TkWsTask> lstTask) {
+    public TkWsTaskListCustom(int id, TkWsFolder tkWsFolder, List<TkWsTaskRaci> tkWsTaskRacis, String taskListTitle, String taskListDesc, Integer timeEstimate, Integer timeEstimateDdl, Date dueDate, String priority, String status, String createBy, String lastUpdateBy, Date createDate, Date lastUpdateDate, List<TkWsTaskCustom> lstTaskCustoms) {
         this.id = id;
-        this.tkWsFolder =tkWsFolder;
-        this.tkWsTaskRacis =tkWsTaskRacis;
+        this.tkWsFolder = tkWsFolder;
+        this.tkWsTaskRacis = tkWsTaskRacis;
         this.taskListTitle = taskListTitle;
         this.taskListDesc = taskListDesc;
         this.timeEstimate = timeEstimate;
@@ -53,7 +55,7 @@ public class TkWsTaskListCustom {
         this.lastUpdateBy = lastUpdateBy;
         this.createDate = createDate;
         this.lastUpdateDate = lastUpdateDate;
-        this.lstTask = lstTask;
+        this.lstTaskCustoms = lstTaskCustoms;
     }
 
     
@@ -177,6 +179,15 @@ public class TkWsTaskListCustom {
     public void setTkWsTaskRacis(List<TkWsTaskRaci> tkWsTaskRacis) {
         this.tkWsTaskRacis = tkWsTaskRacis;
     }
+
+    public List<TkWsTaskCustom> getLstTaskCustoms() {
+        return lstTaskCustoms;
+    }
+
+    public void setLstTaskCustoms(List<TkWsTaskCustom> lstTaskCustoms) {
+        this.lstTaskCustoms = lstTaskCustoms;
+    }
+    
     
     
     

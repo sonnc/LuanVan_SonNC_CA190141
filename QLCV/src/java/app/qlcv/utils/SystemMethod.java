@@ -5,6 +5,10 @@
  */
 package app.qlcv.utils;
 
+import app.qlcv.customs.TkWsTaskCustom;
+import app.qlcv.entities.TkUser;
+import app.qlcv.entities.TkWsTask;
+import app.qlcv.workspace.TaskListController;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
 import java.sql.Date;
@@ -26,6 +30,7 @@ public class SystemMethod extends ActionSupport implements SessionAware, Servlet
 
     private HttpServletRequest request;
     private Map<String, Object> session;
+    private TaskListController taskListController = new TaskListController();
 
     public Date formatStringDateToSqlDate(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -72,6 +77,20 @@ public class SystemMethod extends ActionSupport implements SessionAware, Servlet
         long timeMilli = date.getTime();
         return timeMilli;
     }
+    
+      public TkWsTaskCustom mergeTaskWithUser(TkWsTask tasks) {
+        TkWsTaskCustom taskCustom = new TkWsTaskCustom();
+        taskCustom.setTask(tasks);
+        TkUser assigneeUser = new TkUser();
+        assigneeUser = taskListController.getUserById(tasks.getAssigneeUserId());
+        taskCustom.setAssigneeUser(assigneeUser);
+        TkUser reviewByUser = new TkUser();
+        reviewByUser = taskListController.getUserById(tasks.getReviewBy());
+        taskCustom.setReviewByUser(reviewByUser);
+
+        return taskCustom;
+    }
+    
     
     public HttpServletRequest getRequest() {
         return request;

@@ -21,6 +21,9 @@
         <action name="UserLogout" class="app.qlcv.user.UserAction" method="UserLogout">
             <result name="success">/jsp/login.jsp</result>
         </action>
+        <action name="getDataHome" class="app.qlcv.user.UserAction" method="getDataHomeValue">
+            <result name="success">/jsp/home.jsp</result>
+        </action>
         <action name="adminKpiAction" class="app.kpi.AdminKpiAction" method="adminKpi">
             <result name="VIEW_ALL_KPI_SUCCESS">/tk_admin/kpi.jsp</result>
             <result name="VIEW_KPI_DETAIL_SUCCESS">/tk_admin/kpi-detail.jsp</result>

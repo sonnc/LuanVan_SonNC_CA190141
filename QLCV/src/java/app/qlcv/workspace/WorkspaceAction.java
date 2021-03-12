@@ -42,7 +42,7 @@ public class WorkspaceAction extends ActionSupport implements SessionAware, Serv
     private Map<String, Object> session;
     private WorkspaceController workspaceController;
     private List<TkUser> listUserInDepartement;
-    private List<TkUser> listUserInWorkspace;
+    private List<TkUser> listUserInWorkspace = new ArrayList<>();
     private TkWorkspace workspace;
     private SystemMethod systemMethod;
     private String errorCode;
@@ -75,8 +75,8 @@ public class WorkspaceAction extends ActionSupport implements SessionAware, Serv
                 workspace.setLastUpdateDate(systemMethod.getSysDateToSqlDate());
                 workspace.setCreateBy(user.getLoginId());
                 workspace.setLastUpdateBy(user.getLoginId());
-                workspace.setDepartmentId(user.getDepartment());
-                workspace.setOwner(user.getLoginId());
+                workspace.setDepartmentId(user.getTkDepartment().getId());
+                workspace.setOwner(String.valueOf(user.getId()));
 
                 // them thanh vien vao du an
                 List<TkWsPeople> lstTkWsPeoples = new ArrayList<>();
@@ -164,7 +164,8 @@ public class WorkspaceAction extends ActionSupport implements SessionAware, Serv
                 return ERROR;
             }
         } else if ("viewWorkspace".equals(event)) {
-
+            vewWorkspaceByUser();
+            return "RETURN_WORKSPACE";
         }
 
         return SUCCESS;
@@ -176,8 +177,8 @@ public class WorkspaceAction extends ActionSupport implements SessionAware, Serv
 
         workspaceSummary = workspaceFunction.getWorkspaceSummary(id, request);
         session.put("bieudoTask", workspaceFunction.GetCharTask(id));
-        session.put("bieudoTask2",workspaceFunction.GetCharMemberTask(id));
-        session.put("bieudoTask3",workspaceFunction.GetCharTask3(id));
+        session.put("bieudoTask2", workspaceFunction.GetCharMemberTask(id));
+        session.put("bieudoTask3", workspaceFunction.GetCharTask3(id));
         lstMemberInfoWorkspaceSummarys = workspaceController.MemberInfoWorkspaceSummary(id);
 
         return SUCCESS;
@@ -213,7 +214,11 @@ public class WorkspaceAction extends ActionSupport implements SessionAware, Serv
         lstWorkspaceDashboards = workspaceController.vewWorkspaceByUser(user.getId());
         return SUCCESS;
     }
-
+    
+  
+    
+    
+    
     ////////////////////////////////
     public HttpServletRequest getRequest() {
         return request;

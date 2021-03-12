@@ -25,9 +25,15 @@
         <div class="app-content content">
             <form action="createTask" method="post" enctype="multipart/form-data">
                 <div class="content-wrapper">
-                    <div class="content-header row">
-                        <div class="content-header-left col-md-6 col-12 mb-2">
-                            <h3 class="content-header-title">Tạo mới công việc</h3>
+                    <s:set name="checkTaskPrent"><s:property value="taskParent.id"/></s:set>
+                        <div class="content-header row">
+                            <div class="content-header-left col-md-6 col-12 mb-2">
+                            <s:if test="#checkTaskPrent > 0">
+                                <h3 class="card-title" id="file-repeater">Tạo Sub-task </h3>
+                            </s:if>
+                            <s:else>
+                                <h3 class="content-header-title">Tạo mới công việc</h3>
+                            </s:else>
                         </div>
                         <div class="content-header-right col-md-6 col-12">  
                             <div class="btn-group float-md-right" > 
@@ -50,8 +56,19 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="card-title" id="file-repeater">Tạo mới công việc</h4>
-                                            <a class="heading-elements-toggle"><i class="la la-ellipsis-h font-medium-3"></i></a>
+
+                                            <s:if test="#checkTaskPrent > 0">
+                                                <h4 class="card-title" id="file-repeater">Tạo Sub-task cho công việc: <strong style="color: red"><s:property value="taskParent.taskName"/></strong></h4>
+                                                <div style="margin-top: 10px">
+                                                    <a class="btn btn-outline-cyan" href="viewTask?workspaceId=<s:property value="workspace.id"/>&&tasklistid=<s:property value="taskParent.tkWsTasklist.id"/>&&taskid=<s:property value="taskParent.id"/>">
+                                                    Trở về Task cha
+                                                </a>
+                                                </div>
+                                                
+                                            </s:if>
+                                            <s:else>
+                                                <h4 class="card-title" id="file-repeater">Tạo mới công việc</h4>
+                                            </s:else>
                                             <div class="heading-elements">
                                                 <ul class="list-inline mb-0">
                                                     <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
@@ -68,6 +85,12 @@
                                                     <input hidden="true" id="countItemInputUDF" name="countItemInputUDF" value="" />
                                                     <input hidden="true" name="workspaceId" value="<s:property value="workspace.id"/>" />
                                                     <input hidden="true" name="tasklistid" value="<s:property value="tasklist.id"/>" />
+
+                                                    <s:if test="#checkTaskPrent > 0">
+                                                        <input hidden="true" name="taskid" value="<s:property value="taskParent.id"/>" />
+                                                        <input hidden="true" name="subtask" value="true"/>
+                                                    </s:if>
+
                                                 </div>
                                                 <div class="form-group col-12 mb-2 ">
                                                     <div class="row">

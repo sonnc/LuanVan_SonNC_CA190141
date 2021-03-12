@@ -317,3 +317,27 @@
 <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>assets/css/style.css">
 <!-- END Custom CSS-->
 <%}%> 
+
+
+
+<%
+    if ("home-dashboard".equals((String) session.getAttribute("CssAndJs"))) {
+%>
+<!-- BEGIN VENDOR CSS-->
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/css/vendors.css">
+  <!-- END VENDOR CSS-->
+  <!-- BEGIN MODERN CSS-->
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/css/app.css">
+  <!-- END MODERN CSS-->
+  <!-- BEGIN Page Level CSS-->
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/css/core/menu/menu-types/vertical-menu.css">
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/css/core/colors/palette-gradient.css">
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/vendors/css/charts/jquery-jvectormap-2.0.3.css">
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/vendors/css/charts/morris.css">
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/fonts/simple-line-icons/style.css">
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/css/core/colors/palette-gradient.css">
+  <!-- END Page Level CSS-->
+  <!-- BEGIN Custom CSS-->
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>assets/css/style.css">
+  <!-- END Custom CSS-->
+<%}%> 

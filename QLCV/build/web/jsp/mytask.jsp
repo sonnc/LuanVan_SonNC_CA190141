@@ -50,6 +50,11 @@
                                 <a class="dropdown-item" href="GetTaskByUser?workspaceId=<s:property value="workspace.id"/>&&status=DELAY">Trễ hạn</a>
                             </div>
                         </div>
+                            <div class="btn-group float-md-right">
+                            <a href="TaskPendingRating?workspaceId=<s:property value="workspace.id"/>" class="btn btn-outline-twitter round  px-2" type="button" aria-expanded="false"><i class="ft-star icon-left"></i> 
+                                    Đánh giá công việc thành viên
+                                </a>
+                        </div>
                     </div>
                 </div>
                 <div class="content-body">

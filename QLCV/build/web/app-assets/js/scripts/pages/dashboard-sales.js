@@ -36,7 +36,7 @@
         data: {
             labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon"],
             datasets: [{
-                data: [5000, 10000, 4000, 14500, 8000, 18500, 8000, 20000],
+                data: [5000, 10000, 4000, 14500, 0, 0, 0, 0],
                 borderWidth: 4,
                 borderColor: '#FF4961',
                 pointBackgroundColor: "#FFF",

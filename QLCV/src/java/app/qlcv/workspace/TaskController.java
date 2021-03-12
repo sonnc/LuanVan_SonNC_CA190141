@@ -61,11 +61,11 @@ public class TaskController {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
             String q = "FROM TkWsTask a where a.assigneeUserId=:userId ";
-            if(!"all".equals(status)){
-                q =q+"and status ='"+status.toUpperCase()+"'";
+            if (!"all".equals(status)) {
+                q = q + "and status ='" + status.toUpperCase() + "'";
             }
-            if("DELAY".equals(status)){
-                q =q+" and a.status NOT IN ('CLOSE','CANCEL') and a.dueDate < sysdate()";
+            if ("DELAY".equals(status)) {
+                q = q + " and a.status NOT IN ('CLOSE','CANCEL') and a.dueDate < sysdate()";
             }
             Query query = session.createQuery(q);
             query.setParameter("userId", userId);
@@ -79,6 +79,58 @@ public class TaskController {
             session.close();
         }
         return lstTasks;
+    }
+
+    public List<TkWsTask> getAllTaskPendingRating(int userId) {
+        List<TkWsTask> lstTasks = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            String q = "FROM TkWsTask a where a.reviewBy=:userId and status='COMPLETE'";
+            Query query = session.createQuery(q);
+            query.setParameter("userId", userId);
+            lstTasks = query.list();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstTasks;
+    }
+
+    public List<TkWorkspace>  soDuAnThamGiaByUserId(int userId) {
+        List<TkWsPeople> lstList = new ArrayList<>();
+        List<TkWorkspace> lstWorkspaces = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            String q = "FROM TkWsPeople a where a.userId=:userId and status='ACTIVE'";
+            Query query = session.createQuery(q);
+            query.setParameter("userId", userId);
+            lstList = query.list();
+            if (lstList != null && lstList.size() > 0) {
+                for (int i = 0; i < lstList.size(); i++) {
+                    TkWsPeople get = lstList.get(i);
+                    TkWorkspace workspace = new TkWorkspace();
+                    workspace = (TkWorkspace) session.get(TkWsTasklist.class, get.getTkWorkspace().getId());
+                    if ("ACTIVE".equals(workspace.getStatus())) {
+                        lstWorkspaces.add(workspace);
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstWorkspaces;
     }
 
 }

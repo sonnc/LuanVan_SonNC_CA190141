@@ -52,7 +52,7 @@ public class WorkspaceController {
             + "(select full_name from tk_user where id = w.owner) full_name,\n"
             + "w.status, \n"
             + "(select count(*) from tk_ws_people where tk_workspace_id=w.id ) memberOfWS,\n"
-            + "(select distinct tk_ws_folder_id from tk_ws_tasklist l join tk_ws_folder f on l.tk_ws_folder_id = f.id where f.isMilestones='Y' and l.tk_workspace_id=w.id) count_milestone,\n"
+            + "(select count(*) from (select distinct tk_ws_folder_id from tk_ws_tasklist l join tk_ws_folder f on l.tk_ws_folder_id = f.id where f.isMilestones='Y' and l.tk_workspace_id=w.id)x) count_milestone,\n"
             + "(select count(*) from tk_ws_task t join tk_ws_tasklist l on t.tk_ws_tasklist_id = l.id where l.tk_workspace_id=w.id ) count_task\n"
             + " from tk_workspace w join tk_ws_people p on w.id= p.tk_workspace_id\n"
             + "where p.status='ACTIVE' and p.user_id=:userId";
@@ -409,7 +409,7 @@ public class WorkspaceController {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM TkWsTask WHERE tkWsTasklist.id =:taskListId ");
+            Query query = session.createQuery("FROM TkWsTask WHERE tkWsTasklist.id =:taskListId and status <> 'DELETE'");
             query.setParameter("taskListId", taskListId);
             lstTask = query.list();
         } catch (Exception e) {

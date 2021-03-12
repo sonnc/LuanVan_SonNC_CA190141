@@ -31,7 +31,7 @@
                         </div>
                         <div class="content-header-right col-md-6 col-12">
                             <div class="btn-group float-md-right" role="group" aria-label="">     
-                                <button onclick="countId()" type="submit" class="btn btn-info round box-shadow-2 px-2">
+                                <button onclick="countId();" type="submit" class="btn btn-info round box-shadow-2 px-2">
                                     <i class="ft-save"></i> <%=properties.getProperty("app.save")%></button>
                             </div>
                         </div>

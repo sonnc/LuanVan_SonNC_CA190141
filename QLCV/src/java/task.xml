@@ -12,5 +12,13 @@
             <result name="success">/jsp/mytask.jsp</result>
             <result name="error">/jsp/errorcode.js</result>
         </action>
+        <action name="TaskPendingRating" class="app.qlcv.workspace.TaskAction" method="getAllTaskPendingRating">
+            <result name="success">/jsp/mytask.jsp</result>
+            <result name="error">/jsp/errorcode.js</result>
+        </action>
+        <action name="prepareEditTask" class="app.qlcv.workspace.TaskAction" method="prepareEditTask">
+            <result name="success">/jsp/task-edit.jsp</result>
+            <result name="error">/jsp/errorcode.js</result>
+        </action>
     </package>
 </struts>

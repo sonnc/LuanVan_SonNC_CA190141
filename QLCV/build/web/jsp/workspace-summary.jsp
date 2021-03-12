@@ -34,6 +34,9 @@
                     <div class="content-header-right col-md-6 col-12">
                         <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                             <div style="margin-right: 10px">
+                                <a href="TaskPendingRating?workspaceId=<s:property value="workspace.id"/>" class="btn btn-outline-twitter round  px-2" type="button" aria-expanded="false"><i class="ft-star icon-left"></i> 
+                                    Đánh giá công việc thành viên
+                                </a>
                                 <button class="btn btn-danger round dropdown-toggle dropdown-menu-right box-shadow-2 px-2"
                                         id="btnGroupDrop11" type="button" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false"><i class="ft-edit icon-left"></i> 

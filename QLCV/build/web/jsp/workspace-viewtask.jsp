@@ -46,10 +46,10 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <s:if test="#test.isMilestones!='Y'">
-                                                <h4 class="card-title btn btn-grey-blue">Thư mục </h4> <h4 class="card-title btn btn-vimeo"><s:property value="folderName"/>  </h4>
+                                                <h4 class="card-title btn btn-outline-cyan">Thư mục </h4> <h4 class="card-title btn btn-vimeo"><s:property value="folderName"/>  </h4>
                                             </s:if>
                                             <s:else>
-                                                <h4 class="card-title btn btn-danger">Mốc giai đoạn </h4> <h4 class="card-title btn btn-vimeo"><s:property value="folderName"/> - Số tiền khoán:<s:property value="milestonesTienkhoan"/> </h4>
+                                                <h4 class="card-title btn btn-outline-danger">Mốc giai đoạn </h4> <h4 class="card-title btn btn-vimeo"><s:property value="folderName"/> - Số tiền khoán:<s:property value="milestonesTienkhoan"/> </h4>
                                             </s:else>
                                             <div class="heading-elements">
                                                 <ul class="list-inline mb-0">
@@ -90,27 +90,24 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <s:iterator value="lstTask" var="test">
+                                                            <s:iterator value="lstTaskCustoms" var="lstTask">
                                                                 <tr>
-                                                                    <td><s:property value="id"/></td>
-                                                                    <td><s:property value="taskName"/></td>
-                                                                    <td><s:property value="assigneeUserId"/></td>
-                                                                    <td><s:property value="startDate"/></td>
-                                                                    <td><s:property value="dueDate"/></td>
-                                                                    <td><s:property value="priority"/></td>
-                                                                    <td><s:property value="status"/></td>
-                                                                    <td><s:property value="timeEstimate"/></td>
-                                                                    <td><s:property value="reviewBy"/></td>
+                                                                    <td><s:property value="task.id"/></td>
+                                                                    <td><s:property value="task.taskName"/></td>
+                                                                    <td><s:property value="assigneeUser.fullName"/></td>
+                                                                    <td><s:property value="task.startDate"/></td>
+                                                                    <td><s:property value="task.dueDate"/></td>
+                                                                    <td><s:property value="task.priority"/></td>
+                                                                    <td><s:property value="task.status"/></td>
+                                                                    <td><s:property value="task.timeEstimate"/></td>
+                                                                    <td><s:property value="reviewByUser.fullName"/></td>
                                                                     <td>
-                                                                        <a type="button" class="btn btn-facebook" href="viewTask?workspaceId=<s:property value="workspace.id"/>&&tasklistid=<s:property value="#testTaskList.id"/>&&taskid=<s:property value="id"/>">
+                                                                        <a type="button" class="btn btn-facebook" href="viewTask?workspaceId=<s:property value="workspace.id"/>&&tasklistid=<s:property value="#testTaskList.id"/>&&taskid=<s:property value="#lstTask.task.id"/>">
                                                                             Xem
                                                                         </a>
-                                                                        <a type="button" class="btn btn-warning" href="taskCRUD?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>&&event=view">
-                                                                           Sửa
-                                                                        </a>
-                                                                        <a type="button" class="btn btn-danger" href="taskCRUD?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="id"/>&&event=view">
-                                                                            Xóa
-                                                                        </a>
+                                                                        <a type="button" class="btn btn-danger" href="deleteTask?workspaceId=<s:property value="workspace.id"/>&&tasklistid=<s:property value="#testTaskList.id"/>&&taskid=<s:property value="#lstTask.task.id"/>">
+                                                                                    Xóa
+                                                                                </a>
                                                                     </td>
                                                                 </tr>
                                                             </s:iterator>
@@ -129,7 +126,7 @@
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="card-title btn btn-facebook">Danh sách công việc </h4> <h4 class="card-title  btn btn-vimeo"><s:property value="taskListTitle"/></h4>
+                                            <h4 class="card-title btn btn-outline-instagram">Danh sách công việc </h4> <h4 class="card-title  btn btn-vimeo"><s:property value="taskListTitle"/></h4>
                                             <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                             <div class="heading-elements">
                                                 <ul class="list-inline mb-0">
@@ -169,18 +166,26 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <s:iterator value="lstTask" var="test">
+                                                            <s:iterator value="lstTaskCustoms" var="test">
                                                                 <tr>
-                                                                    <td><s:property value="id"/></td>
-                                                                    <td><s:property value="taskName"/></td>
-                                                                    <td><s:property value="assigneeUserId"/></td>
-                                                                    <td><s:property value="startDate"/></td>
-                                                                    <td><s:property value="dueDate"/></td>
-                                                                    <td><s:property value="priority"/></td>
-                                                                    <td><s:property value="status"/></td>
-                                                                    <td><s:property value="timeEstimate"/></td>
-                                                                    <td><s:property value="reviewBy"/></td>
-                                                                    <td>dd</td>
+                                                                    <td><s:property value="task.id"/></td>
+                                                                    <td><s:property value="task.taskName"/></td>
+                                                                    <td><s:property value="assigneeUser.fullName"/></td>
+                                                                    <td><s:property value="task.startDate"/></td>
+                                                                    <td><s:property value="task.dueDate"/></td>
+                                                                    <td><s:property value="task.priority"/></td>
+                                                                    <td><s:property value="task.status"/></td>
+                                                                    <td><s:property value="task.timeEstimate"/></td>
+                                                                    <td><s:property value="reviewByUser.fullName"/></td>
+                                                                    <td>
+                                                                        <a type="button" class="btn btn-facebook" href="viewTask?workspaceId=<s:property value="workspace.id"/>&&tasklistid=<s:property value="#testTaskList.id"/>&&taskid=<s:property value="#lstTask.task.id"/>">
+                                                                            Xem
+                                                                        </a>
+                                                                        <a type="button" class="btn btn-danger" href="deleteTask?workspaceId=<s:property value="workspace.id"/>&&tasklistid=<s:property value="#testTaskList.id"/>&&taskid=<s:property value="#lstTask.task.id"/>">
+                                                                                    Xóa
+                                                                                </a>
+                                                                        
+                                                                    </td>
                                                                 </tr>
                                                             </s:iterator>
                                                         </tbody>

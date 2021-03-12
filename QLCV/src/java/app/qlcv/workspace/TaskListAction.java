@@ -9,6 +9,7 @@ import app.qlcv.customs.MemberInfoWorkspaceSummary;
 import app.qlcv.customs.MilestonesAndFolder;
 import app.qlcv.customs.RaciMappingCustome;
 import app.qlcv.customs.RaciView;
+import app.qlcv.customs.TkWsTaskCustom;
 import app.qlcv.customs.TkWsTaskListCustom;
 import app.qlcv.customs.WorkspaceFunction;
 import app.qlcv.customs.WorkspaceSummary;
@@ -68,6 +69,8 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
     private List<TkWsTaskListCustom> lstWsTaskListCustoms = new ArrayList<>();
     private List<TkWsTaskRaci> lstTaskRacis = new ArrayList<>();
     private TkWsTask task;
+    private TkWsTask taskParent;
+    private TkWsTaskCustom taskCustom;
     private TkWsComment taskComment;
     private List<SysCodeSet> lstCodeSets = new ArrayList<>();
     private List<SysCodeValue> lstCodeValues = new ArrayList<>();
@@ -81,12 +84,16 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
     private List<TkWsTaskChecklist> lstChecklists = new ArrayList<>();
     private List<TkWsTaskChecklistItem> lstChecklistItems = new ArrayList<>();
     private List<TkWsComment> lstComments = new ArrayList<>();
+    private TaskController taskController;
+    private List<TkWsTaskCustom> lstTaskCustoms = new ArrayList<>();
 
     public TaskListAction() {
         taskListController = new TaskListController();
         workspaceController = new WorkspaceController();
         systemMethod = new SystemMethod();
         workspaceFunction = new WorkspaceFunction();
+        taskController = new TaskController();
+
     }
 
     public String TaskListActions() {
@@ -342,10 +349,15 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
     public String prepareCreateTask() {
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
         int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        if (request.getParameter("parentTaskId") != null) {
+            int parentTaskId = Integer.parseInt(request.getParameter("parentTaskId"));
+            taskParent = taskListController.GetTaskById(parentTaskId);
+        }
         workspace = workspaceController.GetWorkspaceById(workspaceId);
         listUserRaciR = taskListController.getAllRaciR(tasklistid);
         tasklist = taskListController.GetTaskListById(tasklistid);
         listUserInWorkspace = workspaceController.lstUserActiveInWorkSpace(workspaceId);
+
         return SUCCESS;
     }
 
@@ -367,6 +379,11 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         task.setStartDate(systemMethod.formatStringDateToSqlDate(request.getParameter("startDate")));
         task.setDueDate(systemMethod.formatStringDateToSqlDate(request.getParameter("dueDate")));
         task.setStatus("OPEN");
+        if (request.getParameter("subtask") != null && "true".equals(request.getParameter("subtask"))) {
+            int parentTaskId = Integer.parseInt(request.getParameter("taskid"));
+            task.setParentTaskId(parentTaskId);
+            task.setIsSubTask("Y");
+        }
 
         int countItemInputUDF = Integer.parseInt(request.getParameter("countItemInputUDF"));
         int countItemInputCheckList = Integer.parseInt(request.getParameter("countItemInputCheckList"));
@@ -444,7 +461,14 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
 
         errorCode = taskListController.createTask(task, lstSysUdfFieldValues, lstChecklists, lstChecklistItems, taskComment, lstFile);
         if (errorCode == null) {
-            getAllTask();
+
+            if (request.getParameter("subtask") != null) {
+                viewTask();
+                return "RETURN_PARENT_TASK";
+            } else {
+                getAllTask();
+            }
+
             return SUCCESS;
         } else {
             return ERROR;
@@ -478,10 +502,33 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
         int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
         int taskid = Integer.parseInt(request.getParameter("taskid"));
+        if(request.getParameter("issubtask") !=null &&
+                "true".equals(String.valueOf(request.getParameter("issubtask")))){
+             taskid = Integer.parseInt(request.getParameter("parenttask"));
+        }
         task = taskListController.GetTaskById(taskid);
+        TkWsTasklist tasklist = taskListController.GetTaskListById(tasklistid);
+        task.setTkWsTasklist(tasklist);
+        taskCustom = new TkWsTaskCustom();
+        taskCustom.setTask(task);
+        TkUser assigneeUser = new TkUser();
+        assigneeUser = taskListController.getUserById(task.getAssigneeUserId());
+        taskCustom.setAssigneeUser(assigneeUser);
+
+        TkUser reviewByUser = new TkUser();
+        reviewByUser = taskListController.getUserById(task.getReviewBy());
+        taskCustom.setReviewByUser(reviewByUser);
 
         // thong tin subtask
         lstTasks = taskListController.GetAllSubTaskByTaskId(taskid);
+        for (int i = 0; i < lstTasks.size(); i++) {
+            TkWsTask tas = new TkWsTask();
+            tas = lstTasks.get(i);
+            TkWsTaskCustom taskCustom = new TkWsTaskCustom();
+            taskCustom = mergeTaskWithUser(tas);
+            lstTaskCustoms.add(taskCustom);
+
+        }
 
         // thông tin udf
         lstUdf = taskListController.GetAllUDFByTaskId(taskid);
@@ -504,6 +551,224 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         workspace = workspaceController.GetWorkspaceById(workspaceId);
         tasklist = taskListController.GetTaskListById(tasklistid);
         return SUCCESS;
+    }
+
+    public String editTask() {
+        TkUser user = (TkUser) session.get("user");
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+        TkWsTask t = new TkWsTask();
+        t = taskListController.GetTaskById(taskid);
+        t.setTaskName(task.getTaskName());
+        t.setTaskDesc(task.getTaskDesc());
+        t.setNganSach(task.getNganSach());
+        t.setAssigneeUserId(task.getAssigneeUserId());
+        t.setReviewBy(task.getReviewBy());
+        t.setStartDate(systemMethod.formatStringDateToSqlDate(request.getParameter("startDate")));
+        t.setDueDate(systemMethod.formatStringDateToSqlDate(request.getParameter("dueDate")));
+        t.setPriority(task.getPriority());
+        t.setTimeEstimate(task.getTimeEstimate());
+        t.setLastUpdateBy(user.getLoginId());
+        t.setLastUpdateDate(systemMethod.getSysDateToSqlDate());
+
+        errorCode = taskController.updateTask(t);
+        if (errorCode == null) {
+            viewTask();
+            return SUCCESS;
+        } else {
+            return ERROR;
+        }
+    }
+
+    public String createUdf() {
+        TkUser user = (TkUser) session.get("user");
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+
+        List<SysUdfFieldValue> lstSysUdfFieldValues = new ArrayList<>();
+        int countItemInputUDF = Integer.parseInt(request.getParameter("countItemInputUDF"));
+        // tao udf
+        for (int i = 0; i < countItemInputUDF; i++) {
+            SysUdfFieldValue udf = new SysUdfFieldValue();
+            udf.setCreateBy(user.getLoginId());
+            udf.setLastUpdateBy(user.getLoginId());
+            udf.setCreationDate(systemMethod.getSysDateToSqlDate());
+            udf.setLastUpdateDate(systemMethod.getSysDateToSqlDate());
+            udf.setRefKey(request.getParameter("listUdfTask[" + i + "][UdfName]"));
+            udf.setExtValue1(request.getParameter("listUdfTask[" + i + "][UdfType]"));
+            udf.setFieldValue(request.getParameter("listUdfTask[" + i + "][UdfValue]"));
+            udf.setStatus("ACTIVE");
+            udf.setRefId(taskid);
+            lstSysUdfFieldValues.add(udf);
+        }
+        taskListController.createUdf(lstSysUdfFieldValues);
+        viewTask();
+        return SUCCESS;
+    }
+    
+    public String deleteUdf() {
+        TkUser user = (TkUser) session.get("user");
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+        int udfId =Integer.parseInt(request.getParameter("udfid"));
+        taskListController.deleteUdf(udfId);
+        viewTask();
+        return SUCCESS;
+    }
+
+    public String prepareCreateUdf() {
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+
+        task = taskListController.GetTaskById(taskid);
+        workspace = workspaceController.GetWorkspaceById(workspaceId);
+
+        return SUCCESS;
+    }
+    public String prepareCreateCheckList() {
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+
+        task = taskListController.GetTaskById(taskid);
+        workspace = workspaceController.GetWorkspaceById(workspaceId);
+
+        return SUCCESS;
+    }
+    
+    public String createCheckList() {
+        TkUser user = (TkUser) session.get("user");
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+
+        TkWsTask t = new TkWsTask();
+        t = taskListController.GetTaskById(taskid);
+        
+        List<TkWsTaskChecklistItem> lstChecklistItems = new ArrayList<>();
+        List<TkWsTaskChecklist> lstChecklists = new ArrayList<>();
+        int countItemInputCheckList = Integer.parseInt(request.getParameter("countItemInputCheckList"));
+        // tao udf
+        for (int i = 0; i < countItemInputCheckList; i++) {
+            TkWsTaskChecklist checklist = new TkWsTaskChecklist();
+            checklist.setCreateDate(systemMethod.getSysDateToSqlDate());
+            checklist.setCreateBy(user.getLoginId());
+            checklist.setLastUdpateDate(systemMethod.getSysDateToSqlDate());
+            checklist.setLastUdpateBy(user.getLoginId());
+            checklist.setCheckListName(request.getParameter("lstCheckList[" + i + "][checkListTitle]"));
+            checklist.setCheckListStatus("ACTIVE");
+            checklist.setTkWsTask(t);
+            lstChecklists.add(checklist);
+            for (int j = 0; j < 2; j++) {
+                TkWsTaskChecklistItem checklistItem = new TkWsTaskChecklistItem();
+                checklistItem.setCreateDate(systemMethod.getSysDateToSqlDate());
+                checklistItem.setCreateBy(user.getLoginId());
+                checklistItem.setLastUpdateDate(systemMethod.getSysDateToSqlDate());
+                checklistItem.setLastUpdateBy(user.getLoginId());
+                checklistItem.setItemName(
+                        j == 0 ? request.getParameter("lstCheckList[" + i + "][checkListItem1]")
+                                : request.getParameter("lstCheckList[" + i + "][checkListItem2]"));
+                checklistItem.setItemStatus("ACTIVE");
+                // de so sanh
+                checklistItem.setTkWsTaskChecklist(checklist);
+                lstChecklistItems.add(checklistItem);
+            }
+        }
+        
+        taskListController.createCheckList(lstChecklists, lstChecklistItems);
+        
+        viewTask();
+        return SUCCESS;
+    }
+
+    public String deleteCheckList() {
+        TkUser user = (TkUser) session.get("user");
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+        int checkListId =Integer.parseInt(request.getParameter("checklistid"));
+        taskListController.deleteCheckList(checkListId);
+        viewTask();
+        return SUCCESS;
+    }
+    
+    public String uploadFile(){
+        TkUser user = (TkUser) session.get("user");
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+        
+        List<TkWsAttachments> lstFile = new ArrayList<>();
+        if (myFile != null) {
+            for (int i = 0; i < myFile.length; i++) {
+                String fileName = myFileFileName[i];
+                File uploadedFile = myFile[i];
+                String path = systemMethod.saveFiles(uploadedFile, "files/attachments/", fileName, request);
+                if (path != null) {
+                    TkWsAttachments tkFile = new TkWsAttachments();
+                    tkFile.setCreateDate(systemMethod.getSysDateToSqlDate());
+                    tkFile.setCreateBy(user.getLoginId());
+                    tkFile.setLastUpdateDate(systemMethod.getSysDateToSqlDate());
+                    tkFile.setLastUpdateBy(user.getLoginId());
+                    tkFile.setFileLink(path);
+                    tkFile.setFileName(fileName);
+                    tkFile.setFileStatus("ACTIVE");
+                    tkFile.setTaskId(taskid);
+                    lstFile.add(tkFile);
+                } else {
+                    errorCode = "ERROR WHEN UPLOAD FILE.";
+                    return errorCode;
+                }
+            }
+        }
+        taskListController.uploadFile(lstFile);
+        viewTask();
+        return SUCCESS;
+    }
+    
+    public String deleteAttachment() {
+        TkUser user = (TkUser) session.get("user");
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+        int attachmentid =Integer.parseInt(request.getParameter("attachmentid"));
+        taskListController.deleteAttachment(attachmentid);
+        viewTask();
+        return SUCCESS;
+    }
+    
+    
+    public TkWsTaskCustom mergeTaskWithUser(TkWsTask tasks) {
+        TkWsTaskCustom taskCustom = new TkWsTaskCustom();
+        taskCustom.setTask(tasks);
+        TkUser assigneeUser = new TkUser();
+        assigneeUser = taskListController.getUserById(tasks.getAssigneeUserId());
+        taskCustom.setAssigneeUser(assigneeUser);
+        TkUser reviewByUser = new TkUser();
+        reviewByUser = taskListController.getUserById(tasks.getReviewBy());
+        taskCustom.setReviewByUser(reviewByUser);
+
+        return taskCustom;
+    }
+    
+     public String deleteTask() {
+        TkUser user = (TkUser) session.get("user");
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+        taskListController.deleteTask(taskid);
+        if(request.getParameter("issubtask") !=null &&
+                "true".equals(String.valueOf(request.getParameter("issubtask")))){
+            viewTask();
+            return "GET_PARENT_TASK";
+        }else{
+            getAllTask();
+            return "GET_ALL_TASK";
+        }
     }
 
     @Override
@@ -724,6 +989,30 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
 
     public void setLstComments(List<TkWsComment> lstComments) {
         this.lstComments = lstComments;
+    }
+
+    public TkWsTaskCustom getTaskCustom() {
+        return taskCustom;
+    }
+
+    public void setTaskCustom(TkWsTaskCustom taskCustom) {
+        this.taskCustom = taskCustom;
+    }
+
+    public TkWsTask getTaskParent() {
+        return taskParent;
+    }
+
+    public void setTaskParent(TkWsTask taskParent) {
+        this.taskParent = taskParent;
+    }
+
+    public List<TkWsTaskCustom> getLstTaskCustoms() {
+        return lstTaskCustoms;
+    }
+
+    public void setLstTaskCustoms(List<TkWsTaskCustom> lstTaskCustoms) {
+        this.lstTaskCustoms = lstTaskCustoms;
     }
 
 }

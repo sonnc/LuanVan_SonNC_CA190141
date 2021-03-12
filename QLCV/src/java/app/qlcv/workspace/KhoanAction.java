@@ -15,7 +15,7 @@ import app.qlcv.entities.TkWsTask;
 import app.qlcv.utils.SystemMethod;
 import com.opensymphony.xwork2.ActionSupport;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -118,26 +118,50 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
                     && lstTasks.get(i).getDateClose().before(lstTasks.get(i).getDueDate())
                     && lstTasks.get(i).getDateClose().getMonth() == date.getMonth()) {
                 totalKhoanCVInMonth = totalKhoanCVInMonth.add(new BigDecimal(lstTasks.get(i).getNganSach()));
-                taskclose = taskclose++;
-                System.out.println("++++++++++++++++++++++++++++++" + totalKhoanCVInMonth);
+                taskclose = taskclose + 1;
             }
             if ("COMPLETE".equals(lstTasks.get(i).getStatus()) && lstTasks.get(i).getDateClose() != null
                     && lstTasks.get(i).getDateClose().before(date)
                     && lstTasks.get(i).getDateClose().getMonth() == date.getMonth()) {
-                taskclose = taskclose++;
+                taskclose = taskclose + 1;
             }
             if ("OPEN".equals(lstTasks.get(i).getStatus())
                     || "INPROCESS".equals(lstTasks.get(i).getStatus())) {
-                taskduedate = taskduedate++;
+                taskduedate = taskduedate + 1;
             }
         }
-        if (taskclose > taskduedate) {
-            totalKhoanHQDAInMonth = user.getLuongCoSo().multiply(new BigDecimal(1.2)).multiply(new BigDecimal(0.2));
-        } else if (taskclose < taskduedate) {
-            totalKhoanHQDAInMonth = user.getLuongCoSo().multiply(new BigDecimal(0.8)).multiply(new BigDecimal(0.2));
-        } else {
-            totalKhoanHQDAInMonth = user.getLuongCoSo().multiply(new BigDecimal(1)).multiply(new BigDecimal(0.2));
+
+        // tinh he so ca nhan
+        double Hcanhan = 0;
+        double tySo = 0;
+        if (taskduedate > 0) {
+            tySo = taskclose / taskduedate;
         }
+        if (taskduedate == 0 & taskclose > 0) {
+            tySo = taskclose;
+        }
+        if (tySo < 0.7) {
+            Hcanhan = 0;
+        } else if (tySo >= 0.7 && tySo < 1.0) {
+            Hcanhan = 1;
+        } else if (tySo >= 1 && tySo < 1.2) {
+            Hcanhan = 1.2;
+        } else if (tySo >= 1.2) {
+            Hcanhan = 1.5;
+        }
+
+        BigDecimal heSoCanBang = new BigDecimal(1.0);
+
+        BigDecimal tongLuongCoSoVoiHeSo = user.getLuongCoSo().multiply(new BigDecimal(0.2)).multiply(new BigDecimal(Hcanhan)).setScale(2, BigDecimal.ROUND_UP);
+        BigDecimal tongLuongCoSo = user.getLuongCoSo().multiply(new BigDecimal(0.2)).setScale(2, BigDecimal.ROUND_UP);
+
+        // neu nhu tong 20% luong co so nhan voi Hca nhan > 20% luong co sơ
+        if (tongLuongCoSoVoiHeSo.compareTo(tongLuongCoSo) == 1) {
+            heSoCanBang = tongLuongCoSo.divide(tongLuongCoSoVoiHeSo, 2, RoundingMode.HALF_UP);
+            heSoCanBang = heSoCanBang.setScale(2, BigDecimal.ROUND_UP);
+        }
+
+        totalKhoanHQDAInMonth = user.getLuongCoSo().multiply(new BigDecimal(Hcanhan)).multiply(new BigDecimal(0.2)).multiply(heSoCanBang);
 
         LuongKhoanTotal lk2 = new LuongKhoanTotal();
 
@@ -175,33 +199,57 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
 
             int taskclose = 0;
             int taskduedate = 0;
-
             for (int i = 0; i < lstTasks.size(); i++) {
                 // neu dong task dung han thi moi duoc nhan tien khoan cv
                 if ("CLOSE".equals(lstTasks.get(i).getStatus()) && lstTasks.get(i).getDateClose() != null
                         && lstTasks.get(i).getDateClose().before(lstTasks.get(i).getDueDate())
                         && lstTasks.get(i).getDateClose().getMonth() == date.getMonth()) {
                     totalKhoanCVInMonth = totalKhoanCVInMonth.add(new BigDecimal(lstTasks.get(i).getNganSach()));
-                    taskclose = taskclose++;
-                    System.out.println("++++++++++++++++++++++++++++++" + totalKhoanCVInMonth);
+                    taskclose = taskclose + 1;
                 }
                 if ("COMPLETE".equals(lstTasks.get(i).getStatus()) && lstTasks.get(i).getDateClose() != null
                         && lstTasks.get(i).getDateClose().before(date)
                         && lstTasks.get(i).getDateClose().getMonth() == date.getMonth()) {
-                    taskclose = taskclose++;
+                    taskclose = taskclose + 1;
                 }
                 if ("OPEN".equals(lstTasks.get(i).getStatus())
                         || "INPROCESS".equals(lstTasks.get(i).getStatus())) {
-                    taskduedate = taskduedate++;
+                    taskduedate = taskduedate + 1;
                 }
             }
-            if (taskclose > taskduedate) {
-                totalKhoanHQDAInMonth = userTinhKhoan.getLuongCoSo().multiply(new BigDecimal(1.2)).multiply(new BigDecimal(0.2));
-            } else if (taskclose < taskduedate) {
-                totalKhoanHQDAInMonth = userTinhKhoan.getLuongCoSo().multiply(new BigDecimal(0.8)).multiply(new BigDecimal(0.2));
-            } else {
-                totalKhoanHQDAInMonth = userTinhKhoan.getLuongCoSo().multiply(new BigDecimal(1)).multiply(new BigDecimal(0.2));
+
+            // tinh he so ca nhan
+            double Hcanhan = 0;
+            double tySo = 0;
+            if (taskduedate > 0) {
+                tySo = taskclose / taskduedate;
             }
+            if (taskduedate == 0 & taskclose > 0) {
+                tySo = taskclose;
+            }
+            if (tySo < 0.7) {
+                Hcanhan = 0;
+            } else if (tySo >= 0.7 && tySo < 1.0) {
+                Hcanhan = 1;
+            } else if (tySo >= 1 && tySo < 1.2) {
+                Hcanhan = 1.2;
+            } else if (tySo >= 1.2) {
+                Hcanhan = 1.5;
+            }
+
+            BigDecimal heSoCanBang = new BigDecimal(1.0);
+
+            BigDecimal tongLuongCoSoVoiHeSo = userTinhKhoan.getLuongCoSo().multiply(new BigDecimal(0.2)).multiply(new BigDecimal(Hcanhan)).setScale(2, BigDecimal.ROUND_UP);
+            BigDecimal tongLuongCoSo = userTinhKhoan.getLuongCoSo().multiply(new BigDecimal(0.2)).setScale(2, BigDecimal.ROUND_UP);
+
+            // neu nhu tong 20% luong co so nhan voi Hca nhan > 20% luong co sơ
+            if (tongLuongCoSoVoiHeSo.compareTo(tongLuongCoSo) == 1) {
+                heSoCanBang = tongLuongCoSo.divide(tongLuongCoSoVoiHeSo, 2, RoundingMode.HALF_UP);
+                heSoCanBang = heSoCanBang.setScale(2, BigDecimal.ROUND_UP);
+            }
+
+            totalKhoanHQDAInMonth = userTinhKhoan.getLuongCoSo().multiply(new BigDecimal(Hcanhan)).multiply(new BigDecimal(0.2)).multiply(heSoCanBang);
+
 
             LuongKhoanTotal lk2 = new LuongKhoanTotal();
 

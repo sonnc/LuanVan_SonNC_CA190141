@@ -68,7 +68,7 @@ SysCodeValue role = (SysCodeValue) session.getAttribute("role");
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
 
-            <li class="nav-item"><a href="#"><i class="la la-home"></i><span class="menu-title"><%=properties.getProperty("app.dashboards")%></span></a>
+            <li class="nav-item"><a href="getDataHome"><i class="la la-home"></i><span class="menu-title"><%=properties.getProperty("app.dashboards")%></span></a>
             </li>
             <li class=" nav-item"><a href="#"><i class="la la-bell"></i><span class="menu-title"><%=properties.getProperty("app.notification")%></span></a>
             </li>

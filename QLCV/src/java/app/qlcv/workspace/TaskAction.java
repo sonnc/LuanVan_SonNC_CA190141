@@ -9,9 +9,14 @@ import app.qlcv.customs.TkWsTaskCustom;
 import app.qlcv.entities.TkUser;
 import app.qlcv.entities.TkWorkspace;
 import app.qlcv.entities.TkWsTask;
+import app.qlcv.entities.TkWsTasklist;
 import app.qlcv.utils.SystemMethod;
 import com.opensymphony.xwork2.ActionSupport;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +40,11 @@ public class TaskAction extends ActionSupport implements SessionAware, ServletRe
     private List<TkWsTask> lstTask = new ArrayList<>();
     private List<TkWsTaskCustom> lstTaskCustoms = new ArrayList<>();
     private TkWorkspace workspace;
+    private TkWsTasklist tasklist;
+    private TkWsTaskCustom taskCustoms;
+    private List<TkUser> listUserInWorkspace;
+    private List<TkUser> listUserRaciR = new ArrayList<>();
+    
 
     public TaskAction() {
         taskListController = new TaskListController();
@@ -60,7 +70,7 @@ public class TaskAction extends ActionSupport implements SessionAware, ServletRe
             return ERROR;
         }
     }
-    
+
     public String GetAllTask() {
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
         TkUser user = (TkUser) session.get("user");
@@ -104,6 +114,41 @@ public class TaskAction extends ActionSupport implements SessionAware, ServletRe
         return SUCCESS;
     }
 
+    public String getAllTaskPendingRating() {
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        TkUser user = (TkUser) session.get("user");
+        List<TkWsTask> lstTask = new ArrayList<>();
+        lstTask = tasktController.getAllTaskPendingRating(user.getId());
+        for (int i = 0; i < lstTask.size(); i++) {
+            TkWsTask get = lstTask.get(i);
+            TkWsTaskCustom taskCustom = new TkWsTaskCustom();
+            taskCustom.setTask(get);
+            TkUser u = new TkUser();
+            u = taskListController.getUserById(get.getAssigneeUserId());
+            taskCustom.setAssigneeUser(u);
+            TkUser u1 = new TkUser();
+            u1 = taskListController.getUserById(get.getReviewBy());
+            taskCustom.setReviewByUser(u1);
+            lstTaskCustoms.add(taskCustom);
+        }
+        workspace = workspaceController.GetWorkspaceById(workspaceId);
+        return SUCCESS;
+    }
+
+    public String prepareEditTask() {
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+        task = taskListController.GetTaskById(taskid);
+        taskCustoms = systemMethod.mergeTaskWithUser(task);
+        workspace = workspaceController.GetWorkspaceById(workspaceId);
+        tasklist = taskListController.GetTaskListById(tasklistid);
+        listUserInWorkspace = workspaceController.lstUserActiveInWorkSpace(workspaceId);
+        listUserRaciR = taskListController.getAllRaciR(tasklistid);
+
+        return SUCCESS;
+    }
+    
     ///
     @Override
     public void setSession(Map<String, Object> map
@@ -156,5 +201,38 @@ public class TaskAction extends ActionSupport implements SessionAware, ServletRe
     public void setWorkspace(TkWorkspace workspace) {
         this.workspace = workspace;
     }
+
+    public TkWsTasklist getTasklist() {
+        return tasklist;
+    }
+
+    public void setTasklist(TkWsTasklist tasklist) {
+        this.tasklist = tasklist;
+    }
+
+    public TkWsTaskCustom getTaskCustoms() {
+        return taskCustoms;
+    }
+
+    public void setTaskCustoms(TkWsTaskCustom taskCustoms) {
+        this.taskCustoms = taskCustoms;
+    }
+
+    public List<TkUser> getListUserInWorkspace() {
+        return listUserInWorkspace;
+    }
+
+    public void setListUserInWorkspace(List<TkUser> listUserInWorkspace) {
+        this.listUserInWorkspace = listUserInWorkspace;
+    }
+
+    public List<TkUser> getListUserRaciR() {
+        return listUserRaciR;
+    }
+
+    public void setListUserRaciR(List<TkUser> listUserRaciR) {
+        this.listUserRaciR = listUserRaciR;
+    }
+    
 
 }

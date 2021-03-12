@@ -226,41 +226,41 @@ type="text/javascript"></script>
     if ("tasklist-create-raci".equals((String) session.getAttribute("CssAndJs"))) {
 %>
 <!-- BEGIN VENDOR JS-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
-  <!-- BEGIN VENDOR JS-->
-  <!-- BEGIN PAGE VENDOR JS-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/forms/select/selectivity-full.min.js"
-  type="text/javascript"></script>
-  <!-- END PAGE VENDOR JS-->
-  <!-- BEGIN MODERN JS-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/core/app-menu.js" type="text/javascript"></script>
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/core/app.js" type="text/javascript"></script>
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/customizer.js" type="text/javascript"></script>
-  <!-- END MODERN JS-->
-  <!-- BEGIN PAGE LEVEL JS-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/forms/select/form-selectivity.js" type="text/javascript"></script>
-  <!-- END PAGE LEVEL JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+<!-- BEGIN VENDOR JS-->
+<!-- BEGIN PAGE VENDOR JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/forms/select/selectivity-full.min.js"
+type="text/javascript"></script>
+<!-- END PAGE VENDOR JS-->
+<!-- BEGIN MODERN JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/core/app-menu.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/core/app.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/customizer.js" type="text/javascript"></script>
+<!-- END MODERN JS-->
+<!-- BEGIN PAGE LEVEL JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/forms/select/form-selectivity.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL JS-->
 <%}%> 
 
 
 <%
     if ("view_task".equals((String) session.getAttribute("CssAndJs"))) {
 %>
-  <!-- BEGIN VENDOR JS-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
-  <!-- BEGIN VENDOR JS-->
-  <!-- BEGIN PAGE VENDOR JS-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
-  <!-- END PAGE VENDOR JS-->
-  <!-- BEGIN MODERN JS-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/core/app-menu.js" type="text/javascript"></script>
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/core/app.js" type="text/javascript"></script>
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/customizer.js" type="text/javascript"></script>
-  <!-- END MODERN JS-->
-  <!-- BEGIN PAGE LEVEL JS-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/tables/datatables/datatable-basic.js"
-  type="text/javascript"></script>
-  <!-- END PAGE LEVEL JS-->
+<!-- BEGIN VENDOR JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+<!-- BEGIN VENDOR JS-->
+<!-- BEGIN PAGE VENDOR JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
+<!-- END PAGE VENDOR JS-->
+<!-- BEGIN MODERN JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/core/app-menu.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/core/app.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/customizer.js" type="text/javascript"></script>
+<!-- END MODERN JS-->
+<!-- BEGIN PAGE LEVEL JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/tables/datatables/datatable-basic.js"
+type="text/javascript"></script>
+<!-- END PAGE LEVEL JS-->
 <%}%> 
 
 <%
@@ -283,3 +283,29 @@ type="text/javascript"></script>
 <!-- END PAGE LEVEL JS-->
 <%}%> 
 
+home-dashboard
+<%
+    if ("home-dashboard".equals((String) session.getAttribute("CssAndJs"))) {
+%>
+<!-- BEGIN VENDOR JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+<!-- BEGIN VENDOR JS-->
+<!-- BEGIN PAGE VENDOR JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/charts/chart.min.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/charts/raphael-min.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/charts/morris.min.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/charts/jvector/jquery-jvectormap-2.0.3.min.js"
+type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/charts/jvector/jquery-jvectormap-world-mill.js"
+type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/data/jvector/visitor-data.js" type="text/javascript"></script>
+<!-- END PAGE VENDOR JS-->
+<!-- BEGIN MODERN JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/core/app-menu.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/core/app.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/customizer.js" type="text/javascript"></script>
+<!-- END MODERN JS-->
+<!-- BEGIN PAGE LEVEL JS-->
+<!--<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/pages/dashboard-sales.js" type="text/javascript"></script>-->
+<!-- END PAGE LEVEL JS-->
+<%}%>
