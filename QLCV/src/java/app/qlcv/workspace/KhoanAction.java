@@ -163,6 +163,15 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
 
         totalKhoanHQDAInMonth = user.getLuongCoSo().multiply(new BigDecimal(Hcanhan)).multiply(new BigDecimal(0.2)).multiply(heSoCanBang);
 
+        
+        // tinh khoan theo miltone
+        
+        // lay danh sach nguoi tham gia miletone
+        
+        
+        
+        
+        
         LuongKhoanTotal lk2 = new LuongKhoanTotal();
 
         lk2.setTotalKhoanCV(totalKhoanCVInMonth.setScale(2, BigDecimal.ROUND_UP));
