@@ -22,7 +22,9 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.SessionAware;
 import app.qlcv.customs.*;
 import app.qlcv.entities.*;
-
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -40,13 +42,13 @@ public class AdminKpiAction extends ActionSupport implements SessionAware, Servl
     private TkDepartment tkDepartment;
     private File myFile;
     private List<TkKpiTypeSetting> lstKpiTypeSettings;
-    private List<TkKpiItemSetting> lsKpiItemSettings;
+    private List<TkKpiItemSetting> lsKpiItemSettings = new ArrayList<>();
     private TkRatingDateSetup tkRatingDateSetup = new TkRatingDateSetup();
+    private int kpiTypeId;
 
     public AdminKpiAction() {
         adminController = new AdminKpiController();
     }
-
 
     public String adminKpi() {
         String method = request.getParameter("method");
@@ -57,6 +59,7 @@ public class AdminKpiAction extends ActionSupport implements SessionAware, Servl
         } else if ("viewKpiDetail".equals(method)) {
             int kpiId = Integer.parseInt(request.getParameter("kpiId"));
             lsKpiItemSettings = adminController.viewKpiDetail(kpiId);
+            kpiTypeId = kpiId;
             return "VIEW_KPI_DETAIL_SUCCESS";
         } else if ("prepareCreateKpi".equals(method)) {
             lstTkDepartment = adminController.getAllDepartments();
@@ -68,14 +71,14 @@ public class AdminKpiAction extends ActionSupport implements SessionAware, Servl
             TkUser tku = (TkUser) session.get("user");
             SystemMethod sysm = new SystemMethod();
             java.sql.Date sysDate = sysm.getSysDateToSqlDate();
-            
+
             tkRatingDateSetup.setCreateBy(tku.getLoginId());
             tkRatingDateSetup.setLastUpdateBy(tku.getLoginId());
             tkRatingDateSetup.setCreateDate(sysDate);
             tkRatingDateSetup.setLastUpdateDate(sysDate);
             tkRatingDateSetup.setStatus("ACTIVE");
             adminController.createKpiRatingDate(tkRatingDateSetup);
-            
+
             lstTkRatingDateSetup = adminController.getAllKpiRatingDate();
             return "CREATE_KPI_RATING_DATE";
         } else if ("createKpi".equals(method)) {
@@ -162,8 +165,167 @@ public class AdminKpiAction extends ActionSupport implements SessionAware, Servl
 
     }
 
+    public String prepareEditKpiSetting() {
+        int kpiId = Integer.parseInt(request.getParameter("kpiTypeId"));
+        String type = request.getParameter("type");
+        lsKpiItemSettings = adminController.prepareEditKpiSetting(kpiId, type);
+        kpiTypeId = kpiId;
+        return SUCCESS;
 
-    
+    }
+
+    public String editKpiSetting() {
+        Properties prop = (Properties) session.get("properties");
+
+        int countItemInput = Integer.parseInt(request.getParameter("countItemInput"));
+
+        // lay toan bo kpi tu db
+        int kpiId = Integer.parseInt(request.getParameter("kpiTypeId"));
+        String type = request.getParameter("type");
+
+        TkKpiTypeSetting kpiTypeSetting = new TkKpiTypeSetting();
+        kpiTypeSetting = adminController.getKpiTypeSettingById(kpiId);
+
+        List<TkKpiItemSetting> lstItemSettingsDB = new ArrayList<>();
+        lstItemSettingsDB = adminController.prepareEditKpiSetting(kpiId, type);
+        // lay toan bo kpi tu man hinh
+        List<TkKpiItemSetting> lstItemSettingsForm = new ArrayList<>();
+        lstItemSettingsForm = genKpiItemSetting(request.getParameterMap(), countItemInput);
+        // kiem tra xem co thay doi gi khong
+
+        HashMap<String, List<TkKpiItemSetting>> hashmap = new HashMap<>();
+        hashmap = checkKpiItemSetting(lstItemSettingsDB, lstItemSettingsForm, kpiTypeSetting, type);
+
+        List<TkKpiItemSetting> remove = new ArrayList<>();
+        List<TkKpiItemSetting> add = new ArrayList<>();
+        List<TkKpiItemSetting> update = new ArrayList<>();
+
+        remove = hashmap.get("REMOVE");
+        add = hashmap.get("ADD");
+        update = hashmap.get("UPDATE");
+
+        TkUser tku = (TkUser) session.get("user");
+        SystemMethod sysm = new SystemMethod();
+        java.sql.Date sysDate = sysm.getSysDateToSqlDate();
+        adminController.editKpiSetting(add, remove, update, type, kpiId, tku, sysDate);
+
+        lsKpiItemSettings = adminController.viewKpiDetail(kpiId);
+        kpiTypeId = kpiId;
+        return "VIEW_KPI_DETAIL_SUCCESS";
+    }
+
+    public HashMap<String, List<TkKpiItemSetting>> checkKpiItemSetting(List<TkKpiItemSetting> lstItemSettingsDB, 
+            List<TkKpiItemSetting> lstItemSettingsForm, TkKpiTypeSetting kpiTypeSetting, String type) {
+        List<TkKpiItemSetting> lstItemSettings = new ArrayList<>();
+        TkUser tku = (TkUser) session.get("user");
+        SystemMethod sysm = new SystemMethod();
+        java.sql.Date sysDate = sysm.getSysDateToSqlDate();
+
+        List<TkKpiItemSetting> remove = new ArrayList<>();
+        List<TkKpiItemSetting> add = new ArrayList<>();
+        List<TkKpiItemSetting> update = new ArrayList<>();
+
+        HashMap<Integer, TkKpiItemSetting> hashMapForm = new HashMap<>();
+        HashMap<Integer, TkKpiItemSetting> hashMapDB = new HashMap<>();
+
+        for (int i = 0; i < lstItemSettingsForm.size(); i++) {
+            TkKpiItemSetting form = lstItemSettingsForm.get(i);
+            if (form.getId() > 0) {
+                hashMapForm.put(form.getId(), form);
+            } else {
+                form.setTkKpiTypeSetting(kpiTypeSetting);
+                form.setType(type);
+                add.add(form);
+            }
+
+        }
+        for (int i = 0; i < lstItemSettingsDB.size(); i++) {
+            TkKpiItemSetting db = lstItemSettingsDB.get(i);
+            hashMapDB.put(db.getId(), db);
+        }
+
+        for (int i = 0; i < lstItemSettingsForm.size(); i++) {
+            TkKpiItemSetting form = lstItemSettingsForm.get(i);
+            if (hashMapDB.get(form.getId()) != null) {
+                TkKpiItemSetting itemSetting = new TkKpiItemSetting();
+                itemSetting = hashMapDB.get(form.getId());
+                itemSetting.setLastUpdateBy(tku.getLoginId());
+                itemSetting.setLastUpdateDate(sysDate);
+                itemSetting.setKpiName(form.getKpiName());
+                itemSetting.setKpiDesc(form.getKpiDesc());
+                itemSetting.setType(form.getType());
+                itemSetting.setItem(form.getItem());
+                itemSetting.setDonViTinh(form.getDonViTinh());
+                itemSetting.setTrongSo(form.getTrongSo());
+                itemSetting.setTanSuatDanhGia(form.getTanSuatDanhGia());
+                update.add(itemSetting);
+            }
+        }
+
+        for (int i = 0; i < lstItemSettingsDB.size(); i++) {
+            TkKpiItemSetting db = lstItemSettingsDB.get(i);
+            if (hashMapForm.get(db.getId()) == null) {
+                db.setStatus("INACTIVE");
+                remove.add(db);
+            }
+
+        }
+
+        HashMap<String, List<TkKpiItemSetting>> hashmap = new HashMap<>();
+        hashmap.put("ADD", add);
+        hashmap.put("REMOVE", remove);
+        hashmap.put("UPDATE", update);
+
+        return hashmap;
+
+    }
+
+    public List<TkKpiItemSetting> genKpiItemSetting(Map<String, String[]> map, int countItemInput) {
+        List<TkKpiItemSetting> lstItemSettings = new ArrayList<>();
+        TkUser tku = (TkUser) session.get("user");
+        SystemMethod sysm = new SystemMethod();
+        java.sql.Date sysDate = sysm.getSysDateToSqlDate();
+        for (int i = 0; i < countItemInput; i++) {
+            TkKpiItemSetting itemSetting = new TkKpiItemSetting();
+            itemSetting.setCreateBy(tku.getLoginId());
+            itemSetting.setLastUpdateBy(tku.getLoginId());
+            itemSetting.setCreateDate(sysDate);
+            itemSetting.setLastUpdateDate(sysDate);
+            itemSetting.setStatus("ACTIVE");
+            for (Map.Entry<String, String[]> entry : map.entrySet()) {
+                if (entry.getKey().toString().contains("lstKpiDetail[" + i + "]")) {
+                    if (entry.getKey().toString().contains("lstKpiDetail[" + i + "][kpiItemId]")) {
+                        itemSetting.setId(entry.getValue()[0] != null && !"".equals(entry.getValue()[0])
+                                ? Integer.parseInt(entry.getValue()[0]) : 0);
+                    }
+                    if (entry.getKey().toString().contains("lstKpiDetail[" + i + "][tkKpiDetailKpiName]")) {
+                        itemSetting.setKpiName(entry.getValue()[0].toString());
+                    }
+                    if (entry.getKey().toString().contains("lstKpiDetail[" + i + "][tkKpiDetailKpiDesc]")) {
+                        itemSetting.setKpiDesc(entry.getValue()[0].toString());
+                    }
+                    if (entry.getKey().toString().contains("lstKpiDetail[" + i + "][tkKpiDetailKpiType]")) {
+                        itemSetting.setType(entry.getValue()[0].toString());
+                    }
+                    if (entry.getKey().toString().contains("lstKpiDetail[" + i + "][tkKpiDetailKpiIndex]")) {
+                        itemSetting.setItem(Double.parseDouble(entry.getValue()[0]));
+                    }
+                    if (entry.getKey().toString().contains("lstKpiDetail[" + i + "][tkKpiDetailKpiUnit]")) {
+                        itemSetting.setDonViTinh(entry.getValue()[0].toString());
+                    }
+                    if (entry.getKey().toString().contains("lstKpiDetail[" + i + "][tkKpiDetailKpiWeight]")) {
+                        itemSetting.setTrongSo(Double.parseDouble(entry.getValue()[0].toString()));
+                    }
+                    if (entry.getKey().toString().contains("lstKpiDetail[" + i + "][tkKpiDetailKpiFrequene]")) {
+                        itemSetting.setTanSuatDanhGia(entry.getValue()[0].toString());
+                    }
+                }
+            }
+            lstItemSettings.add(itemSetting);
+        }
+
+        return lstItemSettings;
+    }
 
     public File getMyFile() {
         return myFile;
@@ -173,8 +335,6 @@ public class AdminKpiAction extends ActionSupport implements SessionAware, Servl
         this.myFile = myFile;
     }
 
-   
-
     public HttpServletRequest getRequest() {
         return request;
     }
@@ -182,8 +342,6 @@ public class AdminKpiAction extends ActionSupport implements SessionAware, Servl
     public void setRequest(HttpServletRequest request) {
         this.request = request;
     }
-
-   
 
     @Override
     public void setSession(Map<String, Object> map) {
@@ -259,6 +417,12 @@ public class AdminKpiAction extends ActionSupport implements SessionAware, Servl
         this.tkRatingDateSetup = tkRatingDateSetup;
     }
 
-    
+    public int getKpiTypeId() {
+        return kpiTypeId;
+    }
+
+    public void setKpiTypeId(int kpiTypeId) {
+        this.kpiTypeId = kpiTypeId;
+    }
     
 }

@@ -50,6 +50,9 @@
         <property name="status" type="string">
             <column name="STATUS" length="45" />
         </property>
+        <property name="refId" type="java.lang.Integer">
+            <column name="REF_ID" />
+        </property>
         <set name="tkKpiItemDetailRatings" table="tk_kpi_item_detail_rating" inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="TK_KPI_ITEM_DETAIL_ID" />

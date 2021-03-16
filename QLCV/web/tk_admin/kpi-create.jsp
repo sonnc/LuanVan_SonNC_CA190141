@@ -15,7 +15,7 @@
     <head>
         <%
             session.removeAttribute("CssAndJs");
-            session.setAttribute("CssAndJs", "KPI2");
+            session.setAttribute("CssAndJs", "codesetaddnew");
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <%@include file="/jsp/header.jsp" %>
@@ -213,7 +213,7 @@
                                                                                             <div class="controls">
                                                                                                 <select required="true" id="tkKpiDetailKpiType" name="tkKpiDetailKpiType" class="form-control">
                                                                                                     <option value="" selected="" ><%=properties.getProperty("tk.tko.label.select.option.default")%></option>
-                                                                                                    <option value="PHONG_BAN">KPI gắn với phòng ban</option>
+                                                                                                    <option value="BO_PHAN">KPI gắn với phòng ban</option>
                                                                                                     <option value="THUONG_XUYEN">KPI thường xuyên</option>
                                                                                                     <option value="DOT_XUAT">KPI đột xuất</option>
                                                                                                 </select>
@@ -319,7 +319,7 @@
                                                             var typeName = 'lstKpiDetail[' + i + '][tkKpiDetailKpiType]';
                                                             var giaTri = Number($('input[name="' + Weight + '"]').val());
                                                             var type = $('select[name="' + typeName + '"]').val();
-                                                            if ('PHONG_BAN' == type) {
+                                                            if ('BO_PHAN' == type) {
                                                                 atrongSo1 = atrongSo1 + giaTri;
                                                             }
                                                             if ('THUONG_XUYEN' == type) {

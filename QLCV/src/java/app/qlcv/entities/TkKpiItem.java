@@ -25,6 +25,7 @@ public class TkKpiItem  implements java.io.Serializable {
      private Double tyLeThucHien;
      private Double ketQua;
      private String status;
+     private int refId;
      private Set tkKpiItemDetails = new HashSet(0);
 
     public TkKpiItem() {
@@ -149,6 +150,15 @@ public class TkKpiItem  implements java.io.Serializable {
         this.tkKpiItemDetails = tkKpiItemDetails;
     }
 
+    public int getRefId() {
+        return refId;
+    }
+
+    public void setRefId(int refId) {
+        this.refId = refId;
+    }
+
+    
 
 
 

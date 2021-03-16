@@ -6,12 +6,14 @@
 package app.qlcv.workspace;
 
 import app.qlcv.customs.MemberInfoWorkspaceSummary;
+import app.qlcv.customs.Milestone;
 import app.qlcv.customs.TeamAndMember;
 import app.qlcv.customs.TkWsTaskListCustom;
 import app.qlcv.entities.*;
 import app.qlcv.utils.HibernateUtil;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,5 +72,58 @@ public class KhoanController {
             session.close();
         }
 
+    }
+
+    public List<Milestone> GetMilestonesClose() {
+        List<Milestone> lst = new ArrayList<>();
+        List<Object[]> listResult = new ArrayList<>();
+        try {
+            String Sql = " select cast(A.id as UNSIGNED ) MILESTONES_ID, a.milestones_tienkhoan from tk_ws_folder a where a.isMilestones='Y'and \n"
+                    + " EXTRACT(MONTH FROM a.milestones_close_date) = MONTH(CURDATE()) and EXTRACT(YEAR FROM a.milestones_close_date)=YEAR(CURDATE())\n"
+                    + " and status = 'CLOSE' AND A.milestones_close_date < A.milestones_end_date";
+
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createSQLQuery(Sql);
+            listResult = query.list();
+            for (Object[] row : listResult) {
+                Milestone m = new Milestone();
+                m.setMilestoneid(((BigInteger) row[0]).intValue());
+                m.setTienKhoan((BigDecimal) row[1]);
+                lst.add(m);
+            }
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lst;
+    }
+
+    public List<Integer> GetUserMilestonesClose(int mileStoneId) {
+        List<Integer> listResult = new ArrayList<>();
+        try {
+            String Sql = " select distinct b.user_id from tk_ws_tasklist a join tk_ws_task_raci b on a.id=b.tk_ws_tasklist_id\n"
+                    + " where a.tk_ws_folder_id=:mileStoneId";
+
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createSQLQuery(Sql);
+            query.setParameter("mileStoneId", mileStoneId);
+            listResult = query.list();
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return listResult;
     }
 }

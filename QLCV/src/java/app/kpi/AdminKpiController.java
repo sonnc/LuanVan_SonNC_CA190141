@@ -8,7 +8,9 @@ package app.kpi;
 import app.qlcv.customs.*;
 import app.qlcv.entities.*;
 import app.qlcv.utils.HibernateUtil;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -26,8 +28,7 @@ public class AdminKpiController {
     public AdminKpiController() {
         session = HibernateUtil.getSessionFactory().openSession();
     }
-    
-    
+
     public List<TkUser> getAllUser() {
         List<TkUser> lstLogin = new ArrayList<>();
         try {
@@ -46,9 +47,9 @@ public class AdminKpiController {
         }
         return lstLogin;
     }
-    
+
     public TkUser getUserById(int userId) {
-        TkUser  tkUser = new TkUser();
+        TkUser tkUser = new TkUser();
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
@@ -64,8 +65,7 @@ public class AdminKpiController {
         }
         return tkUser;
     }
-    
-    
+
     public boolean deleteUser(TkUser user) {
         boolean success = true;
         try {
@@ -84,11 +84,7 @@ public class AdminKpiController {
         }
         return success;
     }
-    
-    
-    
-    
-    
+
     public List<TkDepartment> getAllDepartments() {
         List<TkDepartment> lstTkDepartment = new ArrayList<>();
         try {
@@ -107,6 +103,7 @@ public class AdminKpiController {
         }
         return lstTkDepartment;
     }
+
     public List<TkRatingDateSetup> getAllKpiRatingDate() {
         List<TkRatingDateSetup> lstTkDepartment = new ArrayList<>();
         try {
@@ -125,7 +122,7 @@ public class AdminKpiController {
         }
         return lstTkDepartment;
     }
-    
+
     public boolean createKpiRatingDate(TkRatingDateSetup tkRatingDateSetup) {
         boolean check = true;
         List<TkRatingDateSetup> lstTkRatingDateSetups = new ArrayList<>();
@@ -140,7 +137,7 @@ public class AdminKpiController {
                     get.setStatus("INACTIVE");
                     session.update(get);
                 }
-                
+
             }
             session.save(tkRatingDateSetup);
             transaction.commit();
@@ -155,8 +152,8 @@ public class AdminKpiController {
         }
         return check;
     }
-    
-    public TkDepartment getDepartmentsByID( int id) {
+
+    public TkDepartment getDepartmentsByID(int id) {
         TkDepartment department = new TkDepartment();
         try {
             session = HibernateUtil.getSessionFactory().openSession();
@@ -173,7 +170,7 @@ public class AdminKpiController {
         }
         return department;
     }
-    
+
     public List<TkUser> getAllUserByDepartmentId(int departmentId) {
         List<TkUser> lstTkUserLogin = new ArrayList<>();
         try {
@@ -193,8 +190,7 @@ public class AdminKpiController {
         }
         return lstTkUserLogin;
     }
-    
-    
+
     public boolean updateDepartment(TkDepartment department) {
         boolean success = true;
         try {
@@ -213,7 +209,7 @@ public class AdminKpiController {
         }
         return success;
     }
-    
+
     public boolean saveDepartment(TkDepartment department) {
         boolean success = true;
         try {
@@ -232,7 +228,7 @@ public class AdminKpiController {
         }
         return success;
     }
-    
+
     public List<TkKpiTypeSetting> getAllKpiTypeSetting() {
         List<TkKpiTypeSetting> lstKpiTypeSettings = new ArrayList<>();
         try {
@@ -251,13 +247,13 @@ public class AdminKpiController {
         }
         return lstKpiTypeSettings;
     }
-    
+
     public List<TkKpiItemSetting> viewKpiDetail(int id) {
         List<TkKpiItemSetting> lstKpiItemSettings = new ArrayList<>();
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM TkKpiItemSetting WHERE tkKpiTypeSetting.id=:id");
+            Query query = session.createQuery("FROM TkKpiItemSetting WHERE tkKpiTypeSetting.id=:id and status='ACTIVE' order by type ASC");
             query.setParameter("id", id);
             lstKpiItemSettings = query.list();
             transaction.commit();
@@ -271,8 +267,8 @@ public class AdminKpiController {
         }
         return lstKpiItemSettings;
     }
-    
-    public boolean createGroupKPI(TkKpiTypeSetting tkKpiTypeSetting, List<TkKpiItemSetting> lstKpiItemSettings){
+
+    public boolean createGroupKPI(TkKpiTypeSetting tkKpiTypeSetting, List<TkKpiItemSetting> lstKpiItemSettings) {
         boolean success = true;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
@@ -295,9 +291,9 @@ public class AdminKpiController {
         }
         return success;
     }
-    
-     public TkKpiTypeSetting getKpiTypeSettingById(int kpiID) {
-         TkKpiTypeSetting kpiTypeSetting = new TkKpiTypeSetting();
+
+    public TkKpiTypeSetting getKpiTypeSettingById(int kpiID) {
+        TkKpiTypeSetting kpiTypeSetting = new TkKpiTypeSetting();
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
@@ -313,8 +309,8 @@ public class AdminKpiController {
         }
         return kpiTypeSetting;
     }
-    
-    public boolean updateKpiTypeSeting(TkKpiTypeSetting tkKpiTypeSetting){
+
+    public boolean updateKpiTypeSeting(TkKpiTypeSetting tkKpiTypeSetting) {
         boolean success = true;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
@@ -331,6 +327,127 @@ public class AdminKpiController {
             session.close();
         }
         return success;
+    }
+
+    public List<TkKpiItemSetting> prepareEditKpiSetting(int kpiTypeId, String type) {
+        List<TkKpiItemSetting> lstKpiItemSettings = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM TkKpiItemSetting WHERE tkKpiTypeSetting.id=:id and type=:type and status='ACTIVE'");
+            query.setParameter("id", kpiTypeId);
+            query.setParameter("type", type);
+            lstKpiItemSettings = query.list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstKpiItemSettings;
+    }
+
+    public boolean editKpiSetting(List<TkKpiItemSetting> add, List<TkKpiItemSetting> remove, List<TkKpiItemSetting> update,
+            String type, int kpiTypeId, TkUser tkCreate, java.sql.Date sysDate
+    ) {
+
+        List<TkKpiItemSetting> lstAdd = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+
+            List<TkKpiItem> lstKpiItems = new ArrayList<>();
+            Query q = session.createQuery("FROM TkKpiItem a where a.kpiItem=:type and a.refId=:kpiTypeId and status='ACTIVE' ");
+            q.setParameter("type", type);
+            q.setParameter("kpiTypeId", kpiTypeId);
+            lstKpiItems = q.list();
+
+            for (int i = 0; i < add.size(); i++) {
+                TkKpiItemSetting ad = add.get(i);
+                int id = (int) session.save(ad);
+                ad.setId(id);
+                lstAdd.add(ad);
+            }
+
+            if (lstKpiItems != null && lstKpiItems.size() > 0) {
+                for (int j = 0; j < lstKpiItems.size(); j++) {
+                    TkKpiItem get = lstKpiItems.get(j);
+
+                    for (int i = 0; i < lstAdd.size(); i++) {
+                        TkKpiItemDetail tkKpiItemDetail = new TkKpiItemDetail();
+                        tkKpiItemDetail.setCreateBy(tkCreate.getLoginId());
+                        tkKpiItemDetail.setLastUpdateBy(tkCreate.getLoginId());
+                        tkKpiItemDetail.setCreateDate(sysDate);
+                        tkKpiItemDetail.setLastUpdateDate(sysDate);
+                        tkKpiItemDetail.setKpiName(lstAdd.get(i).getKpiName());
+                        tkKpiItemDetail.setKpiDesc(lstAdd.get(i).getKpiDesc());
+                        tkKpiItemDetail.setItem(lstAdd.get(i).getItem());
+                        tkKpiItemDetail.setDonViTinh(lstAdd.get(i).getDonViTinh());
+                        tkKpiItemDetail.setTanSuatDanhGia(lstAdd.get(i).getTanSuatDanhGia());
+                        tkKpiItemDetail.setTrongSo(lstAdd.get(i).getTrongSo());
+                        tkKpiItemDetail.setStatus("ACTIVE");
+                        tkKpiItemDetail.setRefId(lstAdd.get(i).getId());
+                        tkKpiItemDetail.setTkKpiItem(get);
+                        session.save(tkKpiItemDetail);
+                    }
+
+                }
+
+            }
+
+            for (int i = 0; i < remove.size(); i++) {
+                TkKpiItemSetting re = remove.get(i);
+                session.update(re);
+                Query q1 = session.createQuery("UPDATE FROM TkKpiItemDetail a set a.status = 'INACTIVE' where a.refId=:refId ");
+                q1.setParameter("refId", re.getId());
+                q1.executeUpdate();
+            }
+
+            DecimalFormat df2 = new DecimalFormat("#.##");
+            for (int i = 0; i < update.size(); i++) {
+                TkKpiItemSetting up = update.get(i);
+                session.update(up);
+                List<TkKpiItemDetail> lstKpiItemDetails = new ArrayList<>();
+                Query q2 = session.createQuery("FROM TkKpiItemDetail a where a.refId=:refId and a.status='ACTIVE'");
+                q2.setParameter("refId", up.getId());
+                lstKpiItemDetails = q2.list();
+                if (lstKpiItemDetails != null && lstKpiItemDetails.size() > 0) {
+                    for (int j = 0; j < lstKpiItemDetails.size(); j++) {
+                        TkKpiItemDetail tkKpiItemDetail = lstKpiItemDetails.get(j);
+                        tkKpiItemDetail.setLastUpdateBy(tkCreate.getLoginId());
+                        tkKpiItemDetail.setLastUpdateDate(sysDate);
+                        tkKpiItemDetail.setKpiName(up.getKpiName());
+                        tkKpiItemDetail.setKpiDesc(up.getKpiDesc());
+                        tkKpiItemDetail.setItem(up.getItem());
+                        tkKpiItemDetail.setDonViTinh(up.getDonViTinh());
+                        tkKpiItemDetail.setTanSuatDanhGia(up.getTanSuatDanhGia());
+                        tkKpiItemDetail.setTrongSo(up.getTrongSo());
+                        tkKpiItemDetail.setRefId(up.getId());
+
+                        double value = (tkKpiItemDetail.getKetQuaThucHien() / up.getItem()) * up.getTrongSo();
+                        String t = df2.format(value);
+                        value = Double.parseDouble(t);
+                        tkKpiItemDetail.setTyLeThucHien(value);
+                        session.update(tkKpiItemDetail);
+
+                    }
+                }
+
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return true;
     }
 
 }

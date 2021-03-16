@@ -44,7 +44,10 @@
         <property name="status" type="string">
             <column name="STATUS" length="45" />
         </property>
-        <set name="tkKpiItemDetails" table="tk_kpi_item_detail" inverse="true" lazy="false" fetch="select">
+        <property name="refId" type="java.lang.Integer">
+            <column name="REF_ID" />
+        </property>
+        <set name="tkKpiItemDetails" table="tk_kpi_item_detail" inverse="true" lazy="false" fetch="select" where="status='ACTIVE'">
             <key>
                 <column name="TK_KPI_ITEM_ID" />
             </key>

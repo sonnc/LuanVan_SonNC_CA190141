@@ -19,6 +19,7 @@ import app.qlcv.customs.UserKpiMapper;
 import app.qlcv.utils.SystemMethod;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
     private List<TkKpiItemDetail> lstTkKpiItemDetailTOTAL = new ArrayList<>();
     private List<TkKpiItemDetail> lstTkKpiItemRating = new ArrayList<>();
     private List<TkKpiItemDetailRating> lstTkKpiItemDetailRatings = new ArrayList<>();
+    private int kpiTypeId;
 
     public KpiAction() {
         kpiController = new KpiController();
@@ -71,6 +73,7 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
     public String viewKpiDetail() {
         int id = Integer.parseInt(request.getParameter("id"));
         lsKpiItemSettings = kpiController.viewKpiDetail(id);
+        kpiTypeId = id;
         return SUCCESS;
     }
 
@@ -135,6 +138,7 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
                 tkKpiItem.setCreateDate(sysDate);
                 tkKpiItem.setLastUpdateDate(sysDate);
                 tkKpiItem.setKpiYear(year);
+                tkKpiItem.setRefId(kpiTypeSetting.getId());
                 if (isPB) {
                     tkKpiItem.setStatus("ACTIVE");
                     tkKpiItem.setKpiItem("BO_PHAN");
@@ -171,6 +175,7 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
                 tkKpiItemDetail.setTanSuatDanhGia(lstTkKpiItemSettings.get(j).getTanSuatDanhGia());
                 tkKpiItemDetail.setTrongSo(lstTkKpiItemSettings.get(j).getTrongSo());
                 tkKpiItemDetail.setStatus("ACTIVE");
+                tkKpiItemDetail.setRefId(lstTkKpiItemSettings.get(j).getId());
                 if ("BO_PHAN".equals(lstTkKpiItemSettings.get(j).getType())) {
                     lstTkKpiItemDetailPhongBan.add(tkKpiItemDetail);
                     continue;
@@ -331,6 +336,7 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
         double totalBP = 0;
         double totalTX = 0;
         double totalDX = 0;
+        DecimalFormat df2 = new DecimalFormat("#.##");
 
         for (int i = 0; i < lstTkKpiItems.size(); i++) {
             TkKpiItemDetail tkKpiItemDetail = new TkKpiItemDetail();
@@ -342,7 +348,6 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
             if ("BO_PHAN".equals(lstTkKpiItems.get(i).getKpiItem())) {
                 HashSet<TkKpiItemDetail> hset = new HashSet<TkKpiItemDetail>(lstTkKpiItems.get(i).getTkKpiItemDetails());
                 List<TkKpiItemDetail> lstTkKpiItemSettings = new ArrayList<TkKpiItemDetail>(hset);
-                System.out.println("vdavasdvadssssssssssssssssssssssssssssssssssssss = "+lstTkKpiItemSettings.size());
                 double total = 0;
                 for (int j = 0; j < lstTkKpiItemSettings.size(); j++) {
                     double tyLe = 0;
@@ -351,7 +356,14 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
                     }
                     total = total + tyLe;
                 }
+                String t = df2.format(total);
+                total = Double.parseDouble(t);
+
                 totalBP = (total * lstTkKpiItems.get(i).getTrongSo()) / 100;
+
+                String tt = df2.format(totalBP);
+                totalBP = Double.parseDouble(tt);
+                
                 tkKpiItemDetail.setTyLeThucHien(total);
 
                 lstTkKpiItemDetailPhongBan.add(tkKpiItemDetail);
@@ -367,9 +379,14 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
                     }
                     total = total + tyLe;
                 }
+                String t = df2.format(total);
+                total = Double.parseDouble(t);
                 totalTX = (total * lstTkKpiItems.get(i).getTrongSo()) / 100;
                 tkKpiItemDetail.setTyLeThucHien(total);
 
+                String tt = df2.format(totalTX);
+                totalTX = Double.parseDouble(tt);
+                
                 lstTkKpiItemDetailThuongXuyen.add(tkKpiItemDetail);
                 lstTkKpiItemDetailThuongXuyen.addAll(hset);
             } else if ("DOT_XUAT".equals(lstTkKpiItems.get(i).getKpiItem())) {
@@ -383,9 +400,15 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
                     }
                     total = total + tyLe;
                 }
+                String t = df2.format(total);
+                total = Double.parseDouble(t);
+
                 totalDX = (total * lstTkKpiItems.get(i).getTrongSo()) / 100;
                 tkKpiItemDetail.setTyLeThucHien(total);
 
+                String tt = df2.format(totalDX);
+                totalDX = Double.parseDouble(tt);
+                
                 lstTkKpiItemDetailDotXuat.add(tkKpiItemDetail);
                 lstTkKpiItemDetailDotXuat.addAll(hset);
             }
@@ -394,8 +417,8 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
         tkKpiItemDetail.setKpiName("KET_QUA_THUC_HIEN_KPI");
         tkKpiItemDetail.setTrongSo(100.0);
 
-        System.out.println("lstTkKpiItemDetailPhongBan = "+lstTkKpiItemDetailPhongBan.size());
-        totalSum = totalBP+totalTX+totalDX;
+        System.out.println("lstTkKpiItemDetailPhongBan = " + lstTkKpiItemDetailPhongBan.size());
+        totalSum = totalBP + totalTX + totalDX;
         tkKpiItemDetail.setTyLeThucHien(totalSum);
         lstTkKpiItemDetailTOTAL.add(tkKpiItemDetail);
     }
@@ -409,8 +432,8 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
         int day = localDate.getDayOfMonth();
 
         TkRatingDateSetup tkRatingDateSetup = new TkRatingDateSetup();
-                tkRatingDateSetup = kpiController.getListTimeDateRating();
-        
+        tkRatingDateSetup = kpiController.getListTimeDateRating();
+
         if (day > tkRatingDateSetup.getRatingStart() && day <= tkRatingDateSetup.getRatingEnd()) {
             for (int i = 0; i < lstTkKpiItem.size(); i++) {
                 boolean isPendingApproved = false;
@@ -585,4 +608,13 @@ public class KpiAction extends ActionSupport implements SessionAware, ServletReq
     public void setServletRequest(HttpServletRequest hsr) {
         this.request = hsr;
     }
+
+    public int getKpiTypeId() {
+        return kpiTypeId;
+    }
+
+    public void setKpiTypeId(int kpiTypeId) {
+        this.kpiTypeId = kpiTypeId;
+    }
+
 }

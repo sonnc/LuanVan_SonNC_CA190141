@@ -28,5 +28,25 @@
             <result name="UPDATE_KPI_STAFF_SUCCESS">/tk_kpi/rating-kpi-for-staff.jsp</result>
             <result name="error" type="redirect">404.jsp</result>
         </action>
+        <action name="adminKpiAction" class="app.kpi.AdminKpiAction" method="adminKpi">
+            <result name="VIEW_ALL_KPI_SUCCESS">/tk_admin/kpi.jsp</result>
+            <result name="VIEW_KPI_DETAIL_SUCCESS">/tk_admin/kpi-detail.jsp</result>
+            <result name="PREPARE_CREATE_KPI_SUCCESS">/tk_admin/kpi-create.jsp</result>
+            <result name="PREPARE_CREATE_KPI_RATING_DATE">/tk_admin/kpi-timeSeting.jsp</result>
+            <result name="CREATE_KPI_RATING_DATE">/tk_admin/kpi-timeSeting.jsp</result>
+            <result name="EDIT_DEPARTMENT">/tk_admin/department-edit.jsp</result>
+            <result name="CREATE_DEPARTMENT">/tk_admin/department.jsp</result>
+        </action>
+        
+        <action name="prepareEditKpi" class="app.kpi.AdminKpiAction" method="prepareEditKpiSetting">
+            <result name="success">/tk_admin/kpi-edit.jsp</result>
+            <result name="error" type="redirect">404.jsp</result>
+        </action>
+        <action name="editKpiSetting" class="app.kpi.AdminKpiAction" method="editKpiSetting">
+            <result name="success">/tk_admin/kpi-edit.jsp</result>
+            <result name="VIEW_KPI_DETAIL_SUCCESS">/tk_admin/kpi-detail.jsp</result>
+            <result name="error" type="redirect">404.jsp</result>
+        </action>
+        
     </package>
 </struts>

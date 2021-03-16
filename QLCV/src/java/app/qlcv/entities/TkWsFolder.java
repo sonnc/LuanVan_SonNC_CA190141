@@ -21,6 +21,8 @@ public class TkWsFolder  implements java.io.Serializable {
      private BigDecimal milestonesTienkhoan;
      private Date milestinesStartDate;
      private Date milestonesEndDate;
+     private Date milestonesCloseDate;
+     private String status;
      private Set tkWsTasklists = new HashSet(0);
 
     public TkWsFolder() {
@@ -99,6 +101,22 @@ public class TkWsFolder  implements java.io.Serializable {
     
     public void setTkWsTasklists(Set tkWsTasklists) {
         this.tkWsTasklists = tkWsTasklists;
+    }
+
+    public Date getMilestonesCloseDate() {
+        return milestonesCloseDate;
+    }
+
+    public void setMilestonesCloseDate(Date milestonesCloseDate) {
+        this.milestonesCloseDate = milestonesCloseDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 

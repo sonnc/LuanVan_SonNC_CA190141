@@ -33,6 +33,7 @@ public class TkUser  implements java.io.Serializable {
      private TkDepartment tkDepartment;
      private byte[] profilePicture;
      private BigDecimal luongCoSo;
+     private Integer heSo;
 
     public TkUser() {
     }
@@ -222,6 +223,14 @@ public class TkUser  implements java.io.Serializable {
 
     public void setLuongCoSo(BigDecimal luongCoSo) {
         this.luongCoSo = luongCoSo;
+    }
+
+    public Integer getHeSo() {
+        return heSo;
+    }
+
+    public void setHeSo(Integer heSo) {
+        this.heSo = heSo;
     }
 
 

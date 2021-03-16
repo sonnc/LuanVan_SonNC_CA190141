@@ -7,6 +7,7 @@ package app.qlcv.workspace;
 
 import app.qlcv.customs.LuongKhoanCustom;
 import app.qlcv.customs.LuongKhoanTotal;
+import app.qlcv.customs.Milestone;
 import app.qlcv.customs.TkWsTaskCustom;
 import app.qlcv.entities.LuongKhoan;
 import app.qlcv.entities.TkUser;
@@ -15,6 +16,7 @@ import app.qlcv.entities.TkWsTask;
 import app.qlcv.utils.SystemMethod;
 import com.opensymphony.xwork2.ActionSupport;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -163,15 +165,26 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
 
         totalKhoanHQDAInMonth = user.getLuongCoSo().multiply(new BigDecimal(Hcanhan)).multiply(new BigDecimal(0.2)).multiply(heSoCanBang);
 
-        
         // tinh khoan theo miltone
-        
+        // lay danh sach khoan dong dung han
+        List<Milestone> lstMilestones = new ArrayList<>();
+        lstMilestones = luongKhoanController.GetMilestonesClose();
+
         // lay danh sach nguoi tham gia miletone
-        
-        
-        
-        
-        
+        for (int i = 0; i < lstMilestones.size(); i++) {
+            List<Integer> lstUserMiletone = luongKhoanController.GetUserMilestonesClose(lstMilestones.get(i).getMilestoneid());
+            BigDecimal khoan = lstMilestones.get(i).getTienKhoan();
+            int soLuongThamGia = lstUserMiletone.size();
+            BigDecimal khoanMoiCaNhan = khoan.divide(new BigDecimal(soLuongThamGia), 2, RoundingMode.HALF_UP);
+
+            for (int j = 0; j < lstUserMiletone.size(); j++) {
+                if (lstUserMiletone.get(i).intValue() == user.getId().intValue()) {
+                    totalKhoanMilstoneInMonth = totalKhoanMilstoneInMonth.add(khoanMoiCaNhan.multiply(new BigDecimal(user.getHeSo()))).setScale(2, BigDecimal.ROUND_UP);
+                    break;
+                }
+            }
+        }
+
         LuongKhoanTotal lk2 = new LuongKhoanTotal();
 
         lk2.setTotalKhoanCV(totalKhoanCVInMonth.setScale(2, BigDecimal.ROUND_UP));
@@ -259,6 +272,24 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
 
             totalKhoanHQDAInMonth = userTinhKhoan.getLuongCoSo().multiply(new BigDecimal(Hcanhan)).multiply(new BigDecimal(0.2)).multiply(heSoCanBang);
 
+            List<Milestone> lstMilestones = new ArrayList<>();
+            lstMilestones = luongKhoanController.GetMilestonesClose();
+
+            // lay danh sach nguoi tham gia miletone
+            for (int i = 0; i < lstMilestones.size(); i++) {
+                List<Integer> lstUserMiletone = luongKhoanController.GetUserMilestonesClose(lstMilestones.get(i).getMilestoneid());
+                BigDecimal khoan = lstMilestones.get(i).getTienKhoan();
+                int soLuongThamGia = lstUserMiletone.size();
+                BigDecimal khoanMoiCaNhan = khoan.divide(new BigDecimal(soLuongThamGia), 2, RoundingMode.HALF_UP);
+
+                for (int j = 0; j < lstUserMiletone.size(); j++) {
+                    if (lstUserMiletone.get(i).intValue() == userTinhKhoan.getId().intValue()) {
+                        totalKhoanMilstoneInMonth = totalKhoanMilstoneInMonth.add(khoanMoiCaNhan.multiply(new BigDecimal(userTinhKhoan.getHeSo()))).setScale(2, BigDecimal.ROUND_UP);
+                        break;
+                    }
+                }
+
+            }
 
             LuongKhoanTotal lk2 = new LuongKhoanTotal();
 

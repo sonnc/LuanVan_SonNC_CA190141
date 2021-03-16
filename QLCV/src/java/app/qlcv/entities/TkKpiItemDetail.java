@@ -25,6 +25,7 @@ public class TkKpiItemDetail implements java.io.Serializable {
     private Double tyLeThucHien = 0.0;
     private Double ketQuaThucHien;
     private String status;
+    private int refId;
     private Set tkKpiItemDetailRatings = new HashSet(0);
 
     public TkKpiItemDetail() {
@@ -175,4 +176,13 @@ public class TkKpiItemDetail implements java.io.Serializable {
         this.tkKpiItemDetailRatings = tkKpiItemDetailRatings;
     }
 
+    public int getRefId() {
+        return refId;
+    }
+
+    public void setRefId(int refId) {
+        this.refId = refId;
+    }
+
+    
 }

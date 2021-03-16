@@ -43,7 +43,7 @@ public class KpiController {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM TkKpiTypeSetting WHERE tkDepartment.id=:deparmentId");
+            Query query = session.createQuery("FROM TkKpiTypeSetting WHERE tkDepartment.id=:deparmentId  and status='ACTIVE'");
             query.setParameter("deparmentId", deparmentId);
             lstKpiTypeSettings = query.list();
             transaction.commit();
@@ -63,7 +63,7 @@ public class KpiController {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM TkKpiItemSetting WHERE tkKpiTypeSetting.id=:id");
+            Query query = session.createQuery("FROM TkKpiItemSetting WHERE tkKpiTypeSetting.id=:id and status='ACTIVE'");
             query.setParameter("id", id);
             lstKpiItemSettings = query.list();
             transaction.commit();
@@ -203,7 +203,7 @@ public class KpiController {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM TkKpiItem WHERE tkUser.id=:userId and kpiYear=:year");
+            Query query = session.createQuery("FROM TkKpiItem WHERE tkUser.id=:userId and kpiYear=:year and status='ACTIVE'");
             query.setParameter("userId", userId);
             query.setParameter("year", year);
             lstTkKpiItems = query.list();

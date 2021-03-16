@@ -29,6 +29,12 @@
         <property name="milestonesEndDate" type="date">
             <column name="milestones_end_date" length="10" />
         </property>
+        <property name="milestonesCloseDate" type="date">
+            <column name="milestones_close_date" length="10" />
+        </property>
+        <property name="status" type="string">
+            <column name="status" length="45" />
+        </property>
         <set name="tkWsTasklists" table="tk_ws_tasklist" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="tk_ws_folder_id" />
