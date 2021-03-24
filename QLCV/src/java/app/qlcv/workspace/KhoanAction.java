@@ -8,6 +8,7 @@ package app.qlcv.workspace;
 import app.qlcv.customs.LuongKhoanCustom;
 import app.qlcv.customs.LuongKhoanTotal;
 import app.qlcv.customs.Milestone;
+import app.qlcv.customs.TienKhoanTheoThang;
 import app.qlcv.customs.TkWsTaskCustom;
 import app.qlcv.entities.LuongKhoan;
 import app.qlcv.entities.TkUser;
@@ -21,6 +22,7 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -107,6 +109,9 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
         List<TkWsTask> lstTasks = new ArrayList<>();
         lstTasks = tasktController.GetAllTaskByUserId(user.getId(), "all");
 
+        List<TkWsTask> lstTaskInWorkspace = new ArrayList<>();
+        lstTasks = tasktController.GetAllTaskByUserId(user.getId(), "all");
+
         BigDecimal totalKhoanCVInMonth = BigDecimal.ZERO;
         BigDecimal totalKhoanMilstoneInMonth = BigDecimal.ZERO;
         BigDecimal totalKhoanHQDAInMonth = BigDecimal.ZERO;
@@ -185,6 +190,24 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
             }
         }
 
+        List<TkUser> lstUsers = new ArrayList<>();
+        TkUser userLogin = (TkUser) session.get("user");
+        lstUsers = workspaceController.GetAllUserInDepartement(userLogin.getTkDepartment().getId());
+
+        BigDecimal totalLuongToanPhongPhan = new BigDecimal(BigInteger.ZERO);
+
+        for (int i = 0; i < lstUsers.size(); i++) {
+            BigDecimal thuong = new BigDecimal(BigInteger.ZERO);
+            thuong = lstUsers.get(i).getPackageSalary().subtract((new BigDecimal(13)).multiply(lstUsers.get(i).getLuongCoSo()));
+            totalLuongToanPhongPhan = totalLuongToanPhongPhan.add(thuong);
+        }
+
+        BigDecimal quyThuongMotThang = new BigDecimal(BigInteger.ZERO);
+        quyThuongMotThang = totalLuongToanPhongPhan.divide(new BigDecimal(12));
+
+        BigDecimal khoanCaNhanOld = new BigDecimal(BigInteger.ZERO);
+        khoanCaNhanOld = quyThuongMotThang.divide(new BigDecimal(lstUsers.size())).multiply(new BigDecimal(user.getHeSo())).setScale(2, BigDecimal.ROUND_UP);
+
         LuongKhoanTotal lk2 = new LuongKhoanTotal();
 
         lk2.setTotalKhoanCV(totalKhoanCVInMonth.setScale(2, BigDecimal.ROUND_UP));
@@ -193,8 +216,11 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
         lk2.setTotalKhoanHQDA2(totalKhoanHQDAInMonth.multiply(new BigDecimal(1.2)).setScale(2, BigDecimal.ROUND_UP));
         lk2.setTotalKhoan(totalKhoanCVInMonth.add(totalKhoanMilstoneInMonth).add(totalKhoanHQDAInMonth.multiply(new BigDecimal(0.8))).setScale(2, BigDecimal.ROUND_UP));
         lk2.setTotalKhoan2(totalKhoanCVInMonth.add(totalKhoanMilstoneInMonth).add(totalKhoanHQDAInMonth.multiply(new BigDecimal(1.2))).setScale(2, BigDecimal.ROUND_UP));
-
+        lk2.setTotalKhoanOld(khoanCaNhanOld);
+        lk2.setTotalKhoanChange((totalKhoanHQDAInMonth.multiply(new BigDecimal(0.8)).setScale(2, BigDecimal.ROUND_UP)).subtract(khoanCaNhanOld));
         luongKhoanTotal2 = lk2;
+
+        LayToanBoKhoanTheoNamByUserId(user);
 
         return SUCCESS;
     }
@@ -209,6 +235,7 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("MM");
         String strDate = formatter.format(date);
+
         for (int k = 0; k < lstUsers.size(); k++) {
             TkUser userTinhKhoan = new TkUser();
             userTinhKhoan = lstUsers.get(k);
@@ -338,6 +365,12 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
                 lstLuongKhoans.add(custom);
             }
         }
+        List<TkUser> lsTkUsers = workspaceController.GetAllUserInDepartement(userLogin.getTkDepartment().getId());
+        String year = systemMethod.getSystemYearToString();
+        String yearPeve = String.valueOf(Integer.parseInt(year) - 1);
+        session.put("PMKhoanTotalCharForAll", PMTongSoTienTraTheoThangNamHienTai(year, lsTkUsers));
+        session.put("PMKhoanTotalCharForAllYearPeve", PMTongSoTienTraTheoThangNamHienTai(yearPeve, lsTkUsers));
+        PMTongSoTienTheoUserNamHienTai(year, lsTkUsers);
 
         return SUCCESS;
     }
@@ -368,7 +401,223 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
                 lstLuongKhoans.add(custom);
             }
         }
+        List<TkUser> lsTkUsers = workspaceController.GetAllUserInDepartement(userLogin.getTkDepartment().getId());
+        String year = systemMethod.getSystemYearToString();
+        String yearPeve = String.valueOf(Integer.parseInt(year) - 1);
+        session.put("PMKhoanTotalCharForAll", PMTongSoTienTraTheoThangNamHienTai(year, lsTkUsers));
+        session.put("PMKhoanTotalCharForAllYearPeve", PMTongSoTienTraTheoThangNamHienTai(yearPeve, lsTkUsers));
+        PMTongSoTienTheoUserNamHienTai(year, lsTkUsers);
         return SUCCESS;
+    }
+
+    public void LayToanBoKhoanTheoNamByUserId(TkUser user) {
+        //lay du lieu khoan
+        List<LuongKhoan> lstLuongKhoan = new ArrayList<>();
+        lstLuongKhoan = luongKhoanController.getLuongKhoanByUserId(user.getId());
+
+        String khoanCv = "";
+        String khoanMilestone = "";
+        String khoanTamUng = "";
+
+        for (int i = 1; i < 13; i++) {
+            List<LuongKhoan> lstLuongKhoanByMonth = new ArrayList<>();
+            lstLuongKhoanByMonth = luongKhoanController.getLuongKhoanByUserIdByMonth(user.getId(), i, systemMethod.getSystemYearToNumber());
+
+            if (lstLuongKhoanByMonth != null && lstLuongKhoanByMonth.size() > 0) {
+                for (int j = 0; j < lstLuongKhoanByMonth.size(); j++) {
+                    LuongKhoan get = lstLuongKhoanByMonth.get(j);
+                    if ("CV".equals(get.getLoaiKhoan())) {
+                        khoanCv = khoanCv + get.getLuongKhoan().toString() + ",";
+                    }
+                    if ("MT".equals(get.getLoaiKhoan())) {
+                        khoanMilestone = khoanMilestone + get.getLuongKhoan().toString() + ",";
+                    }
+                    if ("HQDA".equals(get.getLoaiKhoan())) {
+                        khoanTamUng = khoanTamUng + get.getLuongKhoan().toString() + ",";
+                    }
+                }
+            } else {
+                khoanCv = khoanCv + ",";
+                khoanMilestone = khoanMilestone + ",";
+                khoanTamUng = khoanTamUng + ",";
+            }
+        }
+        System.out.println("khoanCv = " + khoanCv);
+        System.out.println("khoanMilestone = " + khoanMilestone);
+        System.out.println("khoanTamUng = " + khoanTamUng);
+
+//        for (int i = 0; i < lstLuongKhoan.size(); i++) {
+//            LuongKhoan get = lstLuongKhoan.get(i);
+//            if (get.getCreateDate().getYear() == systemMethod.getSystemYear()) {
+//                if ("CV".equals(get.getLoaiKhoan())) {
+//                    khoanCv = khoanCv + get.getLuongKhoan().toString() + ",";
+//                }
+//                if ("MT".equals(get.getLoaiKhoan())) {
+//                    khoanMilestone = khoanMilestone + get.getLuongKhoan().toString() + ",";
+//                }
+//                if ("HQDA".equals(get.getLoaiKhoan())) {
+//                    khoanTamUng = khoanTamUng + get.getLuongKhoan().toString() + ",";
+//                }
+//            }
+//        }
+        List<TkUser> lsTkUsers = workspaceController.GetAllUserInDepartement(user.getTkDepartment().getId());
+        String year = systemMethod.getSystemYearToString();
+        String yearPeve = String.valueOf(Integer.parseInt(year) - 1);
+        session.put("khoanCv", khoanCv);
+        session.put("khoanMilestone", khoanMilestone);
+        session.put("khoanTamUng", khoanTamUng);
+        session.put("KhoanTotalChar", GetDataForCharYear(lstLuongKhoan, year));
+        session.put("KhoanTotalCharPerve", GetDataForCharYear(lstLuongKhoan, yearPeve));
+        session.put("KhoanTotalCharTB", GetDataForCharYearTrungBInh(year, lsTkUsers));
+    }
+
+    public String GetDataForCharYear(List<LuongKhoan> lstLuongKhoan, String year) {
+        HashMap<Integer, BigDecimal> hashMap = new HashMap<>();
+        for (int i = 0; i < lstLuongKhoan.size(); i++) {
+            LuongKhoan lk = lstLuongKhoan.get(i);
+            if (year.equals(systemMethod.getSystemYearToString1(lk.getCreateDate()))) {
+                if (hashMap.get(lk.getThang()) == null) {
+                    hashMap.put(lk.getThang(), lk.getLuongKhoan());
+                } else {
+                    BigDecimal a = hashMap.get(lk.getThang());
+                    hashMap.replace(lk.getThang(), lk.getLuongKhoan().add(a));
+                }
+            }
+        }
+        String KhoanTotalChar = "";
+        KhoanTotalChar = hashMap.get(1) == null ? "," : hashMap.get(1).toString() + ",";
+        KhoanTotalChar = hashMap.get(2) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(2).toString() + ",";
+        KhoanTotalChar = hashMap.get(3) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(3).toString() + ",";
+        KhoanTotalChar = hashMap.get(4) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(4).toString() + ",";
+        KhoanTotalChar = hashMap.get(5) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(5).toString() + ",";
+        KhoanTotalChar = hashMap.get(6) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(6).toString() + ",";
+        KhoanTotalChar = hashMap.get(7) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(7).toString() + ",";
+        KhoanTotalChar = hashMap.get(8) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(8).toString() + ",";
+        KhoanTotalChar = hashMap.get(9) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(9).toString() + ",";
+        KhoanTotalChar = hashMap.get(10) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(10).toString() + ",";
+        KhoanTotalChar = hashMap.get(11) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(11).toString() + ",";
+        KhoanTotalChar = hashMap.get(12) == null ? KhoanTotalChar + "" : KhoanTotalChar + hashMap.get(12).toString();
+
+        System.out.println(KhoanTotalChar);
+        return KhoanTotalChar;
+    }
+
+    public String GetDataForCharYearTrungBInh(String year, List<TkUser> lstUsers) {
+        HashMap<Integer, BigDecimal> hashMap = new HashMap<>();
+        for (int k = 0; k < lstUsers.size(); k++) {
+            TkUser u = lstUsers.get(k);
+            List<LuongKhoan> lstLuongKhoan = new ArrayList<>();
+            lstLuongKhoan = luongKhoanController.getLuongKhoanByUserId(u.getId());
+            for (int i = 0; i < lstLuongKhoan.size(); i++) {
+                LuongKhoan lk = lstLuongKhoan.get(i);
+                if (year.equals(systemMethod.getSystemYearToString1(lk.getCreateDate()))) {
+                    if (hashMap.get(lk.getThang()) == null) {
+                        hashMap.put(lk.getThang(), lk.getLuongKhoan());
+                    } else {
+                        BigDecimal a = hashMap.get(lk.getThang());
+                        hashMap.replace(lk.getThang(), lk.getLuongKhoan().add(a));
+                    }
+                }
+            }
+        }
+        BigDecimal numberUser = new BigDecimal(lstUsers.size());
+
+        String KhoanTotalChar = "";
+        KhoanTotalChar = hashMap.get(1) == null ? "," : (hashMap.get(1).divide(numberUser, 2, RoundingMode.HALF_UP)).toString() + ",";
+        KhoanTotalChar = hashMap.get(2) == null ? KhoanTotalChar + "," : (KhoanTotalChar + hashMap.get(2).divide(numberUser, 2, RoundingMode.HALF_UP)).toString() + ",";
+        KhoanTotalChar = hashMap.get(3) == null ? KhoanTotalChar + "," : (KhoanTotalChar + hashMap.get(3).divide(numberUser, 2, RoundingMode.HALF_UP)).toString() + ",";
+        KhoanTotalChar = hashMap.get(4) == null ? KhoanTotalChar + "," : (KhoanTotalChar + hashMap.get(4).divide(numberUser, 2, RoundingMode.HALF_UP)).toString() + ",";
+        KhoanTotalChar = hashMap.get(5) == null ? KhoanTotalChar + "," : (KhoanTotalChar + hashMap.get(5).divide(numberUser, 2, RoundingMode.HALF_UP)).toString() + ",";
+        KhoanTotalChar = hashMap.get(6) == null ? KhoanTotalChar + "," : (KhoanTotalChar + hashMap.get(6).divide(numberUser, 2, RoundingMode.HALF_UP)).toString() + ",";
+        KhoanTotalChar = hashMap.get(7) == null ? KhoanTotalChar + "," : (KhoanTotalChar + hashMap.get(7).divide(numberUser, 2, RoundingMode.HALF_UP)).toString() + ",";
+        KhoanTotalChar = hashMap.get(8) == null ? KhoanTotalChar + "," : (KhoanTotalChar + hashMap.get(8).divide(numberUser, 2, RoundingMode.HALF_UP)).toString() + ",";
+        KhoanTotalChar = hashMap.get(9) == null ? KhoanTotalChar + "," : (KhoanTotalChar + hashMap.get(9).divide(numberUser, 2, RoundingMode.HALF_UP)).toString() + ",";
+        KhoanTotalChar = hashMap.get(10) == null ? KhoanTotalChar + "," : (KhoanTotalChar + hashMap.get(10).divide(numberUser, 2, RoundingMode.HALF_UP)).toString() + ",";
+        KhoanTotalChar = hashMap.get(11) == null ? KhoanTotalChar + "," : (KhoanTotalChar + hashMap.get(11).divide(numberUser, 2, RoundingMode.HALF_UP)).toString() + ",";
+        KhoanTotalChar = hashMap.get(12) == null ? KhoanTotalChar + "" : (KhoanTotalChar + hashMap.get(12).divide(numberUser, 2, RoundingMode.HALF_UP)).toString();
+
+        System.out.println(KhoanTotalChar);
+        return KhoanTotalChar;
+    }
+
+    public String PMTongSoTienTraTheoThangNamHienTai(String year, List<TkUser> lstUsers) {
+        HashMap<Integer, BigDecimal> hashMap = new HashMap<>();
+        for (int k = 0; k < lstUsers.size(); k++) {
+            TkUser u = lstUsers.get(k);
+            List<LuongKhoan> lstLuongKhoan = new ArrayList<>();
+            lstLuongKhoan = luongKhoanController.getLuongKhoanByUserId(u.getId());
+            for (int i = 0; i < lstLuongKhoan.size(); i++) {
+                LuongKhoan lk = lstLuongKhoan.get(i);
+                if (year.equals(systemMethod.getSystemYearToString1(lk.getCreateDate()))) {
+                    if (hashMap.get(lk.getThang()) == null) {
+                        hashMap.put(lk.getThang(), lk.getLuongKhoan());
+                    } else {
+                        BigDecimal a = hashMap.get(lk.getThang());
+                        hashMap.replace(lk.getThang(), lk.getLuongKhoan().add(a));
+                    }
+                }
+            }
+        }
+
+        String KhoanTotalChar = "";
+        KhoanTotalChar = hashMap.get(1) == null ? "," : hashMap.get(1).toString() + ",";
+        KhoanTotalChar = hashMap.get(2) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(2).toString() + ",";
+        KhoanTotalChar = hashMap.get(3) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(3).toString() + ",";
+        KhoanTotalChar = hashMap.get(4) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(4).toString() + ",";
+        KhoanTotalChar = hashMap.get(5) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(5).toString() + ",";
+        KhoanTotalChar = hashMap.get(6) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(6).toString() + ",";
+        KhoanTotalChar = hashMap.get(7) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(7).toString() + ",";
+        KhoanTotalChar = hashMap.get(8) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(8).toString() + ",";
+        KhoanTotalChar = hashMap.get(9) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(9).toString() + ",";
+        KhoanTotalChar = hashMap.get(10) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(10).toString() + ",";
+        KhoanTotalChar = hashMap.get(11) == null ? KhoanTotalChar + "," : KhoanTotalChar + hashMap.get(11).toString() + ",";
+        KhoanTotalChar = hashMap.get(12) == null ? KhoanTotalChar + "" : KhoanTotalChar + hashMap.get(12).toString();
+
+        System.out.println(KhoanTotalChar);
+        return KhoanTotalChar;
+
+    }
+
+    public void PMTongSoTienTheoUserNamHienTai(String year, List<TkUser> lstUsers) {
+        HashMap<String, BigDecimal> hashMap = new HashMap<>();
+        for (int k = 0; k < lstUsers.size(); k++) {
+            TkUser u = lstUsers.get(k);
+
+            String code = u.getLoginId() + " - " + u.getFullName();
+
+            List<LuongKhoan> lstLuongKhoan = new ArrayList<>();
+            lstLuongKhoan = luongKhoanController.getLuongKhoanByUserId(u.getId());
+            for (int i = 0; i < lstLuongKhoan.size(); i++) {
+                LuongKhoan lk = lstLuongKhoan.get(i);
+                if (year.equals(systemMethod.getSystemYearToString1(lk.getCreateDate()))) {
+                    if (hashMap.get(code) == null) {
+                        hashMap.put(code, lk.getLuongKhoan() == null ? BigDecimal.ZERO : lk.getLuongKhoan());
+                    } else {
+                        BigDecimal a = hashMap.get(code);
+                        BigDecimal value = BigDecimal.ZERO;
+                        if (lk.getLuongKhoan() != null) {
+                            value = lk.getLuongKhoan().add(a);
+                        }
+                        hashMap.replace(code, value);
+                    }
+                }
+            }
+        }
+
+        String dataLabel = "";
+        String dataAmount = "";
+        for (Map.Entry<String, BigDecimal> entry : hashMap.entrySet()) {
+            String key = entry.getKey();
+            BigDecimal value = entry.getValue();
+            dataLabel = dataLabel + ",\"" + key + "\"";
+            dataAmount = dataAmount + "," + value.toString();
+
+        }
+        System.out.println("dataLabel = " + dataLabel);
+        System.out.println("dataAmount = " + dataAmount);
+        session.put("dataLabel", dataLabel);
+        session.put("dataAmount", dataAmount);
+
     }
 
     @Override

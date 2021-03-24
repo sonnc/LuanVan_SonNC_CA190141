@@ -13,10 +13,13 @@
     <head>
         <%
             session.removeAttribute("CssAndJs");
-            session.setAttribute("CssAndJs", "view_task");
+            session.setAttribute("CssAndJs", "khoan");
             Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("MM/yyyy");
+            SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy");
             String strDate = formatter.format(date);
+            String strDate2 = formatter2.format(date);
+            int ywar = Integer.parseInt(strDate2)-1;
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <%@include file="/jsp/header.jsp" %>
@@ -126,6 +129,105 @@
                         </div>
                     </section>
 
+                    <section id="chartjs-line-charts">
+                        <!-- Line Chart -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Dữ liệu tiền thưởng <strong class="danger"><%=strDate2 %></strong></h4>
+                                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                        <div class="heading-elements">
+                                            <ul class="list-inline mb-0">
+                                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card-content collapse show">
+                                        <div class="card-body chartjs">
+                                            <canvas id="line-chart" height="500"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="chartjs-bar-charts">
+                        <!-- Bar Chart -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Số tiền thu nhập theo tháng:  <strong style="color:#28D094"> Năm <%=strDate2 %></strong> - <strong style="color:#F98E76"> Năm <%=ywar %></strong></h4>
+                                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                        <div class="heading-elements">
+                                            <ul class="list-inline mb-0">
+                                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card-content collapse show">
+                                        <div class="card-body">
+                                            <canvas id="column-chart" height="400"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <%--
+                                        <section id="configuration">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h4 class="card-title">DỮ LIỆU CHÊNH LỆCH GIỮA CHÍNH SÁCH CŨ VÀ CHÍNH SÁCH MỚI <strong style="color: red"><%=strDate%></strong></h4>
+                                                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                                            <div class="heading-elements">
+                                                                <ul class="list-inline mb-0">
+                                                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                                                    <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-content collapse hiden">
+                                                            <div class="card-body card-dashboard">
+                                                                <div class="card-content collapse show">
+                                                                    <div class="card-body pt-0">
+                                                                        <div class="row">
+                                                                            <div class="col-md-4 col-12 border-right-blue-grey border-right-lighten-5 text-center">
+                                                                                <h4 class="font-large-2 text-bold-400" id="ccy9" ><s:property value="luongKhoanTotal2.totalKhoanOld"/></h4>
+                                                                                <p class="blue-grey lighten-2 mb-0">LƯƠNG MỀM THEO CHÍNH SÁCH CŨ</p>
+                                                                            </div>
+                                                                            <div class="col-md-4 col-12 text-center">
+                                                                                <h4 class="font-large-2 text-bold-400" id="ccy10" ><s:property value="luongKhoanTotal2.totalKhoanHQDA"/></h4>
+                                                                                <p class="blue-grey lighten-2 mb-0">LƯƠNG MỀM THEO CHÍNH SÁCH MỚI</p>
+                                                                            </div>
+                                                                            <div class="col-md-4 col-12 text-center">
+                                                                                <h4 class="font-large-2 text-bold-400" id="ccy11" ><s:property value="luongKhoanTotal2.totalKhoanChange"/></h4>
+                                                                                <p class="blue-grey lighten-2 mb-0">MỨC CHÊNH LỆCH</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                    --%>
                     <section id="configuration">
                         <div class="row">
                             <div class="col-12">
@@ -278,15 +380,25 @@
         </div>
         <script>
             window.onload = function () {
+                
+                getLineChars();
+                convertNumberToString();
+                getBarChars();
+            };
+            
+            function convertNumberToString(){
                 for (var i = 1, max = 9; i < max; i++) {
-                    var id = 'ccy'+i;
+                    var id = 'ccy' + i;
                     var numer = document.getElementById(id).innerHTML;
                     var num = new Number(numer).toLocaleString("vi-VI");
                     document.getElementById(id).innerHTML = num;
                 }
-            };
+            }
         </script>
+        
 
+        <%@include file="/jsp/khoan-char1.jsp" %>
+        <%@include file="/jsp/khoan-char2.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>

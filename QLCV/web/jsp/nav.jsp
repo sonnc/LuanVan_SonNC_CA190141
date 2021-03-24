@@ -11,8 +11,8 @@
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-TkUser userLoginSys = (TkUser) session.getAttribute("user");
-SysCodeValue role = (SysCodeValue) session.getAttribute("role");
+    TkUser userLoginSys = (TkUser) session.getAttribute("user");
+    SysCodeValue role = (SysCodeValue) session.getAttribute("role");
 %>
 <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-semi-light bg-info navbar-shadow">
     <div class="navbar-wrapper">
@@ -40,7 +40,7 @@ SysCodeValue role = (SysCodeValue) session.getAttribute("role");
                     <li class="dropdown dropdown-user nav-item">
                         <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                             <span class="mr-1">Xin Chào,
-                                <span class="user-name text-bold-700"><%=userLoginSys.getFullName()%> (<%=role.getLocalCodeValue() %>)</span>
+                                <span class="user-name text-bold-700"><%=userLoginSys.getFullName()%> (<%=role.getLocalCodeValue()%>)</span>
                             </span>
                             <!--                            <span class="avatar avatar-online">
                                                             <img src="<%=session.getAttribute("httpURL")%>app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"><i></i></span>-->
@@ -59,12 +59,16 @@ SysCodeValue role = (SysCodeValue) session.getAttribute("role");
 
                 </ul>
             </div>
+            
         </div>
+
     </div>
 </nav>
 
+                        
 
 <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow " data-scroll-to-active="true">
+
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
 
@@ -81,37 +85,35 @@ SysCodeValue role = (SysCodeValue) session.getAttribute("role");
                 </ul>
             </li>-->
             <li class=" nav-item"><a href="viewWorkspaceAction"><i class="la la-briefcase"></i><span class="menu-title"><%=properties.getProperty("app.workspace")%></span></a>
-             
+
             </li>
             <li class=" nav-item"><a href="#"><i class="la la-inbox"></i><span class="menu-title">Khoán và tiền thưởng</span></a>
                 <ul class="menu-content">
-                    <%if ("PM".equals(role.getCode()) ||"SPM".equals(role.getCode())||"GD".equals(role.getCode())
-                            ) {
-                            %>
-                    <li><a class="menu-item" href="themisPrepareCaculateAction">Tính khoán - PM</a></li>
-                    <%
-                        }
+                    <%if ("PM".equals(role.getCode()) || "SPM".equals(role.getCode()) || "GD".equals(role.getCode())) {
                     %>
-                    
+                    <li><a class="menu-item" href="themisPrepareCaculateAction">Tính khoán - PM</a></li>
+                        <%
+                            }
+                        %>
+
                     <li><a class="menu-item" href="themisAction">Khoán và hiệu quả CV</a></li>
                 </ul>
             </li>
             <li class=" nav-item"><a href="viewKpiOfDepartementAction"><i class="la la-star"></i><span class="menu-title"><%=properties.getProperty("app.kpi")%></span></a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="viewKpiOfDepartementAction">KPI</a></li>
-                         <% int year = Calendar.getInstance().get(Calendar.YEAR);%>
-                         <%if ("PM".equals(role.getCode()) ||"SPM".equals(role.getCode())||"GD".equals(role.getCode())
-                            ) {
-                            %>
+                        <% int year = Calendar.getInstance().get(Calendar.YEAR);%>
+                        <%if ("PM".equals(role.getCode()) || "SPM".equals(role.getCode()) || "GD".equals(role.getCode())) {
+                        %>
                     <li>
                         <a href="getAllStaffKpiAction?kpiYear=<%= year%>">QUẢN LÝ KPI NHÂN VIÊN</a>
-                     </li>
+                    </li>
                     <%
                         }
                     %>
-                        
-                     
-                   
+
+
+
                     <li>
                         <a type="button" href="kpiUserAction?userId=0&&kpiYear=<%= year%>&&method=viewMyKpi">KPI CỦA TÔI</a>
                     </li>
@@ -119,20 +121,21 @@ SysCodeValue role = (SysCodeValue) session.getAttribute("role");
             </li>
 <!--            <li class=" nav-item"><a href="#"><i class="la la-inbox"></i><span class="menu-title"><%=properties.getProperty("app.report")%></span></a>
             </li>-->
-            <%if ("PM".equals(role.getCode()) ||"SPM".equals(role.getCode())||"GD".equals(role.getCode())
-                            ) {
-                            %>
-                            <li class=" nav-item"><a href="#"><i class="la la-chrome"></i><span class="menu-title"><%=properties.getProperty("app.setup")%></span></a>
-                                <ul class="menu-content">
-                                    <li><a class="menu-item" href="getAllCodeSet">Giá trị hệ thống</a></li>
-                                    <li><a class="menu-item" href="<%=session.getAttribute("httpURL")%>tk_admin/home.jsp">Cài đặt Hệ thống</a></li>
-                                </ul>
-                            </li>
-                    <%
-                        }
-                    %>
-           
+            <%if ("PM".equals(role.getCode()) || "SPM".equals(role.getCode()) || "GD".equals(role.getCode())) {
+            %>
+            <li class=" nav-item"><a href="#"><i class="la la-chrome"></i><span class="menu-title"><%=properties.getProperty("app.setup")%></span></a>
+                <ul class="menu-content">
+                    <li><a class="menu-item" href="getAllCodeSet">Giá trị hệ thống</a></li>
+                    <li><a class="menu-item" href="<%=session.getAttribute("httpURL")%>tk_admin/home.jsp">Cài đặt Hệ thống</a></li>
+                </ul>
+            </li>
+            <%
+                }
+            %>
+
 
         </ul>
     </div>
-</div>
+
+</div> 
+          

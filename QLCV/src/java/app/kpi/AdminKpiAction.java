@@ -45,6 +45,7 @@ public class AdminKpiAction extends ActionSupport implements SessionAware, Servl
     private List<TkKpiItemSetting> lsKpiItemSettings = new ArrayList<>();
     private TkRatingDateSetup tkRatingDateSetup = new TkRatingDateSetup();
     private int kpiTypeId;
+    private TkKpiTypeSetting kpiTypeSetting = new TkKpiTypeSetting();
 
     public AdminKpiAction() {
         adminController = new AdminKpiController();
@@ -214,7 +215,7 @@ public class AdminKpiAction extends ActionSupport implements SessionAware, Servl
         return "VIEW_KPI_DETAIL_SUCCESS";
     }
 
-    public HashMap<String, List<TkKpiItemSetting>> checkKpiItemSetting(List<TkKpiItemSetting> lstItemSettingsDB, 
+    public HashMap<String, List<TkKpiItemSetting>> checkKpiItemSetting(List<TkKpiItemSetting> lstItemSettingsDB,
             List<TkKpiItemSetting> lstItemSettingsForm, TkKpiTypeSetting kpiTypeSetting, String type) {
         List<TkKpiItemSetting> lstItemSettings = new ArrayList<>();
         TkUser tku = (TkUser) session.get("user");
@@ -327,6 +328,31 @@ public class AdminKpiAction extends ActionSupport implements SessionAware, Servl
         return lstItemSettings;
     }
 
+    public String editWeightKpiTypeSetting() {
+        int kpiType = Integer.parseInt(request.getParameter("kpiTypeId"));
+        TkKpiTypeSetting kpiTypeSetting = new TkKpiTypeSetting();
+        kpiTypeSetting = adminController.getKpiTypeSettingById(kpiType);
+        String tkKpiDetailKpiName = request.getParameter("tkKpiDetailKpiName");
+        String tkKpiDetailKpiDesc = request.getParameter("tkKpiDetailKpiDesc");
+        double trongSoKpiPhongban = Double.parseDouble(request.getParameter("trongSoKpiPhongban"));
+        double trongSoKpiThuongxuyen = Double.parseDouble(request.getParameter("trongSoKpiThuongxuyen"));
+        double trongSoKpiDotxuat = Double.parseDouble(request.getParameter("trongSoKpiDotxuat"));
+        kpiTypeSetting.setKpiName(tkKpiDetailKpiName);
+        kpiTypeSetting.setKpiDesc(tkKpiDetailKpiDesc);
+        kpiTypeSetting.setTrongSoKpiPhongban(trongSoKpiPhongban);
+        kpiTypeSetting.setTrongSoKpiThuongxuyen(trongSoKpiThuongxuyen);
+        kpiTypeSetting.setTrongSoKpiDotxuat(trongSoKpiDotxuat);
+        adminController.editWeightKpiTypeSetting(kpiTypeSetting);
+        lstKpiTypeSettings = adminController.getAllKpiTypeSetting();
+        return "VIEW_ALL_KPI_SUCCESS";
+    }
+
+    public String prepareEditEditWeightKpiTypeSetting() {
+        int kpiType = Integer.parseInt(request.getParameter("kpiId"));
+        kpiTypeSetting = adminController.getKpiTypeSettingById(kpiType);
+        return SUCCESS;
+    }
+
     public File getMyFile() {
         return myFile;
     }
@@ -424,5 +450,13 @@ public class AdminKpiAction extends ActionSupport implements SessionAware, Servl
     public void setKpiTypeId(int kpiTypeId) {
         this.kpiTypeId = kpiTypeId;
     }
-    
+
+    public TkKpiTypeSetting getKpiTypeSetting() {
+        return kpiTypeSetting;
+    }
+
+    public void setKpiTypeSetting(TkKpiTypeSetting kpiTypeSetting) {
+        this.kpiTypeSetting = kpiTypeSetting;
+    }
+
 }

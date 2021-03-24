@@ -23,7 +23,7 @@
         <%@include file="/jsp/nav.jsp" %>
 
         <div class="app-content content">
-            <form action="editTask" method="post" enctype="multipart/form-data">
+            <form id="formAction" action="editTask" method="post" enctype="multipart/form-data">
                 <div class="content-wrapper">
                     <div class="content-header row">
                         <div class="content-header-left col-md-6 col-12 mb-2">
@@ -77,7 +77,7 @@
                                                         <div class="col-12"> 
                                                             <h4 class="form-section"><i class="ft-home"></i> THÔNG TIN CHUNG</h4>
                                                             
-                                                            <form action="editTask"  method="post" enctype="multipart/form-data">
+                                                            <!--<form action="editTask"  method="post" enctype="multipart/form-data">-->
                                                                 <input hidden="true" name="event" value="edit" />
                                                                 <input hidden="true" name="workspaceId" value="<s:property value="workspace.id"/>" />
                                                                 <input hidden="true" name="tasklistid" value="<s:property value="tasklist.id"/>" />
@@ -163,7 +163,7 @@
                                                                         </fieldset> 
                                                                     </div>
                                                                 </div>
-                                                            </form>   
+                                                            <!--</form>-->   
                                                         </div>
                                                     </div>
                                                 </div>
@@ -176,7 +176,7 @@
                 </div>    
             </form>
         </div>
-
+<%@include file="/jsp/dialogConfirm.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>

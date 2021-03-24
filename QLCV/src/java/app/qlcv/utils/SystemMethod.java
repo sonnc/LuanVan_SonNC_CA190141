@@ -11,7 +11,9 @@ import app.qlcv.entities.TkWsTask;
 import app.qlcv.workspace.TaskListController;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
+import java.math.BigDecimal;
 import java.sql.Date;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -64,21 +66,53 @@ public class SystemMethod extends ActionSupport implements SessionAware, Servlet
         }
         return link;
     }
-    
-    public String dateToString(){
+
+    public String dateToString() {
         java.util.Date date = new java.util.Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddhhmmsszzzz");
         String strDate = formatter.format(date);
         return strDate;
     }
-    
-    public Long dateToMiliSecond(){
+
+    public String getSystemDate() {
+        java.util.Date date = new java.util.Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = formatter.format(date);
+        return strDate;
+    }
+
+    public int getSystemYear() {
+        java.util.Date date = new java.util.Date();
+        return date.getYear();
+    }
+
+    public String getSystemYearToString() {
+        java.util.Date date = new java.util.Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+        String strDate = formatter.format(date);
+        return strDate;
+    }
+
+    public int getSystemYearToNumber() {
+        java.util.Date date = new java.util.Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+        String strDate = formatter.format(date);
+        return Integer.parseInt(strDate);
+    }
+
+    public String getSystemYearToString1(java.util.Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+        String strDate = formatter.format(date);
+        return strDate;
+    }
+
+    public Long dateToMiliSecond() {
         java.util.Date date = new java.util.Date();
         long timeMilli = date.getTime();
         return timeMilli;
     }
-    
-      public TkWsTaskCustom mergeTaskWithUser(TkWsTask tasks) {
+
+    public TkWsTaskCustom mergeTaskWithUser(TkWsTask tasks) {
         TkWsTaskCustom taskCustom = new TkWsTaskCustom();
         taskCustom.setTask(tasks);
         TkUser assigneeUser = new TkUser();
@@ -90,8 +124,14 @@ public class SystemMethod extends ActionSupport implements SessionAware, Servlet
 
         return taskCustom;
     }
-    
-    
+
+    public String convertAmountToString(BigDecimal value) {
+        String pattern = "###,###.##";
+        DecimalFormat decimalFormat = new DecimalFormat(pattern);
+        String format = decimalFormat.format(value);
+        return format;
+    }
+
     public HttpServletRequest getRequest() {
         return request;
     }

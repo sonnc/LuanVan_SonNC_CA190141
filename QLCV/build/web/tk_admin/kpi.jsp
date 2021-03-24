@@ -88,6 +88,7 @@
                                                                 <th>Trạng thái</th>
                                                                 <th>Áp dụng</th>
                                                                 <th>Xóa?</th>
+                                                                <th>Sửa trọng số</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -139,7 +140,10 @@
                                                                         <span class=""><s:property value="apDung" /></span>
                                                                     </td>
                                                                     <td>
-                                                                        <a  href="adminKpiAction?method=deleteKpi&&kpiId=<s:property value="id" />" type="button" class="btn btn-danger"><i class="ft-delete"></i> XÓA KPI</a>
+                                                                        <a  href="adminKpiAction?method=deleteKpi&&kpiId=<s:property value="id" />" type="button" class="btn btn-danger"><i class="la la-trash"></i></a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a  href="prepareEditEditWeightKpiTypeSetting?kpiId=<s:property value="id" />" type="button" class="btn btn-info"><i class="la la-edit"></i></a>
                                                                     </td>
                                                                 </tr>
                                                             </s:iterator>

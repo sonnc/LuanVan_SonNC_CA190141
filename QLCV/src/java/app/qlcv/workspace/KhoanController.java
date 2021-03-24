@@ -40,8 +40,28 @@ public class KhoanController {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Query q = session.createQuery("FROM LuongKhoan WHERE userId=:userId");
+            Query q = session.createQuery("FROM LuongKhoan WHERE userId=:userId ORDER BY createDate ASC, thang ASC");
             q.setParameter("userId", userId);
+            luongkhoan = q.list();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return luongkhoan;
+    }
+    public List<LuongKhoan> getLuongKhoanByUserIdByMonth(int userId, int month, int year) {
+        List<LuongKhoan> luongkhoan = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query q = session.createQuery("FROM LuongKhoan WHERE userId=:userId and thang=:month and year(create_date)=:year ORDER BY createDate ASC, thang ASC");
+            q.setParameter("userId", userId);
+            q.setParameter("month", month);
+            q.setParameter("year", year);
             luongkhoan = q.list();
         } catch (Exception e) {
             if (transaction != null) {

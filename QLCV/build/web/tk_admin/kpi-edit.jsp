@@ -44,7 +44,7 @@
             <div class="content-wrapper">
                 <div class="content-header row">
                     <div class="content-header-left col-md-6 col-12 mb-2">
-                        <h3 class="content-header-title mb-0">Khởi tạo KPI</h3>
+                        <h3 class="content-header-title mb-0">Chỉnh sửa KPI</h3>
                         <div class="row breadcrumbs-top">
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
@@ -213,11 +213,13 @@
 
                                                         var typeName = 'lstKpiDetail[0][tkKpiDetailKpiType]';
                                                         var type = $('input[name="' + typeName + '"]').val();
+                                                        
+                                                        
 
                                                         for (i = 0; i < s; i++) {
                                                             var Weight = 'lstKpiDetail[' + i + '][tkKpiDetailKpiWeight]';
                                                             var giaTri = Number($('input[name="' + Weight + '"]').val());
-                                                            if ('PHONG_BAN' == type) {
+                                                            if ('BO_PHAN' == type) {
                                                                 atrongSo1 = atrongSo1 + giaTri;
                                                             }
                                                             if ('THUONG_XUYEN' == type) {
@@ -227,7 +229,7 @@
                                                                 atrongSo3 = atrongSo3 + giaTri;
                                                             }
                                                         }
-                                                        if ('PHONG_BAN' == type) {
+                                                        if ('BO_PHAN' == type) {
                                                             if (trongSo1 > 0 && atrongSo1 < 1) {
                                                                 swal("<%=properties.getProperty("tk.tko.label.admin.kpi.mess0")%>", "<%=properties.getProperty("tk.tko.label.admin.kpi.mess12")%>", "error");
                                                                 return false;

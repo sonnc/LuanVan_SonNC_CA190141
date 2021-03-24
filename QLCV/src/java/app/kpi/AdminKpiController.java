@@ -450,4 +450,32 @@ public class AdminKpiController {
         return true;
     }
 
+    public boolean editWeightKpiTypeSetting(TkKpiTypeSetting kpiTypeSetting) {
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            session.update(kpiTypeSetting);
+
+            Query q1 = session.createQuery("UPDATE TkKpiItem a set a.trongSo=:trongso where  a.kpiItem='BO_PHAN' AND STATUS = 'ACTIVE'");
+            q1.setParameter("trongso", kpiTypeSetting.getTrongSoKpiPhongban());
+            Query q2 = session.createQuery("UPDATE TkKpiItem a set a.trongSo=:trongso where  a.kpiItem='THUONG_XUYEN' AND STATUS = 'ACTIVE'");
+            q2.setParameter("trongso", kpiTypeSetting.getTrongSoKpiThuongxuyen());
+            Query q3 = session.createQuery("UPDATE TkKpiItem a set a.trongSo=:trongso where  a.kpiItem='DOT_XUAT' AND STATUS = 'ACTIVE'");
+            q3.setParameter("trongso", kpiTypeSetting.getTrongSoKpiDotxuat());
+            q1.executeUpdate();
+            q2.executeUpdate();
+            q3.executeUpdate();
+            
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return true;
+    }
+
 }

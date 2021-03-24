@@ -23,7 +23,7 @@
         <%@include file="/jsp/nav.jsp" %>
 
         <div class="app-content content">
-            <form action="createTask" method="post" enctype="multipart/form-data">
+            <form id="formAction" action="createTask" method="post" enctype="multipart/form-data">
                 <div class="content-wrapper">
                     <s:set name="checkTaskPrent"><s:property value="taskParent.id"/></s:set>
                         <div class="content-header row">
@@ -298,7 +298,7 @@
                     </div>
                 </form>                                                
             </div>
-
+<%@include file="/jsp/dialogConfirm.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>

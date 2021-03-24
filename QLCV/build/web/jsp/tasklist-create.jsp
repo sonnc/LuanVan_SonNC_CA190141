@@ -23,7 +23,7 @@
         <%@include file="/jsp/nav.jsp" %>
 
         <div class="app-content content">
-            <form action="taskListAction" method="post" >
+            <form id="formAction" action="taskListAction" method="post" >
                 <div class="content-wrapper">
                     <div class="content-header row">
                         <div class="content-header-left col-md-6 col-12 mb-2">
@@ -205,6 +205,7 @@
                 </div>
             </form>                                                
         </div>
+        <%@include file="/jsp/dialogConfirm.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>

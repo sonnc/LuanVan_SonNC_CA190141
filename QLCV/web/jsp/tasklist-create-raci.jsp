@@ -22,7 +22,7 @@
         <%@include file="/jsp/nav.jsp" %>
 
         <div class="app-content content">
-            <form action="createRaciAction" method="post" >
+            <form id="formAction" action="createRaciAction" method="post" >
                 <div class="content-wrapper">
                     <div class="content-header row">
                         <div class="content-header-left col-md-6 col-12 mb-2">
@@ -71,7 +71,7 @@
                                                                             <s:iterator value="listUserInWorkspace">
                                                                                 <option value="<s:property value="id"/>"><s:property value="loginId"/></option>
                                                                             </s:iterator>
-                                                                            
+
                                                                         </select>
                                                                     </fieldset>
                                                                 </div>
@@ -122,6 +122,7 @@
                 </div>
             </form>                                                
         </div>
+        <%@include file="/jsp/dialogConfirm.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>

@@ -13,13 +13,19 @@
     <head>
         <%
             session.removeAttribute("CssAndJs");
-            session.setAttribute("CssAndJs", "view_task");
+            session.setAttribute("CssAndJs", "khoan");
             Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("MM/yyyy");
             String strDate = formatter.format(date);
             SimpleDateFormat formatter2 = new SimpleDateFormat("MM");
             String strDate2 = formatter2.format(date);
             int month = Integer.parseInt(strDate2);
+        %>
+        <%
+            Date dateChar = new Date();
+            SimpleDateFormat formattercharpm1 = new SimpleDateFormat("yyyy");
+            String strDateCharpm1 = formattercharpm1.format(dateChar);
+            int strDateCharpm2 = Integer.parseInt(strDateCharpm1) - 1;
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <%@include file="/jsp/header.jsp" %>
@@ -51,7 +57,7 @@
                                     <div class="card-content collapse show">
                                         <div class="card-body card-dashboard">
                                             <div class="card-content collapse show">
-                                                <form action="CaculateThemisAction" method="post">
+                                                <form id="formAction" action="CaculateThemisAction" method="post">
                                                     <p style="padding: 5px">NHẬP GIÁ TRỊ HIỆU QUẢ DỰ ÁN:</p>
                                                     <select name="heSoDuAn" style="padding: 5px" class="form-control" >
                                                         <option value="0">0</option>
@@ -73,7 +79,58 @@
                         </div>
                     </section>
 
-
+                    <section id="chartjs-line-charts">
+                        <!-- Line Chart -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Dữ liệu chi trả lương thưởng năm <strong class="danger"><%=strDateCharpm1%></strong> và năm  <strong class="cyan"><%=strDateCharpm2%></strong></h4>
+                                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                        <div class="heading-elements">
+                                            <ul class="list-inline mb-0">
+                                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card-content collapse show">
+                                        <div class="card-body chartjs">
+                                            <canvas id="line-chart" height="500"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section id="chartjs-bar-charts">
+                        <!-- Bar Chart -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Thống kê</h4>
+                                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                                        <div class="heading-elements">
+                                            <ul class="list-inline mb-0">
+                                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card-content collapse show">
+                                        <div class="card-body">
+                                            <canvas id="bar-chart" height="400"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                     <section id="configuration">
                         <div class="row">
                             <div class="col-12">
@@ -194,9 +251,17 @@
                 </div>
             </div>
         </div>
+        <script>
+            window.onload = function () {
+                getLineChars();
+                getBarChars();
+            };
+        </script>
 
-
+        <%@include file="/jsp/khoan-pm-char1.jsp" %>
+        <%@include file="/jsp/khoan-pm-char2.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
+        <%@include file="/jsp/dialogConfirm.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>
 </html>

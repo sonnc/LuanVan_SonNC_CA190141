@@ -23,7 +23,7 @@
         <%@include file="/jsp/nav.jsp" %>
 
         <div class="app-content content">
-            <form action="createUdf" method="post" enctype="multipart/form-data">
+            <form  id="formAction"  action="createUdf" method="post" enctype="multipart/form-data">
                 <div class="content-wrapper">
                     <div class="content-header row">
                         <div class="content-header-left col-md-6 col-12 mb-2">
@@ -131,6 +131,7 @@
             </form>                                                
         </div>
 
+        <%@include file="/jsp/dialogConfirm.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>

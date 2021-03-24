@@ -518,4 +518,23 @@ public class WorkspaceController {
         }
         return lst;
     }
+    
+    public  List<TkWorkspace> GetAllWorkspaceByDepartemnetId(int departmentId){
+        List<TkWorkspace> lstWorkspaces = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM TkWorkspace WHERE departmentId=:departmentId and status = 'ACTIVE' ");
+            query.setParameter("departmentId", departmentId);
+            lstWorkspaces = query.list();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstWorkspaces;
+    }
 }

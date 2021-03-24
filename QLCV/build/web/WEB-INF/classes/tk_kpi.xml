@@ -47,6 +47,13 @@
             <result name="VIEW_KPI_DETAIL_SUCCESS">/tk_admin/kpi-detail.jsp</result>
             <result name="error" type="redirect">404.jsp</result>
         </action>
-        
+        <action name="prepareEditEditWeightKpiTypeSetting" class="app.kpi.AdminKpiAction" method="prepareEditEditWeightKpiTypeSetting">
+            <result name="success">/tk_admin/kpi-edit-weight.jsp</result>
+            <result name="error" type="redirect">404.jsp</result>
+        </action>
+        <action name="editWeightKpiTypeSetting" class="app.kpi.AdminKpiAction" method="editWeightKpiTypeSetting">
+            <result name="VIEW_ALL_KPI_SUCCESS">/tk_admin/kpi.jsp</result>
+            <result name="error" type="redirect">404.jsp</result>
+        </action>
     </package>
 </struts>

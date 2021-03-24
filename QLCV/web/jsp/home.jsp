@@ -32,6 +32,7 @@
 
         <div class="app-content content">
             <div class="content-wrapper">
+                  <%@include file="/jsp/displayWarring.jsp" %>
                 <div class="content-header row">
                 </div>
                 <div class="content-body">
@@ -142,7 +143,7 @@
                                     <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
-                                            
+
                                         </ul>
                                     </div>
                                 </div>
@@ -201,36 +202,36 @@
                                                         </td>
                                                         <td><s:property value="task.timeEstimate"/></td>
                                                         <td><s:property value="reviewByUser.fullName"/></td>
-                                                       <td>
-                                                           <%--  <s:if test="%{#test.task.status == 'OPEN'}">
-                                                                <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=INPROCESS">
-                                                                        Xử lý
-                                                                    </a>
-                                                            </s:if>
-                                                            <s:elseif test="%{#test.task.status == 'INPROCESS'}">
-                                                                <a type="button" class="btn btn-info" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=COMPLETE">
-                                                                        Hoàn thành
-                                                                    </a>
-                                                            </s:elseif>
-                                                            <s:elseif test="%{#test.task.status == 'COMPLETE'}">
-                                                                <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=OPEN">
-                                                                        Mở lại
-                                                                    </a>
-                                                                    <a type="button" class="btn btn-warning" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=CLOSE">
-                                                                        Đóng
-                                                                    </a>
-                                                            </s:elseif>
-                                                            <s:elseif test="%{#test.task.status == 'CANCEL'}">
-                                                                <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=OPEN">
-                                                                        Mở lại
-                                                                    </a>
-                                                            </s:elseif>
-                                                            <a type="button" class="btn btn-danger" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=CANCEL">
-                                                                    Hủy bỏ
-                                                                </a>
+                                                        <td>
+                                                            <%--  <s:if test="%{#test.task.status == 'OPEN'}">
+                                                                 <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=INPROCESS">
+                                                                         Xử lý
+                                                                     </a>
+                                                             </s:if>
+                                                             <s:elseif test="%{#test.task.status == 'INPROCESS'}">
+                                                                 <a type="button" class="btn btn-info" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=COMPLETE">
+                                                                         Hoàn thành
+                                                                     </a>
+                                                             </s:elseif>
+                                                             <s:elseif test="%{#test.task.status == 'COMPLETE'}">
+                                                                 <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=OPEN">
+                                                                         Mở lại
+                                                                     </a>
+                                                                     <a type="button" class="btn btn-warning" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=CLOSE">
+                                                                         Đóng
+                                                                     </a>
+                                                             </s:elseif>
+                                                             <s:elseif test="%{#test.task.status == 'CANCEL'}">
+                                                                 <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=OPEN">
+                                                                         Mở lại
+                                                                     </a>
+                                                             </s:elseif>
+                                                             <a type="button" class="btn btn-danger" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=CANCEL">
+                                                                     Hủy bỏ
+                                                                 </a>
 
                                                             </td>--%>
-                                                        </tr> 
+                                                    </tr> 
                                                 </s:iterator>
                                             </tbody>
                                         </table>
@@ -418,11 +419,11 @@
                 var myDoughnutChart = new Chart(ctx, {
                     type: 'hitRateDoughnut',
                     data: {
-                        labels: ["Hoàn thành", "Chưa hoàn thành"],
+                        labels: ["Chưa hoàn thành", "Hoàn thành"],
                         datasets: [{
                                 label: "Favourite",
-                                backgroundColor: ["#28D094", "#FF4961"],
-                                data: [<%=dataSuccess1%>, <%=dataSuccess2%>],
+                                backgroundColor: ["#FF4961", "#28D094"],
+                                data: [<%=dataSuccess1%>,<%=dataSuccess2%> ],
                             }]
                     },
                     options: {
@@ -431,7 +432,7 @@
                             display: false
                         },
                         legend: {
-                            display: false
+                            display: true
                         },
                         layout: {
                             padding: {

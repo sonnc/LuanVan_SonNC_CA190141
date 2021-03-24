@@ -68,6 +68,9 @@
         <property name="heSo" type="java.lang.Integer">
             <column name="HE_SO" />
         </property>
+        <property name="packageSalary" type="big_decimal">
+            <column name="PACKAGE_SALARY" />
+        </property>
         <many-to-one name="tkDepartment" class="app.qlcv.entities.TkDepartment"  lazy="false" cascade="none" fetch="select">
             <column name="DEPARTMENT" not-null="true" />
         </many-to-one>

@@ -29,12 +29,12 @@
                         <h3 class="content-header-title">Công viêc/ nhiệm vụ</h3>
                     </div>
                     <div class="content-header-right col-md-6 col-12">  
-                        
+
                         <div class="btn-group float-md-right" > 
                             <a type="button" href="workspaceSumaryAction?id=<s:property value="workspace.id"/>" class="btn btn-info round box-shadow-2 px-2">
                                 <i class="ft-home"></i> Trở về Workspace</a>
                         </div>
-                                <div class="btn-group float-md-right">
+                        <div class="btn-group float-md-right">
                             <button class="btn btn-danger round dropdown-toggle dropdown-menu-right box-shadow-2 px-2"
                                     id="btnGroupDrop11" type="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false"><i class="ft-edit icon-left"></i> 
@@ -50,10 +50,10 @@
                                 <a class="dropdown-item" href="GetTaskByUser?workspaceId=<s:property value="workspace.id"/>&&status=DELAY">Trễ hạn</a>
                             </div>
                         </div>
-                            <div class="btn-group float-md-right">
+                        <div class="btn-group float-md-right">
                             <a href="TaskPendingRating?workspaceId=<s:property value="workspace.id"/>" class="btn btn-outline-twitter round  px-2" type="button" aria-expanded="false"><i class="ft-star icon-left"></i> 
-                                    Đánh giá công việc thành viên
-                                </a>
+                                Đánh giá công việc thành viên
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -97,71 +97,75 @@
                                                     <s:iterator value="lstTaskCustoms" var="test">
                                                         <tr>
                                                             <td><s:property value="task.id"/></td>
-                                                            <td><s:property value="task.taskName"/></td>
-                                                            <td><s:property value="assigneeUser.fullName"/></td>
-                                                            <td><s:property value="task.startDate"/></td>
-                                                            <td><s:property value="task.dueDate"/></td>
-                                                            <td>
-                                                                <s:if test="%{#test.task.priority = '1'}">
-                                                                    <span class="la la-flag" style="color: red">Cao</span>
-                                                                </s:if>
-                                                                <s:elseif test="%{#test.task.priority = '2'}">
-                                                                    <span class="la la-flag" style="color: #ffc107">Trung bình</span>
-                                                                </s:elseif>
-                                                                <s:else>
-                                                                    <span class="la la-flag" style="color: green">Cao</span>
-                                                                </s:else>
-                                                            </td>
-                                                            <td>
-                                                                <s:if test="%{#test.task.status == 'OPEN'}">
-                                                                    <span style="color: green">Mở</span>
-                                                                </s:if>
-                                                                <s:elseif test="%{#test.task.status == 'INPROCESS'}">
-                                                                    <span style="color: #ffc107">Đang xử lý</span>
-                                                                </s:elseif>
-                                                                <s:elseif test="%{#test.task.status == 'COMPLETE'}">
-                                                                    <span style="color: blue">Hoàn thành, chờ duyệt</span>
-                                                                </s:elseif>
-                                                                <s:elseif test="%{#test.task.status == 'CLOSE'}">
-                                                                    <span style="color: darkviolet">Đóng</span>
-                                                                </s:elseif>
-                                                                <s:elseif test="%{#test.task.status == 'CANCEL'}">
-                                                                    <span style="color: red">Hủy bỏ</span>
-                                                                </s:elseif>
-                                                            </td>
-                                                            <td><s:property value="task.timeEstimate"/></td>
-                                                            <td><s:property value="reviewByUser.fullName"/></td>
-                                                            <td>
-                                                                <s:if test="%{#test.task.status == 'OPEN'}">
-                                                                    <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=INPROCESS">
-                                                                            Xử lý
-                                                                        </a>
-                                                                </s:if>
-                                                                <s:elseif test="%{#test.task.status == 'INPROCESS'}">
-                                                                    <a type="button" class="btn btn-info" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=COMPLETE">
-                                                                            Hoàn thành
-                                                                        </a>
-                                                                </s:elseif>
-                                                                <s:elseif test="%{#test.task.status == 'COMPLETE'}">
-                                                                    <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=OPEN">
-                                                                            Mở lại
-                                                                        </a>
-                                                                        <a type="button" class="btn btn-warning" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=CLOSE">
-                                                                            Đóng
-                                                                        </a>
-                                                                </s:elseif>
-                                                                <s:elseif test="%{#test.task.status == 'CANCEL'}">
-                                                                    <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=OPEN">
-                                                                            Mở lại
-                                                                        </a>
-                                                                </s:elseif>
-                                                                <a type="button" class="btn btn-danger" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=CANCEL">
-                                                                        Hủy bỏ
-                                                                    </a>
+                                                    <td>
+                                                    <a  href="viewTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&tasklistid=<s:property value="task.tkWsTasklist.id"/>&&taskid=<s:property value="task.id"/>">
+                                                        <s:property value="task.taskName"/>
+                                                    </a>    
+                                                        </td>
+                                                    <td><s:property value="assigneeUser.fullName"/></td>
+                                                    <td><s:property value="task.startDate"/></td>
+                                                    <td><s:property value="task.dueDate"/></td>
+                                                    <td>
+                                                        <s:if test="%{#test.task.priority = '1'}">
+                                                            <span class="la la-flag" style="color: red">Cao</span>
+                                                        </s:if>
+                                                        <s:elseif test="%{#test.task.priority = '2'}">
+                                                            <span class="la la-flag" style="color: #ffc107">Trung bình</span>
+                                                        </s:elseif>
+                                                        <s:else>
+                                                            <span class="la la-flag" style="color: green">Cao</span>
+                                                        </s:else>
+                                                    </td>
+                                                    <td>
+                                                        <s:if test="%{#test.task.status == 'OPEN'}">
+                                                            <span style="color: green">Mở</span>
+                                                        </s:if>
+                                                        <s:elseif test="%{#test.task.status == 'INPROCESS'}">
+                                                            <span style="color: #ffc107">Đang xử lý</span>
+                                                        </s:elseif>
+                                                        <s:elseif test="%{#test.task.status == 'COMPLETE'}">
+                                                            <span style="color: blue">Hoàn thành, chờ duyệt</span>
+                                                        </s:elseif>
+                                                        <s:elseif test="%{#test.task.status == 'CLOSE'}">
+                                                            <span style="color: darkviolet">Đóng</span>
+                                                        </s:elseif>
+                                                        <s:elseif test="%{#test.task.status == 'CANCEL'}">
+                                                            <span style="color: red">Hủy bỏ</span>
+                                                        </s:elseif>
+                                                    </td>
+                                                    <td><s:property value="task.timeEstimate"/></td>
+                                                    <td><s:property value="reviewByUser.fullName"/></td>
+                                                    <td>
+                                                        <s:if test="%{#test.task.status == 'OPEN'}">
+                                                            <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=INPROCESS">
+                                                                    Xử lý
+                                                                </a>
+                                                        </s:if>
+                                                        <s:elseif test="%{#test.task.status == 'INPROCESS'}">
+                                                            <a type="button" class="btn btn-info" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=COMPLETE">
+                                                                    Hoàn thành
+                                                                </a>
+                                                        </s:elseif>
+                                                        <s:elseif test="%{#test.task.status == 'COMPLETE'}">
+                                                            <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=OPEN">
+                                                                    Mở lại
+                                                                </a>
+                                                                <a type="button" class="btn btn-warning" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=CLOSE">
+                                                                    Đóng
+                                                                </a>
+                                                        </s:elseif>
+                                                        <s:elseif test="%{#test.task.status == 'CANCEL'}">
+                                                            <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=OPEN">
+                                                                    Mở lại
+                                                                </a>
+                                                        </s:elseif>
+                                                        <a type="button" class="btn btn-danger" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=CANCEL">
+                                                                Hủy bỏ
+                                                            </a>
 
-                                                                </td>
-                                                            </tr>
-                                                    </s:iterator>
+                                                        </td>
+                                                        </tr>
+                                                </s:iterator>
                                                 </tbody>
                                             </table>
                                         </div>

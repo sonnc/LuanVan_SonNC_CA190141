@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="card-content collapse show">
                                         <div class="card-body">
-                                            <form action="workspaceAction" method="post" class="number-tab-steps wizard-notification">
+                                            <form id="formAction" action="workspaceAction" method="post" class="number-tab-steps wizard-notification">
                                                 <input name="event" value="create" hidden="true">
                                                 <!-- Step 1 -->
                                                 <h6><%=properties.getProperty("app.step.1")%>:<%=properties.getProperty("app.workspace.step.1")%></h6>
@@ -185,7 +185,7 @@
             </div>
         </div>
 
-
+<%@include file="/jsp/dialogConfirm.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>

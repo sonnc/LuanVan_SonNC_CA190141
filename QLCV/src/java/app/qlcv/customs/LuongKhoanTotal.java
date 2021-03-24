@@ -18,6 +18,8 @@ public class LuongKhoanTotal {
     private BigDecimal totalKhoanHQDA2;
     private BigDecimal totalKhoan;
     private BigDecimal totalKhoan2;
+    private BigDecimal totalKhoanOld;
+    private BigDecimal totalKhoanChange;
 
     public LuongKhoanTotal() {
     }
@@ -75,6 +77,22 @@ public class LuongKhoanTotal {
 
     public void setTotalKhoan2(BigDecimal totalKhoan2) {
         this.totalKhoan2 = totalKhoan2;
+    }
+
+    public BigDecimal getTotalKhoanOld() {
+        return totalKhoanOld;
+    }
+
+    public void setTotalKhoanOld(BigDecimal totalKhoanOld) {
+        this.totalKhoanOld = totalKhoanOld;
+    }
+
+    public BigDecimal getTotalKhoanChange() {
+        return totalKhoanChange;
+    }
+
+    public void setTotalKhoanChange(BigDecimal totalKhoanChange) {
+        this.totalKhoanChange = totalKhoanChange;
     }
     
     

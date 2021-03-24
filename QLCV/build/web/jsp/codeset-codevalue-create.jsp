@@ -23,7 +23,7 @@
         <%@include file="/jsp/nav.jsp" %>
 
         <div class="app-content content">
-            <form action="eventCodeSet" method="post" >
+            <form id="formAction" action="eventCodeSet" method="post" >
                 <div class="content-wrapper">
                     <div class="content-header row">
                         <div class="content-header-left col-md-6 col-12 mb-2">
@@ -120,6 +120,7 @@
                 </div>
             </form>                                                
         </div>
+        <%@include file="/jsp/codeset-codevalue-create.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>

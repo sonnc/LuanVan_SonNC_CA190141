@@ -194,7 +194,7 @@ public class HomeCaculate {
         List<TkWsTask> lstTask1 = new ArrayList<>();
         lstTask1 = taskController.GetAllTaskByUserId(userId, "OPEN");
         List<TkWsTask> lstTask2 = new ArrayList<>();
-        lstTask2 = taskController.GetAllTaskByUserId(userId, "CLOSE");
+        lstTask2 = taskController.GetAllTaskByUserId(userId, "INPROCESS");
 
         if (lstTask1.size() + lstTask2.size() == 0) {
             slt.add("0");

@@ -341,3 +341,24 @@
   <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>assets/css/style.css">
   <!-- END Custom CSS-->
 <%}%> 
+
+
+
+<%
+    if ("khoan".equals((String) session.getAttribute("CssAndJs"))) {
+%>
+  <!-- BEGIN VENDOR CSS-->
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/css/vendors.css">
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/vendors/css/tables/datatable/datatables.min.css">
+  <!-- END VENDOR CSS-->
+  <!-- BEGIN MODERN CSS-->
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/css/app.css">
+  <!-- END MODERN CSS-->
+  <!-- BEGIN Page Level CSS-->
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/css/core/menu/menu-types/vertical-menu.css">
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>app-assets/css/core/colors/palette-gradient.css">
+  <!-- END Page Level CSS-->
+  <!-- BEGIN Custom CSS-->
+  <link rel="stylesheet" type="text/css" href="<%=session.getAttribute("httpURL")%>assets/css/style.css">
+  <!-- END Custom CSS-->
+<%}%> 

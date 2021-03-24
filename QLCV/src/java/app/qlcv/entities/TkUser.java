@@ -34,6 +34,7 @@ public class TkUser  implements java.io.Serializable {
      private byte[] profilePicture;
      private BigDecimal luongCoSo;
      private Integer heSo;
+     private BigDecimal packageSalary;
 
     public TkUser() {
     }
@@ -233,7 +234,15 @@ public class TkUser  implements java.io.Serializable {
         this.heSo = heSo;
     }
 
+    public BigDecimal getPackageSalary() {
+        return packageSalary;
+    }
 
+    public void setPackageSalary(BigDecimal packageSalary) {
+        this.packageSalary = packageSalary;
+    }
+
+    
 
 
 }
