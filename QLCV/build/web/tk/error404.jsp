@@ -5,7 +5,6 @@
 --%>
 
 
-<%@page import="hust.soict.ca190141.sonnc.entities.base.TkRole"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>

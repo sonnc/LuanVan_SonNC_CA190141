@@ -66,5 +66,7 @@ Contributor(s):
   <table-filter match-name="tk_kpi_item_detail_rating"/>
   <table-filter match-name="tk_rating_date_setup"/>
   <table-filter match-name="luong_khoan"/>
+  <table-filter match-name="parameter_setup"/>
+  <table-filter match-name="formula"/>
   
 </hibernate-reverse-engineering>

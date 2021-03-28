@@ -126,6 +126,9 @@
             <li class=" nav-item"><a href="#"><i class="la la-chrome"></i><span class="menu-title"><%=properties.getProperty("app.setup")%></span></a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="getAllCodeSet">Giá trị hệ thống</a></li>
+                    <li><a class="menu-item" href="getAllParameter">Giá trị tham số</a></li>
+                    <li><a class="menu-item" href="getAllFormula">Công thức tính toán</a></li>
+                    <li><a class="menu-item" href="getAllFormulaForCompaire">So sánh công thức</a></li>
                     <li><a class="menu-item" href="<%=session.getAttribute("httpURL")%>tk_admin/home.jsp">Cài đặt Hệ thống</a></li>
                 </ul>
             </li>

@@ -58,17 +58,30 @@
                                         <div class="card-body card-dashboard">
                                             <div class="card-content collapse show">
                                                 <form id="formAction" action="CaculateThemisAction" method="post">
-                                                    <p style="padding: 5px">NHẬP GIÁ TRỊ HIỆU QUẢ DỰ ÁN:</p>
-                                                    <select name="heSoDuAn" style="padding: 5px" class="form-control" >
-                                                        <option value="0">0</option>
-                                                        <option value="0.8">0.8</option>
-                                                        <option value="0.9">0.9</option>
-                                                        <option value="1.0">1.0</option>
-                                                        <option value="1.1">1.1</option>
-                                                        <option value="1.2">1.2</option>
-                                                    </select>
-                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <p style="padding: 5px">NHẬP GIÁ TRỊ HIỆU QUẢ DỰ ÁN:</p> <span class="danger">*</span>
+                                                            <select required="true" name="heSoDuAn" style="padding: 5px" class="form-control" >
+                                                                <option value="*0">0</option>
+                                                                <option value="*0.8">0.8</option>
+                                                                <option value="*0.9">0.9</option>
+                                                                <option value="*1.0">1.0</option>
+                                                                <option value="*1.1">1.1</option>
+                                                                <option value="*1.2">1.2</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <p style="padding: 5px">LỰA CHỌN CÔNG THỨC</p><span class="danger">*</span>
+                                                            <select required="true" name="congthuctinh" style="padding: 5px" class="form-control" >
+                                                                <s:iterator value="lstFormula">
+                                                                    <option value="<s:property value="id"/>"><s:property value="formulaCaculation"/></option>
+                                                                </s:iterator>
+                                                            </select>
+                                                        </div>
+                                                    </div>
 
+
+                                                    <br>
                                                     <button style="padding: 5px" class="btn btn-info">Tính giá trị</button>
                                                 </form>
                                             </div>

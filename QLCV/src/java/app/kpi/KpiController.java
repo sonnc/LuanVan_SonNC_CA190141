@@ -321,7 +321,7 @@ public class KpiController {
         }
         return check;
     }
-    
+
     public TkRatingDateSetup getListTimeDateRating() {
         TkRatingDateSetup tkRatingDateSetup = new TkRatingDateSetup();
         List<TkRatingDateSetup> lstKpiRating = new ArrayList<>();
@@ -330,7 +330,7 @@ public class KpiController {
             transaction = session.beginTransaction();
             Query q = session.createQuery("FROM TkRatingDateSetup where status='ACTIVE'");
             lstKpiRating = q.list();
-            if (lstKpiRating.size() > 0 ) {
+            if (lstKpiRating.size() > 0) {
                 tkRatingDateSetup = lstKpiRating.get(0);
             }
             transaction.commit();
@@ -343,6 +343,91 @@ public class KpiController {
             session.close();
         }
         return tkRatingDateSetup;
+    }
+
+    public TkUser getTkUserForUserOtherSource(String loginId) {
+        List<TkUser> lstUsers = new ArrayList<>();
+        TkUser user = new TkUser();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query q = session.createQuery("FROM TkUser a where a.loginId=:loginId");
+            q.setParameter("loginId", loginId);
+            lstUsers = q.list();
+            if (lstUsers.size() > 0) {
+                user = lstUsers.get(0);
+            }
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return user;
+    }
+
+    public TkKpiItem getKPIForUserOtherSource(int userId, int year) {
+        TkKpiItem kpiItem = new TkKpiItem();
+        List<TkKpiItem> lstKpiItems = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM TkKpiItem a where a.tkUser.id=:userId and a.kpiYear=:year and a.kpiItem='BO_PHAN'");
+            query.setParameter("userId", userId);
+            query.setParameter("year", year);
+            lstKpiItems = query.list();
+            if (lstKpiItems.size() > 0) {
+                kpiItem = lstKpiItems.get(0);
+            }
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return kpiItem;
+    }
+
+    public TkKpiItem CreateKpiItemForUserOtherSource(TkKpiItem kpiItem) {
+        List<TkKpiItem> lstKpiItems = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            int id = (int) session.save(kpiItem);
+            kpiItem.setId(id);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return kpiItem;
+    }
+    
+    public void UpdateKpiItemForUserOtherSource(int kpiItemId) {
+        List<TkKpiItem> lstKpiItems = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query q = session.createSQLQuery("UPDATE tk_kpi_item_detail A SET A.STATUS='INACTIVE' WHERE A.TK_KPI_ITEM_ID=:kpiItemId");
+            q.setParameter("kpiItemId", kpiItemId);
+            q.executeUpdate();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
 
 }

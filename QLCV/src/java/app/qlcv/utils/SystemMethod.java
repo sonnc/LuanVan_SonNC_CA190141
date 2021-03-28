@@ -44,6 +44,21 @@ public class SystemMethod extends ActionSupport implements SessionAware, Servlet
         java.sql.Date sqlDate = new java.sql.Date(dateString.getTime());
         return sqlDate;
     }
+    public Date formatStringDateToSqlDate2(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+        java.util.Date dateString = null;
+        try {
+            dateString = sdf.parse(date);
+        } catch (ParseException ex) {
+        }
+        java.sql.Date sqlDate = new java.sql.Date(dateString.getTime());
+        return sqlDate;
+    }
+    
+    public Date formatJavaDateToSqlDate(Date date) {
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        return sqlDate;
+    }
 
     public Date getSysDateToSqlDate() {
         java.util.Date dateString = new java.util.Date();
@@ -102,6 +117,12 @@ public class SystemMethod extends ActionSupport implements SessionAware, Servlet
 
     public String getSystemYearToString1(java.util.Date date) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+        String strDate = formatter.format(date);
+        return strDate;
+    }
+    public String getSystemMonthToString() {
+        java.util.Date date = new java.util.Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("mm");
         String strDate = formatter.format(date);
         return strDate;
     }

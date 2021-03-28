@@ -25,7 +25,10 @@ public class TkKpiItemDetail implements java.io.Serializable {
     private Double tyLeThucHien = 0.0;
     private Double ketQuaThucHien;
     private String status;
-    private int refId;
+    private Integer refId;
+    private Integer month;
+    private String source;
+    private String refIdSource;
     private Set tkKpiItemDetailRatings = new HashSet(0);
 
     public TkKpiItemDetail() {
@@ -176,13 +179,41 @@ public class TkKpiItemDetail implements java.io.Serializable {
         this.tkKpiItemDetailRatings = tkKpiItemDetailRatings;
     }
 
-    public int getRefId() {
+    public Integer getRefId() {
         return refId;
     }
 
-    public void setRefId(int refId) {
+    public void setRefId(Integer refId) {
         this.refId = refId;
     }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getRefIdSource() {
+        return refIdSource;
+    }
+
+    public void setRefIdSource(String refIdSource) {
+        this.refIdSource = refIdSource;
+    }
+
+   
 
     
 }

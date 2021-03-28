@@ -120,7 +120,7 @@
                 </div>
             </form>                                                
         </div>
-        <%@include file="/jsp/codeset-codevalue-create.jsp" %>
+        <%@include file="/jsp/dialogConfirm.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>

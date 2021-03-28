@@ -90,6 +90,7 @@
                                                         <th>Trạng thái</th>
                                                         <th>Estimate</th>
                                                         <th>Kiểm tra</th>
+                                                        <th>Nguồn</th>
                                                         <th>Chức năng</th>
                                                     </tr>
                                                 </thead>
@@ -135,6 +136,7 @@
                                                     </td>
                                                     <td><s:property value="task.timeEstimate"/></td>
                                                     <td><s:property value="reviewByUser.fullName"/></td>
+                                                    <td><s:property value="task.source"/></td>
                                                     <td>
                                                         <s:if test="%{#test.task.status == 'OPEN'}">
                                                             <a type="button" class="btn btn-facebook" href="updateTask?workspaceId=<s:iterator value="workspace"><s:property value="id"/></s:iterator>&&taskid=<s:property value="task.id"/>&&status=INPROCESS">

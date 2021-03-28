@@ -11,6 +11,7 @@
     <include file="task.xml"/>
     <include file="luongkhoan.xml"/>
     <include file="tk_kpi.xml"/>
+    <include file="formula.xml"/>
     
     <package name="default" extends="struts-default">
         <action name="UserLogin" class="app.qlcv.user.UserAction" method="UserLogin">

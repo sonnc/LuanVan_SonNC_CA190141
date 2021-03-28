@@ -74,6 +74,12 @@
         <property name="reviewBy" type="java.lang.Integer">
             <column name="review_by"/>
         </property>
+        <property name="refId" type="string">
+            <column name="ref_id"/>
+        </property>
+        <property name="source" type="string">
+            <column name="source"/>
+        </property>
         <set name="tkWsTaskChecklists" table="tk_ws_task_checklist" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="tk_ws_task_id" not-null="true" />

@@ -35,21 +35,24 @@ public class TkKpiItem  implements java.io.Serializable {
     public TkKpiItem(TkUser tkUser) {
         this.tkUser = tkUser;
     }
-    public TkKpiItem(TkUser tkUser, String createBy, String lastUpdateBy, Date createDate, Date lastUpdateDate, Integer kpiYear, String kpiItem, String mucTieu, Double trongSo, Double tyLeThucHien, Double ketQua, String status, Set tkKpiItemDetails) {
-       this.tkUser = tkUser;
-       this.createBy = createBy;
-       this.lastUpdateBy = lastUpdateBy;
-       this.createDate = createDate;
-       this.lastUpdateDate = lastUpdateDate;
-       this.kpiYear = kpiYear;
-       this.kpiItem = kpiItem;
-       this.mucTieu = mucTieu;
-       this.trongSo = trongSo;
-       this.tyLeThucHien = tyLeThucHien;
-       this.ketQua = ketQua;
-       this.status = status;
-       this.tkKpiItemDetails = tkKpiItemDetails;
+
+    public TkKpiItem(Integer id, TkUser tkUser, String createBy, String lastUpdateBy, Date createDate, Date lastUpdateDate, Integer kpiYear, String kpiItem, String mucTieu, Double trongSo, Double tyLeThucHien, Double ketQua, String status, int refId) {
+        this.id = id;
+        this.tkUser = tkUser;
+        this.createBy = createBy;
+        this.lastUpdateBy = lastUpdateBy;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.kpiYear = kpiYear;
+        this.kpiItem = kpiItem;
+        this.mucTieu = mucTieu;
+        this.trongSo = trongSo;
+        this.tyLeThucHien = tyLeThucHien;
+        this.ketQua = ketQua;
+        this.status = status;
+        this.refId = refId;
     }
+    
    
     public Integer getId() {
         return this.id;

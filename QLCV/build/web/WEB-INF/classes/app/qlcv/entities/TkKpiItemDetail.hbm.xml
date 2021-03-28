@@ -53,6 +53,15 @@
         <property name="refId" type="java.lang.Integer">
             <column name="REF_ID" />
         </property>
+        <property name="month" type="java.lang.Integer">
+            <column name="MONTH" />
+        </property>
+        <property name="source" type="string">
+            <column name="SOURCE" />
+        </property>
+        <property name="refIdSource" type="string">
+            <column name="REF_ID_SOURCE" />
+        </property>
         <set name="tkKpiItemDetailRatings" table="tk_kpi_item_detail_rating" inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="TK_KPI_ITEM_DETAIL_ID" />

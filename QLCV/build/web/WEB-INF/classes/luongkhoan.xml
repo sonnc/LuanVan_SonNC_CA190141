@@ -12,7 +12,7 @@
             <result name="success">/jsp/khoan-tinh.jsp</result>
             <result name="error">/jsp/errorcode.js</result>
         </action>
-        <action name="CaculateThemisAction" class="app.qlcv.workspace.KhoanAction" method="tinhKhoanPhongBan">
+        <action name="CaculateThemisAction" class="app.qlcv.workspace.KhoanAction" method="tinhKhoanPhongBan2">
             <result name="success">/jsp/khoan-tinh.jsp</result>
             <result name="error">/jsp/errorcode.js</result>
         </action>

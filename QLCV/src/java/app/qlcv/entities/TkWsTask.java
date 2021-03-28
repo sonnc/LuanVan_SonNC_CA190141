@@ -35,6 +35,8 @@ public class TkWsTask  implements java.io.Serializable {
      private Long amountSpent;
      private Long amountRemain;
      private Integer reviewBy;
+     private String refId;
+     private String source;
      private Set tkWsTaskChecklists = new HashSet(0);
 
     public TkWsTask() {
@@ -243,6 +245,22 @@ public class TkWsTask  implements java.io.Serializable {
     
     public void setTkWsTaskChecklists(Set tkWsTaskChecklists) {
         this.tkWsTaskChecklists = tkWsTaskChecklists;
+    }
+
+    public String getRefId() {
+        return refId;
+    }
+
+    public void setRefId(String refId) {
+        this.refId = refId;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
 

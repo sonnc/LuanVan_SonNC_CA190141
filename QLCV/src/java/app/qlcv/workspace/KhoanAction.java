@@ -10,10 +10,14 @@ import app.qlcv.customs.LuongKhoanTotal;
 import app.qlcv.customs.Milestone;
 import app.qlcv.customs.TienKhoanTheoThang;
 import app.qlcv.customs.TkWsTaskCustom;
+import app.qlcv.entities.Formula;
 import app.qlcv.entities.LuongKhoan;
+import app.qlcv.entities.ParameterSetup;
 import app.qlcv.entities.TkUser;
 import app.qlcv.entities.TkWorkspace;
 import app.qlcv.entities.TkWsTask;
+import app.qlcv.sys.CaculationFormula;
+import app.qlcv.sys.CalculationFormulaController;
 import app.qlcv.utils.SystemMethod;
 import com.opensymphony.xwork2.ActionSupport;
 import java.math.BigDecimal;
@@ -50,6 +54,8 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
     private List<LuongKhoanCustom> lstLuongKhoans = new ArrayList<>();
     private LuongKhoanTotal luongKhoanTotal;
     private LuongKhoanTotal luongKhoanTotal2;
+    private List<Formula> lstFormula = new ArrayList<>();
+    private CalculationFormulaController calculationFormulaController;
 
     public KhoanAction() {
         taskListController = new TaskListController();
@@ -57,6 +63,7 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
         systemMethod = new SystemMethod();
         workspaceController = new WorkspaceController();
         luongKhoanController = new KhoanController();
+        calculationFormulaController = new CalculationFormulaController();
     }
 ///
 
@@ -375,6 +382,136 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
         return SUCCESS;
     }
 
+    public String tinhKhoanPhongBan2() {
+        List<TkUser> lstUsers = new ArrayList<>();
+        TkUser userLogin = (TkUser) session.get("user");
+        String heSoDuAn = request.getParameter("heSoDuAn");
+        lstUsers = workspaceController.GetAllUserInDepartement(userLogin.getTkDepartment().getId());
+        int formulaId = Integer.parseInt(request.getParameter("congthuctinh"));
+
+        Formula formula = calculationFormulaController.GetFormulaById(formulaId);
+        String formulaStringHQDA = formula.getFormulaCaculation() + heSoDuAn;
+        System.out.println("formulaStringHQDA = "+formulaStringHQDA);
+
+        CaculationFormula cf = new CaculationFormula();
+        List<ParameterSetup> lstParameterWithFormula = new ArrayList<>();
+        lstParameterWithFormula = cf.mappingParameterWithFormula(formulaStringHQDA);
+
+        List<LuongKhoan> lstCreateLuongKhoans = new ArrayList<>();
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM");
+        String strDate = formatter.format(date);
+
+        for (int k = 0; k < lstUsers.size(); k++) {
+            TkUser userTinhKhoan = new TkUser();
+            userTinhKhoan = lstUsers.get(k);
+            List<TkWsTask> lstTasks = new ArrayList<>();
+            lstTasks = tasktController.GetAllTaskByUserId(userTinhKhoan.getId(), "all");
+
+            BigDecimal totalKhoanCVInMonth = BigDecimal.ZERO;
+            BigDecimal totalKhoanMilstoneInMonth = BigDecimal.ZERO;
+            BigDecimal totalKhoanHQDAInMonth = BigDecimal.ZERO;
+
+            int taskclose = 0;
+            int taskduedate = 0;
+            for (int i = 0; i < lstTasks.size(); i++) {
+                // neu dong task dung han thi moi duoc nhan tien khoan cv
+                if ("CLOSE".equals(lstTasks.get(i).getStatus()) && lstTasks.get(i).getDateClose() != null
+                        && lstTasks.get(i).getDateClose().before(lstTasks.get(i).getDueDate())
+                        && lstTasks.get(i).getDateClose().getMonth() == date.getMonth()) {
+                    totalKhoanCVInMonth = totalKhoanCVInMonth.add(new BigDecimal(lstTasks.get(i).getNganSach()));
+                    taskclose = taskclose + 1;
+                }
+                if ("COMPLETE".equals(lstTasks.get(i).getStatus()) && lstTasks.get(i).getDateClose() != null
+                        && lstTasks.get(i).getDateClose().before(date)
+                        && lstTasks.get(i).getDateClose().getMonth() == date.getMonth()) {
+                    taskclose = taskclose + 1;
+                }
+                if ("OPEN".equals(lstTasks.get(i).getStatus())
+                        || "INPROCESS".equals(lstTasks.get(i).getStatus())) {
+                    taskduedate = taskduedate + 1;
+                }
+            }
+
+            String valueHQDA = cf.generalFormula(formulaStringHQDA, lstParameterWithFormula, userLogin);
+            System.out.println("sssssssssssssssss = "+valueHQDA);
+            totalKhoanHQDAInMonth = new BigDecimal(valueHQDA);
+
+            List< Milestone> lstMilestones = new ArrayList<>();
+            lstMilestones = luongKhoanController.GetMilestonesClose();
+
+            // lay danh sach nguoi tham gia miletone
+            for (int i = 0; i < lstMilestones.size(); i++) {
+                List<Integer> lstUserMiletone = luongKhoanController.GetUserMilestonesClose(lstMilestones.get(i).getMilestoneid());
+                BigDecimal khoan = lstMilestones.get(i).getTienKhoan();
+                int soLuongThamGia = lstUserMiletone.size();
+                BigDecimal khoanMoiCaNhan = khoan.divide(new BigDecimal(soLuongThamGia), 2, RoundingMode.HALF_UP);
+
+                for (int j = 0; j < lstUserMiletone.size(); j++) {
+                    if (lstUserMiletone.get(i).intValue() == userTinhKhoan.getId().intValue()) {
+                        totalKhoanMilstoneInMonth = totalKhoanMilstoneInMonth.add(khoanMoiCaNhan.multiply(new BigDecimal(userTinhKhoan.getHeSo()))).setScale(2, BigDecimal.ROUND_UP);
+                        break;
+                    }
+                }
+
+            }
+
+            LuongKhoanTotal lk2 = new LuongKhoanTotal();
+
+            lk2.setTotalKhoanCV(totalKhoanCVInMonth.setScale(2, BigDecimal.ROUND_UP));
+            lk2.setTotalKhoanMilestone(totalKhoanMilstoneInMonth.setScale(2, BigDecimal.ROUND_UP));
+            lk2.setTotalKhoanHQDA(totalKhoanHQDAInMonth.setScale(2, BigDecimal.ROUND_UP));
+            lk2.setTotalKhoan(totalKhoanCVInMonth.add(totalKhoanMilstoneInMonth).add(totalKhoanHQDAInMonth).setScale(2, BigDecimal.ROUND_UP));
+
+            for (int i = 0; i < 3; i++) {
+                LuongKhoan khoan = new LuongKhoan();
+                khoan.setCreateBy(userLogin.getLoginId());
+                khoan.setCreateDate(systemMethod.getSysDateToSqlDate());
+                khoan.setLastUpdateBy(userLogin.getLoginId());
+                khoan.setLastUpdateDate(systemMethod.getSysDateToSqlDate());
+                khoan.setLoaiKhoan(i == 0 ? "CV" : i == 1 ? "MT" : "HQDA");
+                khoan.setLuongKhoan(i == 0 ? lk2.getTotalKhoanCV() : i == 1 ? lk2.getTotalKhoanMilestone() : lk2.getTotalKhoanHQDA());
+                khoan.setPheDuyet(userLogin.getId());
+                khoan.setThang(Integer.parseInt(strDate));
+                khoan.setUserId(userTinhKhoan.getId());
+                lstCreateLuongKhoans.add(khoan);
+            }
+        }
+
+        luongKhoanController.saveKhoan(lstCreateLuongKhoans);
+
+        for (int k = 0; k < lstUsers.size(); k++) {
+            TkUser userTinhKhoan = new TkUser();
+            userTinhKhoan = lstUsers.get(k);
+            List<LuongKhoan> lstLuongKhoan = new ArrayList<>();
+            lstLuongKhoan = luongKhoanController.getLuongKhoanByUserId(userTinhKhoan.getId());
+
+            for (int i = 0; i < lstLuongKhoan.size(); i++) {
+                LuongKhoan get = lstLuongKhoan.get(i);
+                LuongKhoanCustom custom = new LuongKhoanCustom();
+                custom.setCreateBy(get.getCreateBy());
+                custom.setCreateDate(get.getCreateDate());
+                custom.setId(get.getId());
+                custom.setLastUpdateBy(get.getLastUpdateBy());
+                custom.setLastUpdateDate(get.getLastUpdateDate());
+                custom.setLoaiKhoan(get.getLoaiKhoan());
+                custom.setLuongKhoan(get.getLuongKhoan());
+                TkUser u = taskListController.getUserById(get.getPheDuyet());
+                custom.setPheDuyet(u);
+                custom.setThang(get.getThang());
+                custom.setUserId(userTinhKhoan);
+                lstLuongKhoans.add(custom);
+            }
+        }
+        List<TkUser> lsTkUsers = workspaceController.GetAllUserInDepartement(userLogin.getTkDepartment().getId());
+        String year = systemMethod.getSystemYearToString();
+        String yearPeve = String.valueOf(Integer.parseInt(year) - 1);
+        session.put("PMKhoanTotalCharForAll", PMTongSoTienTraTheoThangNamHienTai(year, lsTkUsers));
+        session.put("PMKhoanTotalCharForAllYearPeve", PMTongSoTienTraTheoThangNamHienTai(yearPeve, lsTkUsers));
+        PMTongSoTienTheoUserNamHienTai(year, lsTkUsers);
+        return SUCCESS;
+    }
+
     public String prepareCreateKhoan() {
         List<TkUser> lstUsers = new ArrayList<>();
         TkUser userLogin = (TkUser) session.get("user");
@@ -407,6 +544,9 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
         session.put("PMKhoanTotalCharForAll", PMTongSoTienTraTheoThangNamHienTai(year, lsTkUsers));
         session.put("PMKhoanTotalCharForAllYearPeve", PMTongSoTienTraTheoThangNamHienTai(yearPeve, lsTkUsers));
         PMTongSoTienTheoUserNamHienTai(year, lsTkUsers);
+
+        lstFormula = calculationFormulaController.getAllFormula();
+
         return SUCCESS;
     }
 
@@ -694,6 +834,14 @@ public class KhoanAction extends ActionSupport implements SessionAware, ServletR
 
     public void setLuongKhoanTotal2(LuongKhoanTotal luongKhoanTotal2) {
         this.luongKhoanTotal2 = luongKhoanTotal2;
+    }
+
+    public List<Formula> getLstFormula() {
+        return lstFormula;
+    }
+
+    public void setLstFormula(List<Formula> lstFormula) {
+        this.lstFormula = lstFormula;
     }
 
 }

@@ -43,4 +43,31 @@ public class ReadPropertiesFile {
         }
         return properties;
     }
+
+    public Properties ReadConfig(String fileName) {
+        Properties properties = new Properties();
+        InputStream inputStream = null;
+        try {
+            String pathFile = null;
+            pathFile = "/resources/"+fileName;
+            System.out.println(pathFile);
+
+            inputStream = ReadPropertiesFile.class.getClassLoader()
+                    .getResourceAsStream(pathFile);
+
+            properties.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // close objects
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return properties;
+    }
 }
