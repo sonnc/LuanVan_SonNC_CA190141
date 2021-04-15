@@ -80,6 +80,9 @@
         <property name="source" type="string">
             <column name="source"/>
         </property>
+        <property name="followTask" type="string">
+            <column name="follow_task"/>
+        </property>
         <set name="tkWsTaskChecklists" table="tk_ws_task_checklist" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="tk_ws_task_id" not-null="true" />

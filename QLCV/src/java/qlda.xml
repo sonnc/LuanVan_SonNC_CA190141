@@ -1,0 +1,11 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="qlda" extends="struts-default">
+        <action name="cpmNodeGenData" class="app.qlcv.workspace.GenDataArrayAction" method="cpmNodeGenData">
+            <result name="success">/jsp/parameter-setup.jsp</result>
+        </action>
+    </package>
+</struts>

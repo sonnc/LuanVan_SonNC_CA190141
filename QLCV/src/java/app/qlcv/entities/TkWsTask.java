@@ -37,6 +37,8 @@ public class TkWsTask  implements java.io.Serializable {
      private Integer reviewBy;
      private String refId;
      private String source;
+     private String followTask;
+     private int taskLevel = 0;
      private Set tkWsTaskChecklists = new HashSet(0);
 
     public TkWsTask() {
@@ -263,6 +265,23 @@ public class TkWsTask  implements java.io.Serializable {
         this.source = source;
     }
 
+    public String getFollowTask() {
+        return followTask;
+    }
+
+    public void setFollowTask(String followTask) {
+        this.followTask = followTask;
+    }
+
+    public int getTaskLevel() {
+        return taskLevel;
+    }
+
+    public void setTaskLevel(int taskLevel) {
+        this.taskLevel = taskLevel;
+    }
+    
+    
 
 
 

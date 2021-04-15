@@ -144,6 +144,15 @@ public class CalculationFormulaAction extends ActionSupport implements SessionAw
 
         List<Formula> lstFormulas = new ArrayList<>();
         lstFormulas = (List<Formula>) session.get("lstFormulasCompaire");
+        
+        String maxvalue = "";
+        String minvalue = "";
+        double maxvalueDouble = 0.0;
+        double minvalueDouble = 0.0;
+        String formularMax = "";        
+        String formularMin = "";
+        
+        NumberFormat nf = NumberFormat.getInstance(new Locale("en", "US"));
         for (int i = 0; i < lstFormulas.size(); i++) {
             Formula get = lstFormulas.get(i);
             String formular = get.getFormulaCaculation();
@@ -158,11 +167,36 @@ public class CalculationFormulaAction extends ActionSupport implements SessionAw
             }
             CaculationFormula cf = new CaculationFormula();
             double value = Double.parseDouble(cf.generalFormulaForCompaire(formular)) ;
-            NumberFormat nf = NumberFormat.getInstance(new Locale("en", "US"));
+            if(maxvalueDouble == 0.0){
+                maxvalueDouble = value;
+                 maxvalue = nf.format(value);
+                formularMax = get.getFormulaCaculation();
+            }
+            if(minvalueDouble == 0.0){
+                minvalueDouble = value;
+                minvalue = nf.format(value);
+                formularMin = get.getFormulaCaculation();
+            }
+            if(value > maxvalueDouble){
+                maxvalue = nf.format(value);
+                formularMax = get.getFormulaCaculation();
+            }
+            if(value < minvalueDouble){
+                minvalue = nf.format(value);
+                formularMin = get.getFormulaCaculation();
+            }
+            
             String val = nf.format(value);
             mp.setValueTotal(val);
             lstMappingFormulas.add(mp);
         }
+        
+        
+        session.put("maxAmount", maxvalue);
+        session.put("minAmount", minvalue);
+        session.put("formularMax", formularMax);
+        session.put("formularMin", formularMin);
+        
         return SUCCESS;
     }
 

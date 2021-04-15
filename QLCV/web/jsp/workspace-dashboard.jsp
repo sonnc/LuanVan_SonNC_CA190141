@@ -64,6 +64,7 @@
                                                     <th class="border-top-0">Số thành viên</th>
                                                     <th class="border-top-0">Mốc giai đoạn</th>
                                                     <th class="border-top-0">Công việc</th>
+                                                    <th class="border-top-0">CPM</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -84,6 +85,9 @@
                                                         </td>
                                                         <td class="text-truncate">
                                                             <button type="button" class="btn btn-sm btn-danger round"><s:property value="task"/></button>
+                                                        </td>
+                                                        <td class="text-truncate">
+                                                            <a class="btn btn-sm btn-danger" href="cpmAction?workspaceId=<s:property value="workspaceId"/>">CPM</a>
                                                         </td>
                                                     </tr>
                                                 </s:iterator>

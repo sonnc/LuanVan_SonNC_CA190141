@@ -101,7 +101,7 @@ public class TaskController {
         return lstTasks;
     }
 
-    public List<TkWorkspace>  soDuAnThamGiaByUserId(int userId) {
+    public List<TkWorkspace> soDuAnThamGiaByUserId(int userId) {
         List<TkWsPeople> lstList = new ArrayList<>();
         List<TkWorkspace> lstWorkspaces = new ArrayList<>();
         try {
@@ -132,8 +132,34 @@ public class TaskController {
         }
         return lstWorkspaces;
     }
-    
-    
 
-    
+    public List<TkWsTask> GetAllTaskByWorkspaceId(int workspaceId) {
+        List<TkWsTask> lstTasks = new ArrayList<>();
+        List<TkWsTasklist> lstTasklists = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM TkWsTasklist WHERE tkWorkspace.id =:workspaceId");
+            query.setParameter("workspaceId", workspaceId);
+            lstTasklists = query.list();
+
+            for (int i = 0; i < lstTasklists.size(); i++) {
+                List<TkWsTask> task = new ArrayList<>();
+                Query q = session.createQuery("FROM TkWsTask WHERE tkWsTasklist.id =:tasklistID AND isSubTask ='N'");
+                q.setParameter("tasklistID", lstTasklists.get(i).getId());
+                task = q.list();
+                lstTasks.addAll(task);
+            }
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstTasks;
+    }
+
 }

@@ -95,6 +95,11 @@ public class SystemMethod extends ActionSupport implements SessionAware, Servlet
         String strDate = formatter.format(date);
         return strDate;
     }
+    
+    public java.util.Date getSystemDateDate() {
+        java.util.Date date = new java.util.Date();
+        return  date;
+    }
 
     public int getSystemYear() {
         java.util.Date date = new java.util.Date();

@@ -84,9 +84,7 @@
                     <li><a class="menu-item" href="#">Sửa thành viên</a></li>
                 </ul>
             </li>-->
-            <li class=" nav-item"><a href="viewWorkspaceAction"><i class="la la-briefcase"></i><span class="menu-title"><%=properties.getProperty("app.workspace")%></span></a>
-
-            </li>
+            <li class=" nav-item"><a href="viewWorkspaceAction"><i class="la la-briefcase"></i><span class="menu-title"><%=properties.getProperty("app.workspace")%></span></a></li>
             <li class=" nav-item"><a href="#"><i class="la la-inbox"></i><span class="menu-title">Khoán và tiền thưởng</span></a>
                 <ul class="menu-content">
                     <%if ("PM".equals(role.getCode()) || "SPM".equals(role.getCode()) || "GD".equals(role.getCode())) {

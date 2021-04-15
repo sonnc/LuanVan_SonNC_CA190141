@@ -4,7 +4,6 @@
 
 <struts>
     <constant name="struts.multipart.maxSize" value="5242880" />
-    <include file="example.xml"/>
     <include file="codeset.xml"/>
     <include file="workspace.xml"/>
     <include file="tasklist.xml"/>
@@ -12,6 +11,7 @@
     <include file="luongkhoan.xml"/>
     <include file="tk_kpi.xml"/>
     <include file="formula.xml"/>
+    <include file="qlda.xml"/>
     
     <package name="default" extends="struts-default">
         <action name="UserLogin" class="app.qlcv.user.UserAction" method="UserLogin">

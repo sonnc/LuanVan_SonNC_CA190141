@@ -55,6 +55,29 @@
                                     </div>
                                     <div class="card-content collapse show">
                                         <div class="card-body card-dashboard">
+
+                                            <div style="padding: 20px">
+                                                <div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label class="danger">Giá trị tốt nhất cho công ty</label>
+                                                            <br>
+                                                            <h4><%=session.getAttribute("minAmount")%></h4>
+                                                            <br>
+                                                            <h5><%=session.getAttribute("formularMin")%></h5>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="info">Giá trị tốt nhất cho nhân viên</label>
+                                                            <br>
+                                                            <h4><%=session.getAttribute("maxAmount")%></h4>
+                                                            <br>
+                                                            <h5><%=session.getAttribute("formularMax")%></h5>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
                                             <table class="table table-striped table-bordered zero-configuration">
                                                 <thead>
                                                     <tr>

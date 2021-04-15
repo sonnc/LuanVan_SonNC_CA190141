@@ -365,3 +365,13 @@ type="text/javascript"></script>
   <!-- END PAGE LEVEL JS-->
 
 <%}%> 
+
+
+
+<%
+    if ("soDoCongViec".equals((String) session.getAttribute("CssAndJs"))) {
+%>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/custom/go.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/custom/Figures.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/custom/DrawCommandHandler.js" type="text/javascript"></script>
+<%}%> 
