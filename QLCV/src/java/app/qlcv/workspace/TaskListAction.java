@@ -21,21 +21,16 @@ import app.qlcv.entities.TkWorkspace;
 import app.qlcv.entities.TkWsAttachments;
 import app.qlcv.entities.TkWsComment;
 import app.qlcv.entities.TkWsFolder;
-import app.qlcv.entities.TkWsPeople;
-import app.qlcv.entities.TkWsPeopleTeams;
 import app.qlcv.entities.TkWsTask;
 import app.qlcv.entities.TkWsTaskChecklist;
 import app.qlcv.entities.TkWsTaskChecklistItem;
 import app.qlcv.entities.TkWsTaskRaci;
 import app.qlcv.entities.TkWsTasklist;
-import app.qlcv.entities.TkWsTeams;
 import app.qlcv.utils.SystemMethod;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
-import java.math.BigDecimal;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -357,6 +352,7 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         listUserRaciR = taskListController.getAllRaciR(tasklistid);
         tasklist = taskListController.GetTaskListById(tasklistid);
         listUserInWorkspace = workspaceController.lstUserActiveInWorkSpace(workspaceId);
+        lstWsTaskListCustoms = taskListController.GetAllTaskListWithTaskByWorkspaceId(workspaceId);
 
         return SUCCESS;
     }
@@ -384,6 +380,27 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
             task.setParentTaskId(parentTaskId);
             task.setIsSubTask("Y");
         }
+
+        HashMap<String, String[]> hashMap = new HashMap<>();
+        hashMap = (HashMap<String, String[]>) request.getParameterMap();
+        String[] taskFollow = null;
+        if (hashMap.get("lstFollowTask") != null) {
+            taskFollow = hashMap.get("lstFollowTask");
+        }
+        String followString = null;
+        if (taskFollow != null && taskFollow.length > 0) {
+            for (int i = 0; i < taskFollow.length; i++) {
+                String string = taskFollow[i];
+                if (followString == null) {
+                    followString = string;
+                } else {
+                    followString = followString + "," + string;
+                }
+
+            }
+        }
+        System.out.println(followString);
+        task.setFollowTask(followString);
 
         int countItemInputUDF = Integer.parseInt(request.getParameter("countItemInputUDF"));
         int countItemInputCheckList = Integer.parseInt(request.getParameter("countItemInputCheckList"));
@@ -502,9 +519,9 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
         int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
         int taskid = Integer.parseInt(request.getParameter("taskid"));
-        if(request.getParameter("issubtask") !=null &&
-                "true".equals(String.valueOf(request.getParameter("issubtask")))){
-             taskid = Integer.parseInt(request.getParameter("parenttask"));
+        if (request.getParameter("issubtask") != null
+                && "true".equals(String.valueOf(request.getParameter("issubtask")))) {
+            taskid = Integer.parseInt(request.getParameter("parenttask"));
         }
         task = taskListController.GetTaskById(taskid);
         TkWsTasklist tasklist = taskListController.GetTaskListById(tasklistid);
@@ -607,13 +624,13 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         viewTask();
         return SUCCESS;
     }
-    
+
     public String deleteUdf() {
         TkUser user = (TkUser) session.get("user");
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
         int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
         int taskid = Integer.parseInt(request.getParameter("taskid"));
-        int udfId =Integer.parseInt(request.getParameter("udfid"));
+        int udfId = Integer.parseInt(request.getParameter("udfid"));
         taskListController.deleteUdf(udfId);
         viewTask();
         return SUCCESS;
@@ -629,6 +646,7 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
 
         return SUCCESS;
     }
+
     public String prepareCreateCheckList() {
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
         int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
@@ -639,7 +657,7 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
 
         return SUCCESS;
     }
-    
+
     public String createCheckList() {
         TkUser user = (TkUser) session.get("user");
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
@@ -648,7 +666,7 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
 
         TkWsTask t = new TkWsTask();
         t = taskListController.GetTaskById(taskid);
-        
+
         List<TkWsTaskChecklistItem> lstChecklistItems = new ArrayList<>();
         List<TkWsTaskChecklist> lstChecklists = new ArrayList<>();
         int countItemInputCheckList = Integer.parseInt(request.getParameter("countItemInputCheckList"));
@@ -678,9 +696,9 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
                 lstChecklistItems.add(checklistItem);
             }
         }
-        
+
         taskListController.createCheckList(lstChecklists, lstChecklistItems);
-        
+
         viewTask();
         return SUCCESS;
     }
@@ -690,18 +708,18 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
         int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
         int taskid = Integer.parseInt(request.getParameter("taskid"));
-        int checkListId =Integer.parseInt(request.getParameter("checklistid"));
+        int checkListId = Integer.parseInt(request.getParameter("checklistid"));
         taskListController.deleteCheckList(checkListId);
         viewTask();
         return SUCCESS;
     }
-    
-    public String uploadFile(){
+
+    public String uploadFile() {
         TkUser user = (TkUser) session.get("user");
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
         int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
         int taskid = Integer.parseInt(request.getParameter("taskid"));
-        
+
         List<TkWsAttachments> lstFile = new ArrayList<>();
         if (myFile != null) {
             for (int i = 0; i < myFile.length; i++) {
@@ -729,19 +747,18 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         viewTask();
         return SUCCESS;
     }
-    
+
     public String deleteAttachment() {
         TkUser user = (TkUser) session.get("user");
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
         int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
         int taskid = Integer.parseInt(request.getParameter("taskid"));
-        int attachmentid =Integer.parseInt(request.getParameter("attachmentid"));
+        int attachmentid = Integer.parseInt(request.getParameter("attachmentid"));
         taskListController.deleteAttachment(attachmentid);
         viewTask();
         return SUCCESS;
     }
-    
-    
+
     public TkWsTaskCustom mergeTaskWithUser(TkWsTask tasks) {
         TkWsTaskCustom taskCustom = new TkWsTaskCustom();
         taskCustom.setTask(tasks);
@@ -754,18 +771,18 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
 
         return taskCustom;
     }
-    
-     public String deleteTask() {
+
+    public String deleteTask() {
         TkUser user = (TkUser) session.get("user");
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
         int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
         int taskid = Integer.parseInt(request.getParameter("taskid"));
         taskListController.deleteTask(taskid);
-        if(request.getParameter("issubtask") !=null &&
-                "true".equals(String.valueOf(request.getParameter("issubtask")))){
+        if (request.getParameter("issubtask") != null
+                && "true".equals(String.valueOf(request.getParameter("issubtask")))) {
             viewTask();
             return "GET_PARENT_TASK";
-        }else{
+        } else {
             getAllTask();
             return "GET_ALL_TASK";
         }

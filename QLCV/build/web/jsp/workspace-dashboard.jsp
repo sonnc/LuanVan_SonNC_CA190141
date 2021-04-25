@@ -65,6 +65,8 @@
                                                     <th class="border-top-0">Mốc giai đoạn</th>
                                                     <th class="border-top-0">Công việc</th>
                                                     <th class="border-top-0">CPM</th>
+                                                    <th class="border-top-0">EVM</th>
+                                                    <th class="border-top-0">TFW</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -87,7 +89,13 @@
                                                             <button type="button" class="btn btn-sm btn-danger round"><s:property value="task"/></button>
                                                         </td>
                                                         <td class="text-truncate">
-                                                            <a class="btn btn-sm btn-danger" href="cpmAction?workspaceId=<s:property value="workspaceId"/>">CPM</a>
+                                                            <a class="btn btn-sm btn-success" href="cpmNodeGenData?workspaceId=<s:property value="workspaceId"/>">CPM</a>
+                                                        </td>
+                                                        <td class="text-truncate">
+                                                            <a class="btn btn-sm btn-info" href="evmGenData?workspaceId=<s:property value="workspaceId"/>">EVM</a>
+                                                        </td>
+                                                        <td class="text-truncate">
+                                                            <a class="btn btn-sm btn-danger" href="TfwRunToView?workspaceId=<s:property value="workspaceId"/>">TFW</a>
                                                         </td>
                                                     </tr>
                                                 </s:iterator>

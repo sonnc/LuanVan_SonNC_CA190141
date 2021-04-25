@@ -1,18 +1,27 @@
 <%-- 
-    Document   : critical-path
-    Created on : Apr 13, 2021, 9:30:29 PM
+    Document   : khoan
+    Created on : Mar 10, 2021, 8:44:35 PM
     Author     : sonng
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <html>
     <head>
+        <%
+            session.removeAttribute("CssAndJs");
+            session.setAttribute("CssAndJs", "home-dashboard");
+        %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <%@include file="/jsp/header.jsp" %>
+        <title>CPM</title>
         <script src="<%=session.getAttribute("httpURL")%>app-assets/custom/go.js" type="text/javascript"></script>
-<script src="<%=session.getAttribute("httpURL")%>app-assets/custom/Figures.js" type="text/javascript"></script>
-<script src="<%=session.getAttribute("httpURL")%>app-assets/custom/DrawCommandHandler.js" type="text/javascript"></script>
+        <script src="<%=session.getAttribute("httpURL")%>app-assets/custom/Figures.js" type="text/javascript"></script>
+        <script src="<%=session.getAttribute("httpURL")%>app-assets/custom/DrawCommandHandler.js" type="text/javascript"></script>
+        <%@include file="/jsp/linkCss.jsp" %>
         <script id="code">
             function init() {
                 if (window.goSamples)
@@ -578,7 +587,8 @@
                                                         SpotButton(go.Spot.Top, false), SpotButton(go.Spot.Left, false), SpotButton(go.Spot.Right, false), SpotButton(go.Spot.Bottom, false)
                                                         ),
                                                 $(go.Panel, "Spot",
-                                                        {margin: new go.Margin(0, 0, 0, 2)},
+                                                        {margin: new go.Margin(0, 0, 0, 2)}
+                                                ,
                                                         AllSidesButton(true),
                                                         SpotButton(go.Spot.Top, true), SpotButton(go.Spot.Left, true), SpotButton(go.Spot.Right, true), SpotButton(go.Spot.Bottom, true)
                                                         )
@@ -599,49 +609,126 @@
             }
         </script>
     </head>
-    <body onload="init()">
-        <div id="sample">
-            <div id="myDiagramDiv" style="border: solid 1px black; width:100%; height:1000px"></div>
-            <p>
-                Double-click in the background to create a new node.
-                Create groups by selecting nodes and invoking Ctrl-G; Ctrl-Shift-G to ungroup a selected group.
-                A selected node will have four orange triangles that when clicked will automatically copy the node and link to it.
-                Use the context menu to change the shape, color, thickness, and dashed-ness.
-            </p>
-            <p>
-                Links can be drawn by dragging from the side of each node.
-                A selected link can be reconnected by dragging an end handle.
-                Use the context menu to change the color, thickness, dashed-ness, and which side the link should connect with.
-                Press the F2 key to start editing the label of a selected link.
-            </p>
-            <div id="buttons">
-                <button id="loadModel" onclick="load()">Load</button>
-                <button id="saveModel" onclick="save()">Save</button>
+    <body onload="init()" class="vertical-layout vertical-menu 2-columns   menu-expanded fixed-navbar"
+          data-open="click" data-menu="vertical-menu" data-col="2-columns">
+        <%@include file="/jsp/nav.jsp" %>
+        <div class="app-content content">
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-md-6 col-12 mb-2">
+                        <h3 class="content-header-title">CPM</h3>
+                    </div>
+                    <div class="content-header-right col-md-6 col-12">  
+                    </div>
+                </div>
+                <div class="content-body">
+                    <!-- Zero configuration table -->
+                    <section id="configuration">
+                        <div class="row">
+                            <div class="col-2">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th  style="padding: 0px">STT</th>
+                                            <th style="padding: 0px">Hình</th>
+                                            <th style="padding: 0px">Mô tả</th>
+                                        </tr>
+                                    </thead>    
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 0px">1</td>
+                                            <td style="padding: 0px"><img height="50px" width="50px" src="<%=session.getAttribute("httpURL")%>app-assets/custom/path/start.png" alt="start"></td>
+                                            <td style="padding: 0px">Điểm bắt đầu</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px">2</td>
+                                            <td style="padding: 0px"><img height="50px" width="50px" src="<%=session.getAttribute("httpURL")%>app-assets/custom/path/close.png" alt="start"></td>
+                                            <td style="padding: 0px">Task hoàn thành</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px">3</td>
+                                            <td style="padding: 0px"><img height="50px" width="50px" src="<%=session.getAttribute("httpURL")%>app-assets/custom/path/trehan.png" alt="start"></td>
+                                            <td style="padding: 0px">Task trễ hạn</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px">4</td>
+                                            <td style="padding: 0px"><img height="50px" width="50px" src="<%=session.getAttribute("httpURL")%>app-assets/custom/path/delete.png" alt="start"></td>
+                                            <td style="padding: 0px">Task xóa</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px">5</td>
+                                            <td style="padding: 0px"><img height="50px" width="50px" src="<%=session.getAttribute("httpURL")%>app-assets/custom/path/inprocess.png" alt="start"></td>
+                                            <td style="padding: 0px">Task đang xử lý</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px">6</td>
+                                            <td style="padding: 0px"><img height="50px" width="50px" src="<%=session.getAttribute("httpURL")%>app-assets/custom/path/end.png" alt="start"></td>
+                                            <td style="padding: 0px">Điểm kết thúc</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px">7</td>
+                                            <td style="padding: 0px"><img height="10px" width="50px" src="<%=session.getAttribute("httpURL")%>app-assets/custom/path/1.png" alt="start"></td>
+                                            <td style="padding: 0px">Đường task đúng han</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px">8</td>
+                                            <td style="padding: 0px"><img height="10px" width="50px" src="<%=session.getAttribute("httpURL")%>app-assets/custom/path/2.png" alt="start"></td>
+                                            <td style="padding: 0px">Đưởng task xóa</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px">9</td>
+                                            <td style="padding: 0px"><img height="10px" width="50px" src="<%=session.getAttribute("httpURL")%>app-assets/custom/path/3.png" alt="start"></td>
+                                            <td style="padding: 0px">Đường ảnh hưởng trễ hạn</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-10">
+                                <div id="sample">
+                                    <div id="myDiagramDiv"  style="border: solid 1px black; width:100%; height:1000px"></div>
+
+                                    <!--                            <div id="buttons">
+                                                                    <button id="loadModel" onclick="load()">Load</button>
+                                                                    <button id="saveModel" onclick="save()">Save</button>
+                                                                </div>-->
+                                    <textarea hidden="true" id="mySavedModel" style="width:100%;height:100px">
+                                        <s:property value="contentCPM"/>
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                    <section id="configuration" style="margin-top: 20px">
+                        <h2 class="blue-grey lighten-2 mb-0">DỰ BÁO DỰ ÁN</h2>
+                        <div class="card-content collapse show">
+                            <div class="card-body card-dashboard">
+                                <div class="card-content collapse show">
+                                    <div class="card-body pt-0">
+                                        <div class="row">
+                                            <div class="col-md-4 col-12 border-right-blue-grey border-right-lighten-5 text-center">
+                                                <p class="blue-grey lighten-2 mb-0">Số ngày theo kế hoạch</p>
+                                                <h4 class="font-large-2 text-bold-400" id="ccy1" ><s:property value="thoiGianThucHien"/></h4>
+                                            </div>
+                                            <div class="col-md-4 col-12 text-center">
+                                                <p class="blue-grey lighten-2 mb-0">Số ngày trễ hạn</p>
+                                                <h4 class="font-large-2 text-bold-400" id="ccy2" ><s:property value="soNgayTreHan"/></h4>
+                                            </div>
+                                            <div class="col-md-4 col-12 text-center">
+                                                <p class="blue-grey lighten-2 mb-0">Số ngày dự báo hoàn thành</p>
+                                                <h4 class="font-large-2 text-bold-400" id="ccy3" ><s:property value="tongNgayThucTe"/></h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
-            <textarea id="mySavedModel" style="width:100%;height:300px">
-{ "class": "GraphLinksModel",
-  "nodeDataArray": [ 
-{"key":1, "loc":"0 0", "text":"Alpha", "details":"sss "},
-{"key":2, "loc":"170 0", "text":"Beta", "color":"blue", "thickness":2, "figure":"Procedure"},
-{"key":3, "loc":"0 100", "text":"Gamma", "color":"green", "figure":"Cylinder1"},
-{"key":4, "loc":"80 180", "text":"Delta", "color":"red", "figure":"Terminator", "size":"80 40"},
-{"key":5, "loc":"350 -50", "text":"Zeta", "group":7, "color":"blue", "figure":"CreateRequest"},
-{"key":6, "loc":"350 50", "text":"Eta", "group":7, "figure":"Document", "fill":"lightyellow"},
-{"key":7, "isGroup":true, "text":"Theta", "color":"green", "fill":"lightgreen"},
-{"key":8, "loc":"520 50", "text":"Iota", "fill":"pink"}
- ],
-  "linkDataArray": [ 
-{"from":1, "to":2, "dash":[ 6,3 ], "thickness":4},
-{"from":1, "to":3, "dash":[ 2,4 ], "color":"green", "text":"label"},
-{"from":3, "to":4, "color":"red", "text":"a red label", "fromSpot":"RightSide"},
-{"from":2, "to":1},
-{"from":5, "to":6, "text":"in a group"},
-{"from":2, "to":7},
-{"from":6, "to":8, "dir":0},
-{"from":6, "to":8, "dir":1},
-{"from":6, "to":8, "dir":2}
- ]}
-            </textarea>
         </div>
+        <%@include file="/jsp/footer.jsp" %>
+        <%@include file="/jsp/js.jsp" %>
     </body>
 </html>
+

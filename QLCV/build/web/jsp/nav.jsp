@@ -95,6 +95,7 @@
                         %>
 
                     <li><a class="menu-item" href="themisAction">Khoán và hiệu quả CV</a></li>
+                    <li><a class="menu-item" href="<%=session.getAttribute("httpURL")%>jsp/bao-cao.jsp">Báo cáo</a></li>
                 </ul>
             </li>
             <li class=" nav-item"><a href="viewKpiOfDepartementAction"><i class="la la-star"></i><span class="menu-title"><%=properties.getProperty("app.kpi")%></span></a>

@@ -32,12 +32,17 @@ public class TkWsTask  implements java.io.Serializable {
      private Integer timeEstimateDdl;
      private Long nganSach;
      private Integer nganSachCcy;
+     private Long amountPlan;
      private Long amountSpent;
      private Long amountRemain;
      private Integer reviewBy;
      private String refId;
      private String source;
      private String followTask;
+     private Long etcAmountPlan;
+     private Date etcDatePlan;
+     private Long percentCoplete;
+     
      private int taskLevel = 0;
      private Set tkWsTaskChecklists = new HashSet(0);
 
@@ -280,10 +285,40 @@ public class TkWsTask  implements java.io.Serializable {
     public void setTaskLevel(int taskLevel) {
         this.taskLevel = taskLevel;
     }
+
+    public Long getAmountPlan() {
+        return amountPlan;
+    }
+
+    public void setAmountPlan(Long amountPlan) {
+        this.amountPlan = amountPlan;
+    }
+
+    public Long getEtcAmountPlan() {
+        return etcAmountPlan;
+    }
+
+    public void setEtcAmountPlan(Long etcAmountPlan) {
+        this.etcAmountPlan = etcAmountPlan;
+    }
+
+    public Date getEtcDatePlan() {
+        return etcDatePlan;
+    }
+
+    public void setEtcDatePlan(Date etcDatePlan) {
+        this.etcDatePlan = etcDatePlan;
+    }
+
+    public Long getPercentCoplete() {
+        return percentCoplete;
+    }
+
+    public void setPercentCoplete(Long percentCoplete) {
+        this.percentCoplete = percentCoplete;
+    }
     
     
-
-
 
 }
 

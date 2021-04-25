@@ -61,10 +61,10 @@
                                                 <h4 class="card-title" id="file-repeater">Tạo Sub-task cho công việc: <strong style="color: red"><s:property value="taskParent.taskName"/></strong></h4>
                                                 <div style="margin-top: 10px">
                                                     <a class="btn btn-outline-cyan" href="viewTask?workspaceId=<s:property value="workspace.id"/>&&tasklistid=<s:property value="taskParent.tkWsTasklist.id"/>&&taskid=<s:property value="taskParent.id"/>">
-                                                    Trở về Task cha
-                                                </a>
+                                                        Trở về Task cha
+                                                    </a>
                                                 </div>
-                                                
+
                                             </s:if>
                                             <s:else>
                                                 <h4 class="card-title" id="file-repeater">Tạo mới công việc</h4>
@@ -141,13 +141,13 @@
                                                                 <div class="col-3">
                                                                     <fieldset class="form-group">
                                                                         <label>Ngày bắt đầu <span class="danger">*</span></label>
-                                                                        <input type="date" name="startDate" class="form-control" id="textbox2"/>
+                                                                        <input required="true" max="<s:date name="workspace.endDate" format="MM-dd-yyyy"/>" type="date" name="startDate" class="form-control" id="textbox2"/>
                                                                     </fieldset>
                                                                 </div>
                                                                 <div class="col-3">
                                                                     <fieldset class="form-group">
                                                                         <label>Hạn cuối cùng <span class="danger">*</span></label>
-                                                                        <input type="date" name="dueDate" class="form-control" id="textbox2"/>
+                                                                        <input  required="true" type="date" name="dueDate" class="form-control" id="textbox2"/>
                                                                     </fieldset>
                                                                 </div>
                                                                 <div class="col-3">
@@ -165,6 +165,26 @@
                                                                         <label>Estimate <span class="danger">*</span></label>
                                                                         <s:textfield min="1" type="number" name="task.timeEstimate" cssClass="form-control" id="textbox2"/>
                                                                     </fieldset>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-3">
+                                                                    <fieldset class="form-group">
+                                                                        <label>Kinh phí theo kế hoạch</label>
+                                                                        <s:textfield requiredLabel="true" value="0" type="number" name="task.amountPlan" cssClass="form-control" id="textbox2"/>
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-3">
+                                                                    <label>Theo sau công việc</label><br>
+                                                                    <select name="lstFollowTask" class="select2 form-control" multiple="multiple">
+                                                                        <s:iterator value="lstWsTaskListCustoms">
+                                                                            <optgroup label="<s:property value="taskListTitle"/>">
+                                                                                <s:iterator value="lstTaskCustoms">
+                                                                                    <option value="<s:property value="task.id"/>"><s:property value="task.taskName"/></option>
+                                                                                </s:iterator>
+                                                                            </optgroup>
+                                                                        </s:iterator>
+                                                                    </select>
                                                                 </div>
                                                             </div>
 
@@ -298,7 +318,7 @@
                     </div>
                 </form>                                                
             </div>
-<%@include file="/jsp/dialogConfirm.jsp" %>
+        <%@include file="/jsp/dialogConfirm.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>

@@ -537,4 +537,20 @@ public class WorkspaceController {
         }
         return lstWorkspaces;
     }
+    
+     public void updateWorkspace(TkWorkspace tkWorkspace) {
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            session.save(tkWorkspace);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
 }

@@ -3,16 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/src/java/app/qlcv/customs/LinkDataArray.java</file>
-            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/src/java/app/qlcv/customs/NodeDataArray.java</file>
-            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/src/java/struts.xml</file>
-            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/web/jsp/file.html</file>
-            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/web/jsp/critical-path.jsp</file>
+            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/src/java/app/soap/DownloadAction.java</file>
             <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/src/java/app/qlcv/workspace/GenDataArrayAction.java</file>
-            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/src/java/app/qlcv/workspace/GenDataArray.java</file>
-            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/src/java/qlda.xml</file>
-            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/src/java/app/qlcv/utils/SystemMethod.java</file>
-            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/web/jsp/js.jsp</file>
+            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/src/java/app/qlcv/workspace/KhoanAction.java</file>
+            <file>file:/D:/1.%20HOC%20TAP/2.%20CAO%20HOC/1.%20SOURCE%20CODE/LuanVan/QLCV/src/java/app/qlcv/sys/CaculationFormula.java</file>
         </group>
     </open-files>
 </project-private>

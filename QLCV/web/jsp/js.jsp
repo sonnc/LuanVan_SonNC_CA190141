@@ -272,6 +272,7 @@ type="text/javascript"></script>
 <!-- BEGIN PAGE VENDOR JS-->
 <script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/forms/repeater/jquery.repeater.min.js"
 type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>
 <!-- END PAGE VENDOR JS-->
 <!-- BEGIN MODERN JS-->
 <script src="<%=session.getAttribute("httpURL")%>app-assets/js/core/app-menu.js" type="text/javascript"></script>
@@ -280,6 +281,7 @@ type="text/javascript"></script>
 <!-- END MODERN JS-->
 <!-- BEGIN PAGE LEVEL JS-->
 <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/forms/form-repeater.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/forms/select/form-select2.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL JS-->
 <%}%> 
 
@@ -332,37 +334,37 @@ type="text/javascript"></script>
 <!-- END PAGE LEVEL JS-->
 
 
-  <!-- BEGIN PAGE VENDOR JS-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/charts/chart.min.js" type="text/javascript"></script>
-  <!-- END PAGE VENDOR JS-->
+<!-- BEGIN PAGE VENDOR JS-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/vendors/js/charts/chart.min.js" type="text/javascript"></script>
+<!-- END PAGE VENDOR JS-->
 
-  <!-- BEGIN PAGE LEVEL JS-->
-  <!--<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line.js" type="text/javascript"></script>-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line-area.js" type="text/javascript"></script>
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line-logarithmic.js"
-  type="text/javascript"></script>
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line-multi-axis.js"
-  type="text/javascript"></script>
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line-skip-points.js"
-  type="text/javascript"></script>
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line-stacked-area.js"
-  type="text/javascript"></script>
-  <!-- END PAGE LEVEL JS-->
-  
-
+<!-- BEGIN PAGE LEVEL JS-->
+<!--<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line.js" type="text/javascript"></script>-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line-area.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line-logarithmic.js"
+type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line-multi-axis.js"
+type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line-skip-points.js"
+type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/line/line-stacked-area.js"
+type="text/javascript"></script>
+<!-- END PAGE LEVEL JS-->
 
 
-  <!-- BEGIN PAGE LEVEL JS-->
-  <!--<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/bar.js" type="text/javascript"></script>-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/bar-stacked.js" type="text/javascript"></script>
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/bar-multi-axis.js"
-  type="text/javascript"></script>
-  <!--<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/column.js" type="text/javascript"></script>-->
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/column-stacked.js"
-  type="text/javascript"></script>
-  <script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/column-multi-axis.js"
-  type="text/javascript"></script>
-  <!-- END PAGE LEVEL JS-->
+
+
+<!-- BEGIN PAGE LEVEL JS-->
+<!--<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/bar.js" type="text/javascript"></script>-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/bar-stacked.js" type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/bar-multi-axis.js"
+type="text/javascript"></script>
+<!--<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/column.js" type="text/javascript"></script>-->
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/column-stacked.js"
+type="text/javascript"></script>
+<script src="<%=session.getAttribute("httpURL")%>app-assets/js/scripts/charts/chartjs/bar/column-multi-axis.js"
+type="text/javascript"></script>
+<!-- END PAGE LEVEL JS-->
 
 <%}%> 
 

@@ -10,6 +10,7 @@
             <result name="PREPARE_WORKSPACE_CREATE_TEAM">/jsp/workspace-create-team.jsp</result>
             <result name="CREATE_TEAM_SUSSESS">/jsp/workspace-action-forward-teams.jsp</result>
             <result name="RETURN_WORKSPACE">/jsp/workspace-dashboard.jsp</result>
+            <result name="EDIT_WORKSPACE">/jsp/workspace-view.jsp</result>
             <result name="error">/jsp/errorcode.jsp</result>
         </action>
         <action name="viewWorkspaceAction" class="app.qlcv.workspace.WorkspaceAction" method="vewWorkspaceByUser">

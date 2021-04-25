@@ -47,6 +47,9 @@ public class CaculationFormula {
             valueReturn = String.valueOf( engine.eval(formula));
         } catch (Exception e) {
         }
+        if(valueReturn==null || valueReturn.equals("")){
+            valueReturn = "0";
+        }
         return valueReturn;
     }
 

@@ -62,7 +62,7 @@
                                     <%=properties.getProperty("app.function")%>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <a class="dropdown-item" href="workspaceAction?event=edit&&id=<s:property value="workspace.id"/>"><%=properties.getProperty("app.edit")%></a>
+                                    <a class="dropdown-item" href="workspaceAction?event=prepareViewWorkspace&&workspaceId=<s:property value="workspace.id"/>"><%=properties.getProperty("app.edit")%></a>
                                     <a class="dropdown-item" href="workspaceAction?event=edit&&id=<s:property value="workspace.id"/>"><%=properties.getProperty("app.close")%></a>
                                     <a class="dropdown-item" href="workspaceAction?event=edit&&id=<s:property value="workspace.id"/>">Quản lý nhóm</a>
 

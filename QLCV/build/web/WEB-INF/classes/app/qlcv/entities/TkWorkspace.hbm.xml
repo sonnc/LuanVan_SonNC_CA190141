@@ -58,6 +58,12 @@
         <property name="tienKhoan" type="java.lang.Long">
             <column name="TIEN_KHOAN" precision="10" scale="0" />
         </property>
+        <property name="etcAmount" type="java.lang.Long">
+            <column name="ETC_AMOUNT" precision="10" scale="0" />
+        </property>
+        <property name="etcDate" type="date">
+            <column name="ETC_DATE" length="10" />
+        </property>
         <set name="tkWsPeoples" table="tk_ws_people" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="tk_workspace_id" not-null="true" />

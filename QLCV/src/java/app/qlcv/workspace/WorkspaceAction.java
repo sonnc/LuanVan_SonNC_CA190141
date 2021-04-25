@@ -70,6 +70,7 @@ public class WorkspaceAction extends ActionSupport implements SessionAware, Serv
                 // nhap thong tin cho du an
                 workspace.setStartDate(systemMethod.formatStringDateToSqlDate(request.getParameter("startDate")));
                 workspace.setEndDate(systemMethod.formatStringDateToSqlDate(request.getParameter("endDate")));
+                workspace.setEtcDate(systemMethod.formatStringDateToSqlDate(request.getParameter("etcDate")));
                 workspace.setStatus("ACTIVE");
                 workspace.setCreateDate(systemMethod.getSysDateToSqlDate());
                 workspace.setLastUpdateDate(systemMethod.getSysDateToSqlDate());
@@ -166,6 +167,22 @@ public class WorkspaceAction extends ActionSupport implements SessionAware, Serv
         } else if ("viewWorkspace".equals(event)) {
             vewWorkspaceByUser();
             return "RETURN_WORKSPACE";
+        } else if ("prepareViewWorkspace".equals(event)) {
+            workspace = workspaceController.GetWorkspaceById(Integer.parseInt(request.getParameter("workspaceId")));
+            return "EDIT_WORKSPACE";
+        } else if ("updateWorkSpace".equals(event)) {
+            TkWorkspace tkWorkspace = new TkWorkspace();
+            tkWorkspace = workspaceController.GetWorkspaceById(workspace.getId());
+            tkWorkspace.setWorkspaceName(workspace.getWorkspaceName());
+            tkWorkspace.setDescription(workspace.getDescription());
+            tkWorkspace.setTienKhoan(workspace.getTienKhoan());
+            tkWorkspace.setEtcAmount(workspace.getEtcAmount());
+            tkWorkspace.setStartDate(systemMethod.formatStringDateToSqlDate(request.getParameter("startDate")));
+            tkWorkspace.setEndDate(systemMethod.formatStringDateToSqlDate(request.getParameter("endDate")));
+            tkWorkspace.setEtcDate(systemMethod.formatStringDateToSqlDate(request.getParameter("etcDate")));
+            workspaceController.updateWorkspace(tkWorkspace);
+            workspace = tkWorkspace;
+            return "EDIT_WORKSPACE";
         }
 
         return SUCCESS;
@@ -214,11 +231,7 @@ public class WorkspaceAction extends ActionSupport implements SessionAware, Serv
         lstWorkspaceDashboards = workspaceController.vewWorkspaceByUser(user.getId());
         return SUCCESS;
     }
-    
-  
-    
-    
-    
+
     ////////////////////////////////
     public HttpServletRequest getRequest() {
         return request;

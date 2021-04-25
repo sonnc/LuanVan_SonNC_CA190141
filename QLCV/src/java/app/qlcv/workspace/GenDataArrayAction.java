@@ -39,6 +39,11 @@ public class GenDataArrayAction extends ActionSupport implements SessionAware, S
     private TaskController taskController;
     public static String NODE_STRING_VAL = "{\"key\":@value1, \"loc\":\"@value2\", \"text\":\"@value3\", \"details\":\"@value4\", \"color\":\"white\", \"figure\":\"@value7\", \"fill\":\"@value8\", \"size\":\"50 50\"}";
     public static String LINE_STRING_VAL = "{\"from\":@value1, \"to\":@value2,\"dash\":@value3, \"color\":\"@value4\", \"text\":\"@value5\"}";
+    private int thoiGianThucHien = 0;
+    private int soNgayTreHan = 0;
+    private int tongNgayThucTe = 0;
+
+    private String contentCPM = " ";
 
     public GenDataArrayAction() {
         systemMethod = new SystemMethod();
@@ -48,8 +53,7 @@ public class GenDataArrayAction extends ActionSupport implements SessionAware, S
 
     public String cpmNodeGenData() {
         int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
-        GenDataArray(workspaceId);
-        return null;
+        return GenDataArray(workspaceId);
     }
 
     public String GenDataArray(int workspaceId) {
@@ -90,17 +94,57 @@ public class GenDataArrayAction extends ActionSupport implements SessionAware, S
             }
         }
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+
+        for (int i = 1; i < level; i++) {
+            int maxDateInLevel = 0;
+            int maxTreHan = 0;
+            for (int j = 0; j < lstTasks.size(); j++) {
+                TkWsTask task = lstTasks.get(j);
+                if (task.getTaskLevel() == i) {
+                    c1.setTime(task.getStartDate());
+                    c2.setTime(task.getDueDate());
+                    long noDay = (c2.getTime().getTime() - c1.getTime().getTime()) / (24 * 3600 * 1000);
+                    if (maxDateInLevel < noDay) {
+                        maxDateInLevel = (int) noDay;
+                    }
+
+                    if ((task.getDateClose() == null && systemMethod.getSystemDateDate().after(task.getDueDate()))
+                            || (task.getDateClose() != null && task.getDateClose().after(task.getDueDate()))) {
+                        c1.setTime(task.getDueDate());
+                        if (task.getDateClose() == null) {
+                            c2.setTime(systemMethod.getSystemDateDate());
+                        } else {
+                            c2.setTime(task.getDateClose());
+                        }
+
+                        long noDayTrehan = (c2.getTime().getTime() - c1.getTime().getTime()) / (24 * 3600 * 1000);
+
+                        if (maxTreHan < noDayTrehan) {
+                            maxTreHan = (int) noDayTrehan;
+                        }
+                    }
+                }
+            }
+
+            soNgayTreHan = soNgayTreHan + maxTreHan;
+            thoiGianThucHien = thoiGianThucHien + maxDateInLevel;
+        }
+
+        tongNgayThucTe = thoiGianThucHien + soNgayTreHan;
+
         for (int i = 0; i < lstTasks.size(); i++) {
             TkWsTask get = lstTasks.get(i);
             System.out.println(get.getId() + " - " + get.getFollowTask() + " - " + get.getTaskLevel());
         }
-
         // tao node end
-        CreateNode(lstTasks, level);
-
-        CreateLine(lstTasks);
-
-        return null;
+//        CreateNode(lstTasks, level);
+//
+//        CreateLine(lstTasks);
+        contentCPM = CreateNode(lstTasks, level) + CreateLine(lstTasks);
+        return SUCCESS;
     }
 
     public String CreateNode(List<TkWsTask> lstTasks, int maxLevel) {
@@ -125,7 +169,7 @@ public class GenDataArrayAction extends ActionSupport implements SessionAware, S
 
             boolean endTask = false;
             int start = 1;
-            int x = 100;
+            int x = 200;
             while (start <= maxLevel) {
                 int y = 0;
                 for (int i = 0; i < lstTasks.size(); i++) {
@@ -141,7 +185,7 @@ public class GenDataArrayAction extends ActionSupport implements SessionAware, S
                     }
                 }
                 start = start + 1;
-                x = x + 100;
+                x = x + 200;
             }
 
             nodeEnd.setLoc("" + x + " 0");
@@ -221,12 +265,13 @@ public class GenDataArrayAction extends ActionSupport implements SessionAware, S
                     long noDay = (c2.getTime().getTime() - c1.getTime().getTime()) / (24 * 3600 * 1000);
 
                     String color = "";
-                    if (!lstTasks.get(i).getStatus().equals("DELETE")
+                    if (!lstTasks.get(i).getStatus().equals("DELETE") 
                             && ((lstTasks.get(i).getDateClose() == null && lstTasks.get(i).getDueDate().before(systemMethod.getSystemDateDate()))
+                            || (lstTasks.get(i).getDateClose() != null && lstTasks.get(i).getDueDate().before(lstTasks.get(i).getDateClose()))
                             )) {
                         color = "red";
-                    }else{
-                         color = "blue";
+                    } else {
+                        color = "blue";
                     }
 
                     LinkDataArray link = new LinkDataArray(String.valueOf(lstTasks.get(i).getId()), "99999", "[0,0]", color, noDay + "d", "0");
@@ -254,7 +299,7 @@ public class GenDataArrayAction extends ActionSupport implements SessionAware, S
         }
         lineStringData = beginLink + content + endLink;
         System.out.println(lineStringData);
-        return null;
+        return lineStringData;
     }
 
     public List<TkWsTask> findLevelForTask(int index, TkWsTask task, List<TkWsTask> lstTasks) {
@@ -287,6 +332,38 @@ public class GenDataArrayAction extends ActionSupport implements SessionAware, S
     public void setServletRequest(HttpServletRequest hsr
     ) {
         this.request = hsr;
+    }
+
+    public String getContentCPM() {
+        return contentCPM;
+    }
+
+    public void setContentCPM(String contentCPM) {
+        this.contentCPM = contentCPM;
+    }
+
+    public int getThoiGianThucHien() {
+        return thoiGianThucHien;
+    }
+
+    public void setThoiGianThucHien(int thoiGianThucHien) {
+        this.thoiGianThucHien = thoiGianThucHien;
+    }
+
+    public int getSoNgayTreHan() {
+        return soNgayTreHan;
+    }
+
+    public void setSoNgayTreHan(int soNgayTreHan) {
+        this.soNgayTreHan = soNgayTreHan;
+    }
+
+    public int getTongNgayThucTe() {
+        return tongNgayThucTe;
+    }
+
+    public void setTongNgayThucTe(int tongNgayThucTe) {
+        this.tongNgayThucTe = tongNgayThucTe;
     }
 
 }

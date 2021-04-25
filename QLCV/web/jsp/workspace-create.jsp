@@ -77,22 +77,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-4">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label for="firstName1"><%=properties.getProperty("app.workspace.management.by")%>  :</label>
-                                                                        <input disabled="true" name="" type="text" class="form-control" id="firstName1">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label for="firstName1"><%=properties.getProperty("app.workspace.management.by")%>  :</label>
-                                                                        <input disabled="true" name="" type="text" class="form-control" id="firstName1">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="lastName1"><%=properties.getProperty("app.workspace.tienkhoan")%> :</label>
@@ -112,6 +97,22 @@
                                                                     <div class="form-group">
                                                                         <label for="lastName1"><%=properties.getProperty("app.workspace.end.date")%> :</label>
                                                                         <input  required="true" type="date" name="endDate" class="form-control" id="date1"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="firstName1">Ước lượng kinh phí khi hoàn thành:</label>
+                                                                        <s:textfield required="required" name="workspace.etcAmount" type="nummber" cssClass="form-control" id="firstName1"/>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="firstName1">Ước lương kết thúc :</label>
+                                                                        <input required="true" type="date" name="etcDate" class="form-control" id="firstName1">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -185,7 +186,7 @@
             </div>
         </div>
 
-<%@include file="/jsp/dialogConfirm.jsp" %>
+        <%@include file="/jsp/dialogConfirm.jsp" %>
         <%@include file="/jsp/footer.jsp" %>
         <%@include file="/jsp/js.jsp" %>
     </body>

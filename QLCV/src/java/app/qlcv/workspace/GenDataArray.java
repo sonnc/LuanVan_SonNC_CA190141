@@ -57,7 +57,7 @@ public class GenDataArray {
         if (task.getStatus().equals("CLOSE")) {
             collor = "#7BDCB5";
         }
-        if (!task.getStatus().equals("DELETE")
+        if (!task.getStatus().equals("DELETE") && !task.getStatus().equals("CLOSE")
                 && ((task.getDateClose() == null && task.getDueDate().before(systemMethod.getSystemDateDate()))
                 || (task.getDateClose() != null && task.getDueDate().before(task.getDateClose())))) {
             collor = "red";
@@ -142,12 +142,12 @@ public class GenDataArray {
         String collor = null;
         if (task.getStatus().equals("DELETE")) {
             collor = "red";
-        } else if (!task.getStatus().equals("DELETE")) {
-            collor = "blue";
-        } else if (!task.getStatus().equals("DELETE")
+        }else  if (!task.getStatus().equals("DELETE")
                 && ((task.getDateClose() == null && task.getDueDate().before(systemMethod.getSystemDateDate()))
                 || (task.getDateClose() != null && task.getDueDate().before(task.getDateClose())))) {
             collor = "red";
+        }else if (!task.getStatus().equals("DELETE")) {
+            collor = "blue";
         }
         return collor;
     }

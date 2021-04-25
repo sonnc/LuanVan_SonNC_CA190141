@@ -28,6 +28,8 @@ public class TkWorkspace  implements java.io.Serializable {
      private Date endDate;
      private int departmentId;
      private Long tienKhoan;
+     private Long etcAmount;
+     private Date etcDate;
      private Set tkWsPeoples = new HashSet(0);
      private Set tkWsTeamses = new HashSet(0);
      private Set tkWsTasklists = new HashSet(0);
@@ -195,6 +197,23 @@ public class TkWorkspace  implements java.io.Serializable {
         this.tienKhoan = tienKhoan;
     }
 
+    public Long getEtcAmount() {
+        return etcAmount;
+    }
+
+    public void setEtcAmount(Long etcAmount) {
+        this.etcAmount = etcAmount;
+    }
+
+    public Date getEtcDate() {
+        return etcDate;
+    }
+
+    public void setEtcDate(Date etcDate) {
+        this.etcDate = etcDate;
+    }
+
+    
 
 
 

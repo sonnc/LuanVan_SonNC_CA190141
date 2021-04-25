@@ -161,5 +161,60 @@ public class TaskController {
         }
         return lstTasks;
     }
+    
+    public List<TkWsTask> GetAllTaskByWorkspaceIdForEVM(int workspaceId) {
+        List<TkWsTask> lstTasks = new ArrayList<>();
+        List<TkWsTasklist> lstTasklists = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM TkWsTasklist WHERE tkWorkspace.id =:workspaceId");
+            query.setParameter("workspaceId", workspaceId);
+            lstTasklists = query.list();
+
+            for (int i = 0; i < lstTasklists.size(); i++) {
+                List<TkWsTask> task = new ArrayList<>();
+                Query q = session.createQuery("FROM TkWsTask WHERE tkWsTasklist.id =:tasklistID AND isSubTask ='N' "
+                        + "and (percentCoplete is null or percentCoplete < 100) "
+                        + "  ");
+                q.setParameter("tasklistID", lstTasklists.get(i).getId());
+                task = q.list();
+                lstTasks.addAll(task);
+            }
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return lstTasks;
+    }
+    
+    public String updateListTask(List<TkWsTask> lstTask) {
+        String error = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            for (int i = 0; i < lstTask.size(); i++) {
+                TkWsTask task = lstTask.get(i);
+                session.update(task);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            StringWriter errors = new StringWriter();
+            e.printStackTrace(new PrintWriter(errors));
+            error = errors.toString();
+        } finally {
+            session.close();
+        }
+        return error;
+
+    }
 
 }
