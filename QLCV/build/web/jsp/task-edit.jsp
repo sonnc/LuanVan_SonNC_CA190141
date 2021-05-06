@@ -149,8 +149,8 @@
                                                                     </div>
                                                                     <div class="col-3">
                                                                         <fieldset class="form-group">
-                                                                            <label>Estimate <span class="danger">*</span></label>
-                                                                            <s:textfield min="1" type="number" name="task.timeEstimate" cssClass="form-control" id="textbox2"/>
+                                                                            <label>Chi phí kế hoạch <span class="danger">*</span></label>
+                                                                            <s:textfield min="0" type="number" name="task.amountPlan" cssClass="form-control" id="textbox2"/>
                                                                         </fieldset>
                                                                     </div>
                                                                 </div>

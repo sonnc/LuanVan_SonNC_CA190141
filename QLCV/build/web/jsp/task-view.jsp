@@ -122,6 +122,12 @@
                                                                     <s:textarea disabled="true" cssClass="form-control" name="task.taskDesc"/>
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-3 label-control" for="projectinput1">Chi phí kế hoạch</label>
+                                                                <div class="col-md-9">
+                                                                    <s:textfield disabled="true" cssClass="form-control" name="task.amountPlan"/>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="col-6">
                                                             <div class="form-group row">
@@ -168,6 +174,37 @@
                                                     </div>
                                                 </div>
 
+                                                                
+                                                                
+                                                 <!--Cong viec theo sau-->
+                                                 <div class="row">
+                                                    <div class="col-11">
+                                                        <h4 class="form-section"><i class="ft-server"></i> Theo sau các công việc</h4>
+                                                    </div>
+                                                    <div class="col-1"><a href="prepareCreateTaskFollow?workspaceId=<s:property value="workspace.id"/>&&tasklistid=<s:property value="task.tkWsTasklist.id"/>&&taskid=<s:property value="task.id"/>" type="button"  class="btn btn-outline-danger">Tạo mới</a></div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <table class="table table-striped table-bordered zero-configuration hiden">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>ID</th>
+                                                                <th>Tên công việc</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <s:iterator value="lstTasksFollows" var="test">
+                                                                <tr>
+                                                                    <td><s:property value="id"/></td>
+                                                                    <td><s:property value="taskName"/></td>
+                                                                </tr>
+                                                            </s:iterator>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                                
+                                                                
+                                                                
                                                 <s:set name="taskSub"><s:property value="task.isSubTask"/></s:set>
                                                 <s:if test="#taskSub.equalsIgnoreCase('N')">
                                                     <div class="row">

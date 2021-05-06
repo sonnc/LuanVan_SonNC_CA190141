@@ -26,6 +26,14 @@
             <result name="success">/jsp/task-create.jsp</result>
             <result name="error">/jsp/errorcode.jsp</result>
         </action>
+        <action name="prepareCreateTaskFollow" class="app.qlcv.workspace.TaskListAction" method="prepareCreateTaskFollow">
+            <result name="success">/jsp/task-create-task-follow.jsp</result>
+            <result name="error">/jsp/errorcode.jsp</result>
+        </action>
+        <action name="createTaskFollow" class="app.qlcv.workspace.TaskListAction" method="createTaskFollow">
+            <result name="success">/jsp/task-view.jsp</result>
+            <result name="error">/jsp/errorcode.jsp</result>
+        </action>
         <action name="createTask" class="app.qlcv.workspace.TaskListAction" method="createTask">
             <result name="success">/jsp/workspace-viewtask.jsp</result>
             <result name="RETURN_PARENT_TASK">/jsp/task-view.jsp</result>

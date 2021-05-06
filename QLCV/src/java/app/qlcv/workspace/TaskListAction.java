@@ -74,6 +74,7 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
     private String[] myFileFileName;
     private List<RaciView> lstRaciViews = new ArrayList<>();
     private List<TkWsTask> lstTasks = new ArrayList<>();
+    private List<TkWsTask> lstTasksFollows = new ArrayList<>();
     private List<SysUdfFieldValue> lstUdf = new ArrayList<>();
     private List<TkWsAttachments> lstAttachmentses = new ArrayList<>();
     private List<TkWsTaskChecklist> lstChecklists = new ArrayList<>();
@@ -536,6 +537,18 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         reviewByUser = taskListController.getUserById(task.getReviewBy());
         taskCustom.setReviewByUser(reviewByUser);
 
+        // thong tin cong viec theo sau:
+        if (task.getFollowTask() != null) {
+            String[] taskidFollow = task.getFollowTask().split(",");
+            for (int i = 0; i < taskidFollow.length; i++) {
+                String string = taskidFollow[i];
+                int idtasks = Integer.parseInt(string);
+                TkWsTask t = new TkWsTask();
+                t = taskListController.GetTaskById(idtasks);
+                lstTasksFollows.add(t);
+            }
+        }
+
         // thong tin subtask
         lstTasks = taskListController.GetAllSubTaskByTaskId(taskid);
         for (int i = 0; i < lstTasks.size(); i++) {
@@ -588,6 +601,7 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         t.setTimeEstimate(task.getTimeEstimate());
         t.setLastUpdateBy(user.getLoginId());
         t.setLastUpdateDate(systemMethod.getSysDateToSqlDate());
+        t.setAmountPlan(task.getAmountPlan());
 
         errorCode = taskController.updateTask(t);
         if (errorCode == null) {
@@ -644,6 +658,54 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
         task = taskListController.GetTaskById(taskid);
         workspace = workspaceController.GetWorkspaceById(workspaceId);
 
+        return SUCCESS;
+    }
+
+    public String prepareCreateTaskFollow() {
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+
+        task = taskListController.GetTaskById(taskid);
+        workspace = workspaceController.GetWorkspaceById(workspaceId);
+
+        lstWsTaskListCustoms = taskListController.GetAllTaskListWithTaskByWorkspaceId(workspaceId);
+
+        return SUCCESS;
+    }
+
+    public String createTaskFollow() {
+        TkUser user = (TkUser) session.get("user");
+        int workspaceId = Integer.parseInt(request.getParameter("workspaceId"));
+        int tasklistid = Integer.parseInt(request.getParameter("tasklistid"));
+        int taskid = Integer.parseInt(request.getParameter("taskid"));
+        
+        TkWsTask t = new TkWsTask();
+        t = taskListController.GetTaskById(taskid);
+        HashMap<String, String[]> hashMap = new HashMap<>();
+        hashMap = (HashMap<String, String[]>) request.getParameterMap();
+        String[] taskFollow = null;
+        if (hashMap.get("lstFollowTask") != null) {
+            taskFollow = hashMap.get("lstFollowTask");
+        }
+        String followString = null;
+        if (taskFollow != null && taskFollow.length > 0) {
+            for (int i = 0; i < taskFollow.length; i++) {
+                String string = taskFollow[i];
+                if (followString == null) {
+                    followString = string;
+                } else {
+                    followString = followString + "," + string;
+                }
+
+            }
+        }
+        System.out.println(followString);
+        t.setFollowTask(followString);
+        
+        taskController.updateTask(t);
+        
+        viewTask();
         return SUCCESS;
     }
 
@@ -1030,6 +1092,14 @@ public class TaskListAction extends ActionSupport implements SessionAware, Servl
 
     public void setLstTaskCustoms(List<TkWsTaskCustom> lstTaskCustoms) {
         this.lstTaskCustoms = lstTaskCustoms;
+    }
+
+    public List<TkWsTask> getLstTasksFollows() {
+        return lstTasksFollows;
+    }
+
+    public void setLstTasksFollows(List<TkWsTask> lstTasksFollows) {
+        this.lstTasksFollows = lstTasksFollows;
     }
 
 }
